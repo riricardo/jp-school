@@ -1,16 +1,15 @@
-# Japonês Pocket v2
+# Japcket v3
 
-1. Extraia o ZIP e envie os arquivos de dentro da pasta japanese-study para a raiz do seu repositório, substituindo os anteriores.
-2. Abra seu GitHub Pages com internet e recarregue novamente após o Service Worker atualizar. O cache tem versão nova, sem aviso na interface.
-3. Chrome no Android → Instalar aplicativo / Adicionar à tela inicial. Depois teste em modo avião.
+Substitua os arquivos do seu repositório pelo conteúdo desta pasta. Reabra o mesmo endereço com internet e recarregue após a atualização do cache.
 
-Para testar no computador: abra index.html, ou use um servidor localhost para testar cache/PWA. HTTPS ou localhost é necessário para Service Worker.
+O nome agora é Japcket. A mesma chave de armazenamento da v2 preserva proficiência e rodada em andamento. Os dados continuam locais ao navegador.
 
-⚙️ configura conteúdo, sentido e tamanho da próxima rodada. Alterações na leitura são imediatas. Nova rodada não apaga a proficiência.
-✅ aumenta a sequência; ❌ zera a sequência daquele item e repete o cartão. O máximo é 10 acertos seguidos em todos os itens.
+Configurações abrem em overlay, com a lição oculta. Checkboxes permitem combinar palavras, frases e parágrafos, além dos sentidos JP → PT e PT → JP. Com os dois sentidos marcados, eles alternam a cada apresentação, começando por um sentido aleatório. A direção atual persiste ao recarregar.
 
-Mesmo navegador e endereço mantêm e migram o progresso da versão 1. Mudar o domínio, limpar dados do navegador ou usar outro aparelho não transfere progresso. Não há login/sincronização.
+Mudanças de conteúdo e sentido valem para a próxima rodada. Mostrar furigana/romaji/tradução muda imediatamente; no sentido inverso a resposta continua escondida até tocar 日本語.
 
-Edite data.js para ampliar o conteúdo. IDs precisam ser únicos e estáveis. Use kind: "word", "phrase" ou "paragraph"; mantenha japanese, kana, romaji, meaning e segments. segments aceita texto e pares [kanji, leitura].
+A proficiência global aparece somente em percentual e barra. Cada item precisa de 10 acertos seguidos; um erro zera a sequência daquele item. Sequência compartilhada entre os sentidos. O máximo só acontece quando todos os itens têm sequência 10.
 
-Ao modificar arquivos publicados, aumente CACHE em sw.js para invalidar o cache antigo. Leia PLANO.md para regras de pontuação e repetição.
+Mantidos 10 vocábulos e 10 frases. Parágrafos ainda sem conteúdo. Não há contagem visual de respostas certas/erradas nem aviso de cache.
+
+Chrome no Android: Instalar aplicativo / Adicionar à tela inicial. Offline requer a primeira visita com internet via HTTPS ou localhost.

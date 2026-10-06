@@ -1,4 +1,4 @@
-const CACHE = 'japanese-pocket-v2';
+const CACHE = 'japanese-pocket-v3';
 const FILES = ['./','./index.html','./style.css','./data.js','./app.js','./engine.js','./manifest.json','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('japanese-pocket-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
