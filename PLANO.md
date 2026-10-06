@@ -1,9 +1,9 @@
-# Mudanças v3
+# v4 — gramática e atualização
 
-1. Nome Japcket no título e manifesto.
-2. Proficiência apenas em percentual e barra.
-3. Configurações em dialog modal nativo: foco restrito ao overlay, botão fechar, Escape e lição oculta.
-4. Conteúdo e sentidos em checkboxes; combinações livres. Ambos os sentidos alternam por apresentação.
-5. Sem rótulo de tipo ou direção na lição.
-6. Mesma pontuação e penalidade: 10 acertos seguidos em cada item; erro zera apenas o item.
-7. Progresso v2 preservado, incluindo rodadas em andamento; mesmos 20 cartões.
+- Mantidos os 20 cartões originais e IDs anteriores.
+- Nova categoria Gramática prática: 7 formas de cada um dos verbos 行く, 食べる e 飲む; dicionário, educada afirmativa/negativa/passado afirmativo/passado negativo, negativa informal e forma て.
+- Partículas は, を, に, で, か; です, じゃないです; conectores でも, そして, から.
+- Explicações e exemplos opcionais, sem entregar a resposta no modo inverso.
+- Proficiência global continua exigindo sequência 10 por item; acertos existentes preservados.
+- Atualização online por conjunto completo; somente após sucesso de todos os downloads troca o conjunto offline. Cache identificado pelo hash dos arquivos, sem versionamento manual a cada edição.
+- Sem rede, volta ao último conjunto completo. Progresso fica separado do cache.

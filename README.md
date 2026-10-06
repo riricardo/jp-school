@@ -1,15 +1,15 @@
-# Japcket v3
+# Japcket v4
 
-Substitua os arquivos do seu repositório pelo conteúdo desta pasta. Reabra o mesmo endereço com internet e recarregue após a atualização do cache.
+Substitua os arquivos do repositório e abra o mesmo endereço com internet. Na primeira migração da v3, espere alguns segundos e recarregue uma vez caso ainda veja a versão antiga. Da v4 em diante, uma navegação/recarregamento online busca o conjunto completo atualizado; não precisa limpar dados ou incrementar versão de cache ao editar HTML/CSS/JS/dados.
 
-O nome agora é Japcket. A mesma chave de armazenamento da v2 preserva proficiência e rodada em andamento. Os dados continuam locais ao navegador.
+O Service Worker busca todos os arquivos essenciais, ignora o cache HTTP e só troca o conjunto offline quando todos chegaram com sucesso. Se a rede falhar, mantém o conjunto anterior. Há limite de 8 segundos para a busca. GitHub Pages ainda pode demorar a publicar; o app só pode baixar o que já está disponível. Evite abrir durante uma publicação parcial de arquivos: publique o conjunto num único commit.
 
-Configurações abrem em overlay, com a lição oculta. Checkboxes permitem combinar palavras, frases e parágrafos, além dos sentidos JP → PT e PT → JP. Com os dois sentidos marcados, eles alternam a cada apresentação, começando por um sentido aleatório. A direção atual persiste ao recarregar.
+Progresso mantido no mesmo navegador e URL. A troca de cache não apaga localStorage. Se o próprio Service Worker mudar, o aplicativo verifica atualização e recarrega após a troca de controlador.
 
-Mudanças de conteúdo e sentido valem para a próxima rodada. Mostrar furigana/romaji/tradução muda imediatamente; no sentido inverso a resposta continua escondida até tocar 日本語.
+Categoria Gramática prática: 21 cartões de famílias dos verbos ir/comer/beber e 10 padrões/partículas. Os 20 cartões originais permanecem. Ative Gramática prática nas configurações. Abra Como usar após revelar a resposta para ver explicação e exemplo com kana/romaji/tradução.
 
-A proficiência global aparece somente em percentual e barra. Cada item precisa de 10 acertos seguidos; um erro zera a sequência daquele item. Sequência compartilhada entre os sentidos. O máximo só acontece quando todos os itens têm sequência 10.
+Pontos internos continuam como sequências de até 10; erro zera o item. A proficiência global inclui todo o conteúdo, então adicionar itens aumenta o denominador e reduz o percentual sem apagar acertos anteriores.
 
-Mantidos 10 vocábulos e 10 frases. Parágrafos ainda sem conteúdo. Não há contagem visual de respostas certas/erradas nem aviso de cache.
+No modo inverso o japonês e a explicação não aparecem antes de revelar a resposta. Nenhum parágrafo adicionado neste lote.
 
-Chrome no Android: Instalar aplicativo / Adicionar à tela inicial. Offline requer a primeira visita com internet via HTTPS ou localhost.
+Chrome Android: Instalar aplicativo / Adicionar à tela inicial. Teste offline após a primeira abertura com internet. Cache/PWA exige HTTPS ou localhost.
