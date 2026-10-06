@@ -1,23 +1,16 @@
-# Japonês Pocket — teste com 10 palavras e 10 frases
+# Japonês Pocket v2
 
-## Testar agora
-Abra index.html no computador. A interface funciona sem instalar nada; o cache PWA exige HTTPS ou localhost.
+1. Extraia o ZIP e envie os arquivos de dentro da pasta japanese-study para a raiz do seu repositório, substituindo os anteriores.
+2. Abra seu GitHub Pages com internet e recarregue novamente após o Service Worker atualizar. O cache tem versão nova, sem aviso na interface.
+3. Chrome no Android → Instalar aplicativo / Adicionar à tela inicial. Depois teste em modo avião.
 
-## GitHub Pages
-1. Extraia o ZIP e envie o conteúdo da pasta japanese-study para a raiz do repositório.
-2. GitHub → Settings → Pages → Deploy from a branch → main → / (root) → Save.
-3. Abra a URL publicada no Chrome do celular, com internet, e espere aparecer “Arquivos salvos para uso offline”.
-4. Menu do Chrome → Adicionar à tela inicial / Instalar aplicativo.
-5. Feche, ative modo avião e abra novamente para testar offline.
+Para testar no computador: abra index.html, ou use um servidor localhost para testar cache/PWA. HTTPS ou localhost é necessário para Service Worker.
 
-## Como estudar
-⚙️ configura leitura, romaji e tradução sempre visíveis, ou modo Palavras/Frases/Misturado.
-あ, ABC e PT revelam apenas o cartão atual. Katakana já aparece na própria palavra quando é a escrita natural, como テレビ.
-✅ retira o cartão da rodada. ❌ coloca de volta após até três outros cartões; com poucos restantes ele reaparece antes.
-A rodada, configurações e progresso ficam salvos neste navegador/dispositivo. Trocar o modo inicia uma rodada nova daquele conjunto. Recomeçar rodada permite revisar tudo novamente.
-Este protótipo faz repetição dentro da rodada, sem agendamento de revisão por dias. “Sei” indica sua resposta, não domínio comprovado.
+⚙️ configura conteúdo, sentido e tamanho da próxima rodada. Alterações na leitura são imediatas. Nova rodada não apaga a proficiência.
+✅ aumenta a sequência; ❌ zera a sequência daquele item e repete o cartão. O máximo é 10 acertos seguidos em todos os itens.
 
-## Adicionar conteúdo
-Edite data.js, mantendo IDs únicos e estáveis. segments mistura texto simples e pares [kanji, leitura] para furigana alinhado. Os campos kana e type ficam disponíveis para expansão.
-Para atualizar arquivos publicados, altere a versão CACHE em sw.js (por exemplo, japanese-pocket-v2). Reabra com internet e recarregue após a atualização.
-Limpar os dados do navegador apaga o progresso e o cache. Não há conta nem sincronização.
+Mesmo navegador e endereço mantêm e migram o progresso da versão 1. Mudar o domínio, limpar dados do navegador ou usar outro aparelho não transfere progresso. Não há login/sincronização.
+
+Edite data.js para ampliar o conteúdo. IDs precisam ser únicos e estáveis. Use kind: "word", "phrase" ou "paragraph"; mantenha japanese, kana, romaji, meaning e segments. segments aceita texto e pares [kanji, leitura].
+
+Ao modificar arquivos publicados, aumente CACHE em sw.js para invalidar o cache antigo. Leia PLANO.md para regras de pontuação e repetição.

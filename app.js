@@ -1,35 +1,28 @@
 (() => {
-'use strict';
-const $ = id => document.getElementById(id);
-const KEY = 'japanese-pocket-v1';
-let state = {settings:{mode:'all',furigana:false,romaji:false,meaning:false},known:[],queue:[],attempts:0,started:false};
-try { const saved=JSON.parse(localStorage.getItem(KEY)); if(saved) {state.settings={...state.settings,...saved.settings};state.known=Array.isArray(saved.known)?saved.known:[];state.queue=Array.isArray(saved.queue)?saved.queue:[];state.attempts=Number(saved.attempts)||0;state.started=!!saved.started;} } catch {}
-if(!['all','word','phrase'].includes(state.settings.mode))state.settings.mode='all';
-const data=window.STUDY_DATA;
-const selected=()=>data.filter(c=>state.settings.mode==='all'||c.kind===state.settings.mode);
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch{$('storageWarning').hidden=false;}};
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-function start(){state.queue=shuffle(selected().map(c=>c.id));state.known=state.known.filter(id=>!selected().some(c=>c.id===id));state.attempts=0;state.started=true;save();render();}
+'use strict';const $=id=>document.getElementById(id),KEY='japanese-pocket-v2',E=window.StudyEngine,data=window.STUDY_DATA;
+let state={settings:{mode:'all',inverse:false,furigana:false,romaji:false,meaning:false,amount:100},stats:{},round:null};
+try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved){state={...state,...saved,settings:{...state.settings,...saved.settings}};}else{const old=JSON.parse(localStorage.getItem('japanese-pocket-v1'));if(old){state.settings={...state.settings,...old.settings};for(const id of old.known||[])state.stats[id]={streak:1,errors:0};if(old.started&&old.queue?.length)state.round={queue:old.queue,hard:{},mode:state.settings.mode,inverse:false};}}}catch{}
+if(!['all','word','phrase','paragraph'].includes(state.settings.mode))state.settings.mode='all';state.settings.amount=Math.max(100,Math.min(2000,Math.round((Number(state.settings.amount)||100)/100)*100));state.stats=state.stats&&typeof state.stats==='object'?state.stats:{};
+const pool=()=>data.filter(c=>state.settings.mode==='all'||c.kind===state.settings.mode);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{$('storageWarning').hidden=false;}}
+function score(){const s=E.proficiency(data,state.stats);$('points').textContent=s.points.toLocaleString('pt-BR');$('percent').textContent=(s.percent===100?'100':(Math.floor(s.percent*10)/10).toLocaleString('pt-BR'))+'%';$('masteryFill').style.width=s.percent+'%';$('points').title=`Máximo: ${s.max} pontos. 10 acertos seguidos por item.`;}
+function settings(){for(const k of ['inverse','furigana','romaji','meaning'])$(k).checked=!!state.settings[k];$('mode').value=state.settings.mode;$('amount').textContent=state.settings.amount;$('less').disabled=state.settings.amount<=100;$('more').disabled=state.settings.amount>=2000;const n=pool().length;$('available').textContent=n?`${n} itens disponíveis · ${Math.min(n,state.settings.amount)} nesta rodada.`:'Nenhum parágrafo neste lote. Adicione itens com kind: "paragraph" em data.js.';}
+function start(){state.round={queue:E.pick(pool(),state.stats,state.settings.amount),hard:{},mode:state.settings.mode,inverse:state.settings.inverse};save();$('settings').hidden=true;$('settingsButton').setAttribute('aria-expanded','false');render();}
 let revealed={};
-function render(){
-revealed={}; const pool=selected();state.queue=state.queue.filter(id=>pool.some(c=>c.id===id));
-const c=data.find(c=>c.id===state.queue[0]);
-$('japanese').replaceChildren();$('romajiText').hidden=true;$('meaningText').hidden=true;
-$('reveal').hidden=!c;$('answers').hidden=!c;
-$('progress').textContent=`Sei nesta rodada: ${pool.filter(c=>state.known.includes(c.id)).length}/${pool.length} · Restantes: ${state.queue.length} · Respostas: ${state.attempts}`;
-if(!c){$('kind').textContent='Rodada concluída';$('japanese').textContent='おつかれさま！';$('meaningText').textContent='Bom trabalho! Abra ⚙️ para recomeçar.';$('meaningText').hidden=false;return;}
-$('kind').textContent=c.kind==='word'?'PALAVRA':'FRASE';
-for(const seg of c.segments){if(typeof seg==='string')$('japanese').append(document.createTextNode(seg));else{const ruby=document.createElement('ruby');ruby.append(document.createTextNode(seg[0]));const rt=document.createElement('rt');rt.textContent=seg[1];ruby.append(rt);$('japanese').append(ruby);}}
-$('romajiText').textContent=c.romaji;$('meaningText').textContent=c.meaning;visibility();
-}
-function visibility(){const kana=state.settings.furigana||revealed.furigana;document.querySelectorAll('ruby').forEach(r=>r.classList.toggle('hide-reading',!kana));$('romajiText').hidden=!(state.settings.romaji||revealed.romaji);$('meaningText').hidden=!(state.settings.meaning||revealed.meaning);$('showKana').disabled=kana||!$('japanese').querySelector('ruby');$('showRomaji').disabled=!$('romajiText').hidden;$('showMeaning').disabled=!$('meaningText').hidden;}
-function answer(known){const id=state.queue.shift();if(!id)return;state.attempts++;if(known){if(!state.known.includes(id))state.known.push(id);}else{state.known=state.known.filter(x=>x!==id);state.queue.splice(Math.min(3,state.queue.length),0,id);}save();render();}
+function render(){revealed={};score();settings();const r=state.round;const c=data.find(c=>c.id===r?.queue[0]);$('japanese').replaceChildren();$('japanese').hidden=false;$('portuguesePrompt').hidden=true;$('romajiText').hidden=true;$('meaningText').hidden=true;$('completed').hidden=true;$('answers').hidden=!c;$('reveal').hidden=!c;$('card').classList.toggle('paragraph',c?.kind==='paragraph');
+if(!c){$('kind').textContent=pool().length?'RODADA FINALIZADA':'SEM CONTEÚDO';$('japanese').hidden=true;$('completed').hidden=!pool().length;return;}
+$('kind').textContent=({word:'PALAVRA',phrase:'FRASE',paragraph:'PARÁGRAFO'}[c.kind]||'CARTÃO')+(r.inverse?' · PT → JP':' · JP → PT');
+for(const seg of c.segments||[c.japanese]){if(typeof seg==='string')$('japanese').append(document.createTextNode(seg));else{const ruby=document.createElement('ruby');ruby.append(document.createTextNode(seg[0]));const rt=document.createElement('rt');rt.textContent=seg[1];ruby.append(rt);$('japanese').append(ruby);}}
+$('portuguesePrompt').textContent=c.meaning;$('romajiText').textContent=c.romaji;$('meaningText').textContent=c.meaning;visibility();}
+function visibility(){const inverse=!!state.round?.inverse,jp=!inverse||!!revealed.japanese;const kana=state.settings.furigana||revealed.furigana;$('portuguesePrompt').hidden=!inverse;$('japanese').hidden=!jp;document.querySelectorAll('ruby').forEach(r=>r.classList.toggle('hide-reading',!kana));$('romajiText').hidden=!(jp&&(state.settings.romaji||revealed.romaji));$('meaningText').hidden=inverse||!(state.settings.meaning||revealed.meaning);$('showJapanese').hidden=!inverse;$('showJapanese').disabled=jp;$('showKana').disabled=!jp||kana||!$('japanese').querySelector('ruby');$('showRomaji').disabled=!jp||!$('romajiText').hidden;$('showMeaning').hidden=inverse;$('showMeaning').disabled=!$('meaningText').hidden;}
+function answer(known){if(!state.round?.queue.length)return;E.answer(state.round,state.stats,known);save();render();}
 $('yes').onclick=()=>answer(true);$('no').onclick=()=>answer(false);
-for(const [button,key] of [['showKana','furigana'],['showRomaji','romaji'],['showMeaning','meaning']])$(button).onclick=()=>{revealed[key]=true;visibility();};
+for(const [button,key]of[['showJapanese','japanese'],['showKana','furigana'],['showRomaji','romaji'],['showMeaning','meaning']])$(button).onclick=()=>{revealed[key]=true;visibility();};
 $('settingsButton').onclick=()=>{$('settings').hidden=!$('settings').hidden;$('settingsButton').setAttribute('aria-expanded',String(!$('settings').hidden));};
-for(const key of ['furigana','romaji','meaning']){$(key).checked=state.settings[key];$(key).onchange=()=>{state.settings[key]=$(key).checked;save();visibility();};}
-$('mode').value=state.settings.mode;$('mode').onchange=()=>{state.settings.mode=$('mode').value;start();};
-$('restart').onclick=start;$('reset').onclick=()=>{if(confirm('Apagar todo o progresso e começar de novo?')){state.known=[];start();}};
-if(!state.started)start();else render();
-if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').then(()=>navigator.serviceWorker.ready).then(()=>{$('offline').textContent='Arquivos salvos para uso offline.';}).catch(()=>{$('offline').textContent='Cache offline indisponível. Tente recarregar com internet.';});
+for(const key of ['furigana','romaji','meaning'])$(key).onchange=()=>{state.settings[key]=$(key).checked;save();visibility();};
+$('inverse').onchange=()=>{state.settings.inverse=$('inverse').checked;save();};$('mode').onchange=()=>{state.settings.mode=$('mode').value;save();settings();};
+for(const [id,step]of[['less',-100],['more',100]])$(id).onclick=()=>{state.settings.amount=Math.max(100,Math.min(2000,state.settings.amount+step));save();settings();};
+$('restart').onclick=start;$('newRound').onclick=start;
+if(state.round){state.round.queue=(state.round.queue||[]).filter(id=>data.some(c=>c.id===id));state.round.hard=state.round.hard||{};save();render();}else start();
+if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
