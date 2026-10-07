@@ -1,9 +1,294 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f5f7"><title>Japcket</title><link rel="manifest" href="./manifest.json"><link rel="icon" href="./icon-192.png"><link rel="apple-touch-icon" href="./icon-192.png"><link rel="stylesheet" href="./style.css"><script defer src="./data.js"></script><script defer src="./engine.js"></script><script defer src="./app.js"></script></head><body><main>
-<header><div class="score"><span class="eyebrow">PROFICIÊNCIA</span><div><strong id="percent">0%</strong></div></div><button id="settingsButton" class="icon-button" aria-label="Configurações" aria-expanded="false" aria-controls="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1z"/><circle cx="12" cy="12" r="3"/></svg></button></header><div class="mastery-track"><div id="masteryFill"></div></div>
-<dialog id="settings" aria-labelledby="settingsTitle"><div class="dialog-top"><h2 id="settingsTitle">Seu treino</h2><button id="closeSettings" class="icon-button" aria-label="Fechar configurações">✕</button></div>
-<fieldset><legend>Conteúdo</legend><label class="toggle"><span>Palavras</span><input id="words" type="checkbox"></label><label class="toggle"><span>Frases</span><input id="phrases" type="checkbox"></label><label class="toggle"><span>Parágrafos</span><input id="paragraphs" type="checkbox"></label></fieldset>
-<label class="toggle"><span>Gramática prática</span><input id="grammar" type="checkbox"></label><fieldset><legend>Sentido</legend><label class="toggle"><span>Japonês → português</span><input id="forward" type="checkbox"></label><label class="toggle"><span>Português → japonês</span><input id="reverse" type="checkbox"></label></fieldset>
-<fieldset><legend>Leitura</legend><label class="toggle"><span>Furigana sempre visível</span><input id="furigana" type="checkbox"></label><label class="toggle"><span>Romaji sempre visível</span><input id="romaji" type="checkbox"></label><label class="toggle"><span>Tradução sempre visível</span><input id="meaning" type="checkbox"></label></fieldset>
-<div class="quantity"><span>Itens por rodada</span><div><button id="less" aria-label="Diminuir 100 itens">−</button><output id="amount"></output><button id="more" aria-label="Aumentar 100 itens">+</button></div></div><p id="available" class="hint"></p><p class="hint">10 acertos seguidos por item = proficiência máxima. Um erro zera a sequência daquele item. Marque os dois sentidos para alternar entre eles na rodada.</p><button id="restart" class="primary">Começar nova rodada</button></dialog>
-<div id="lesson"><section id="card" aria-live="polite"><div id="portuguesePrompt" hidden></div><div id="japanese" lang="ja"></div><p id="romajiText" hidden></p><p id="meaningText" hidden></p><details id="usage" hidden><summary>Como usar</summary><p id="usageText"></p><div id="exampleJapanese" lang="ja"></div><p id="exampleKana" lang="ja"></p><p id="exampleRomaji"></p><p id="exampleMeaning"></p></details><div id="reveal"><button id="showJapanese">日本語</button><button id="showKana">あ</button><button id="showRomaji">ABC</button><button id="showMeaning">PT</button></div><div id="completed" hidden><div class="trophy">✦</div><h1>Treino concluído.</h1><p>Mais uma rodada, mais prática.</p><button id="newRound" class="primary">Jogar de novo</button></div></section>
-<footer><div id="answers"><button id="no" aria-label="Não sei"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></button><button id="yes" aria-label="Sei"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></button></div><p id="storageWarning" class="hint" hidden>Não foi possível salvar neste navegador. O treino continuará nesta sessão.</p></footer></div></main></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+  <meta content="#f5f5f7" name="theme-color"/>
+  <title>
+   Japcket
+  </title>
+  <link href="./manifest.json" rel="manifest"/>
+  <link href="./icon-192.png" rel="icon"/>
+  <link href="./icon-192.png" rel="apple-touch-icon"/>
+  <link href="./style.css" rel="stylesheet"/>
+  <script defer="" src="./data.js">
+  </script>
+  <script defer="" src="./engine.js">
+  </script>
+  <script defer="" src="./app.js">
+  </script>
+ </head>
+ <body>
+  <main>
+   <header>
+    <span class="eyebrow">
+     PROFICIÊNCIA
+    </span>
+    <button aria-controls="settings" aria-expanded="false" aria-label="Configurações" class="icon-button" id="settingsButton">
+     ⚙
+    </button>
+   </header>
+   <div class="skill-scores">
+    <div>
+     <span>
+      Japonês → português
+     </span>
+     <strong id="percent-forward">
+      0%
+     </strong>
+     <div class="mastery-track">
+      <div id="fill-forward">
+      </div>
+     </div>
+    </div>
+    <div>
+     <span>
+      Português → japonês
+     </span>
+     <strong id="percent-reverse">
+      0%
+     </strong>
+     <div class="mastery-track">
+      <div id="fill-reverse">
+      </div>
+     </div>
+    </div>
+    <div>
+     <span>
+      Kana → kanji
+     </span>
+     <strong id="percent-toKanji">
+      0%
+     </strong>
+     <div class="mastery-track">
+      <div id="fill-toKanji">
+      </div>
+     </div>
+    </div>
+    <div>
+     <span>
+      Kanji → kana
+     </span>
+     <strong id="percent-fromKanji">
+      0%
+     </strong>
+     <div class="mastery-track">
+      <div id="fill-fromKanji">
+      </div>
+     </div>
+    </div>
+   </div>
+   <dialog aria-labelledby="settingsTitle" id="settings">
+    <div class="dialog-top">
+     <h2 id="settingsTitle">
+      Seu treino
+     </h2>
+     <button aria-label="Fechar configurações" class="icon-button" id="closeSettings">
+      ✕
+     </button>
+    </div>
+    <fieldset>
+     <legend>
+      Conteúdo
+     </legend>
+     <label class="toggle">
+      <span>
+       Palavras
+      </span>
+      <input id="words" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Frases
+      </span>
+      <input id="phrases" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Parágrafos
+      </span>
+      <input id="paragraphs" type="checkbox"/>
+     </label>
+    </fieldset>
+    <label class="toggle">
+     <span>
+      Gramática prática
+     </span>
+     <input id="grammar" type="checkbox"/>
+    </label>
+    <fieldset>
+     <legend>
+      Habilidades
+     </legend>
+     <label class="toggle">
+      <span>
+       Japonês → português
+      </span>
+      <input id="forward" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Português → japonês
+      </span>
+      <input id="reverse" type="checkbox"/>
+     </label>
+    </fieldset>
+    <label class="toggle">
+     <span>
+      Kana → kanji
+     </span>
+     <input id="toKanji" type="checkbox"/>
+    </label>
+    <label class="toggle">
+     <span>
+      Kanji → kana
+     </span>
+     <input id="fromKanji" type="checkbox"/>
+    </label>
+    <fieldset>
+     <legend>
+      Leitura
+     </legend>
+     <label class="toggle">
+      <span>
+       Furigana até dominar o kanji
+       <small>
+        Nos modos de tradução; domínio = 10 acertos em kanji → kana.
+       </small>
+      </span>
+      <input id="autoFurigana" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Romaji sempre visível
+      </span>
+      <input id="romaji" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Tradução sempre visível
+      </span>
+      <input id="meaning" type="checkbox"/>
+     </label>
+    </fieldset>
+    <div class="quantity">
+     <span>
+      Itens por rodada
+     </span>
+     <div>
+      <button aria-label="Diminuir 100 itens" id="less">
+       −
+      </button>
+      <output id="amount">
+      </output>
+      <button aria-label="Aumentar 100 itens" id="more">
+       +
+      </button>
+     </div>
+    </div>
+    <label class="toggle" for="repeatGap">
+     <span>
+      Repetir erro após
+      <small>
+       Quantidade de desafios · padrão: 20.
+      </small>
+     </span>
+     <input aria-label="Desafios antes de repetir um erro" id="repeatGap" inputmode="numeric" max="2000" min="1" step="1" type="number"/>
+    </label>
+    <p class="hint">
+     Uma única revisão por erro nesta rodada. O intervalo vale para os próximos erros; revisões já agendadas mantêm sua posição.
+    </p>
+    <p class="hint" id="available">
+    </p>
+    <p class="hint">
+     10 acertos seguidos por item e habilidade. Um erro zera apenas essa sequência. Kanji usa somente palavras com kanji. Cada combinação de item e habilidade conta como um desafio. As configurações valem para a próxima rodada.
+    </p>
+    <button class="primary" id="restart">
+     Começar nova rodada
+    </button>
+    <button class="reset-progress" id="resetProgress" type="button">
+     Zerar progresso
+    </button>
+   </dialog>
+   <div id="lesson">
+    <section aria-live="polite" id="card">
+     <p class="hint" id="skillLabel">
+     </p>
+     <div hidden="" id="portuguesePrompt">
+     </div>
+     <div id="japanese" lang="ja">
+     </div>
+     <p hidden="" id="romajiText">
+     </p>
+     <p hidden="" id="meaningText">
+     </p>
+     <details hidden="" id="usage">
+      <summary>
+       Como usar
+      </summary>
+      <p id="usageText">
+      </p>
+      <div id="exampleJapanese" lang="ja">
+      </div>
+      <p id="exampleKana" lang="ja">
+      </p>
+      <p id="exampleRomaji">
+      </p>
+      <p id="exampleMeaning">
+      </p>
+     </details>
+     <div id="reveal">
+      <button id="showJapanese">
+       日本語
+      </button>
+      <button id="showKana">
+       あ
+      </button>
+      <button id="showRomaji">
+       ABC
+      </button>
+      <button id="showMeaning">
+       PT
+      </button>
+     </div>
+     <div hidden="" id="completed">
+      <div class="trophy">
+       ✦
+      </div>
+      <h1>
+       Treino concluído.
+      </h1>
+      <p>
+       Mais uma rodada, mais prática.
+      </p>
+      <button class="primary" id="newRound">
+       Jogar de novo
+      </button>
+     </div>
+    </section>
+    <footer>
+     <p class="hint" hidden="" id="attemptHint">
+      Resposta revelada. Toque em “Não sei” para continuar.
+     </p>
+     <div id="answers">
+      <button aria-label="Não sei" id="no">
+       <svg aria-hidden="true" viewbox="0 0 24 24">
+        <path d="m7 7 10 10M17 7 7 17">
+        </path>
+       </svg>
+      </button>
+      <button aria-label="Sei" id="yes">
+       <svg aria-hidden="true" viewbox="0 0 24 24">
+        <path d="m5 12 4 4L19 6">
+        </path>
+       </svg>
+      </button>
+     </div>
+     <p class="hint" hidden="" id="storageWarning">
+      Não foi possível salvar neste navegador. O treino continuará nesta sessão.
+     </p>
+    </footer>
+   </div>
+  </main>
+ </body>
+</html>
