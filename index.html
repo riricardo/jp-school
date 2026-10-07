@@ -25,54 +25,59 @@
      PROFICIÊNCIA
     </span>
     <button aria-controls="settings" aria-expanded="false" aria-label="Configurações" class="icon-button" id="settingsButton">
-     ⚙
+     <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1z">
+      </path>
+      <circle cx="12" cy="12" r="3">
+      </circle>
+     </svg>
     </button>
    </header>
    <div class="skill-scores">
-    <div>
+    <div class="skill-progress">
      <span>
       Japonês → português
      </span>
      <strong id="percent-forward">
       0%
      </strong>
-     <div class="mastery-track">
+     <div aria-label="Japonês → português" aria-valuemax="100" aria-valuemin="0" class="mastery-track" role="progressbar">
       <div id="fill-forward">
       </div>
      </div>
     </div>
-    <div>
+    <div class="skill-progress">
      <span>
       Português → japonês
      </span>
      <strong id="percent-reverse">
       0%
      </strong>
-     <div class="mastery-track">
+     <div aria-label="Português → japonês" aria-valuemax="100" aria-valuemin="0" class="mastery-track" role="progressbar">
       <div id="fill-reverse">
       </div>
      </div>
     </div>
-    <div>
+    <div class="skill-progress">
      <span>
       Kana → kanji
      </span>
      <strong id="percent-toKanji">
       0%
      </strong>
-     <div class="mastery-track">
+     <div aria-label="Kana → kanji" aria-valuemax="100" aria-valuemin="0" class="mastery-track" role="progressbar">
       <div id="fill-toKanji">
       </div>
      </div>
     </div>
-    <div>
+    <div class="skill-progress">
      <span>
       Kanji → kana
      </span>
      <strong id="percent-fromKanji">
       0%
      </strong>
-     <div class="mastery-track">
+     <div aria-label="Kanji → kana" aria-valuemax="100" aria-valuemin="0" class="mastery-track" role="progressbar">
       <div id="fill-fromKanji">
       </div>
      </div>
@@ -109,13 +114,13 @@
       </span>
       <input id="paragraphs" type="checkbox"/>
      </label>
+     <label class="toggle">
+      <span>
+       Gramática prática
+      </span>
+      <input id="grammar" type="checkbox"/>
+     </label>
     </fieldset>
-    <label class="toggle">
-     <span>
-      Gramática prática
-     </span>
-     <input id="grammar" type="checkbox"/>
-    </label>
     <fieldset>
      <legend>
       Habilidades
@@ -132,19 +137,19 @@
       </span>
       <input id="reverse" type="checkbox"/>
      </label>
+     <label class="toggle">
+      <span>
+       Kana → kanji
+      </span>
+      <input id="toKanji" type="checkbox"/>
+     </label>
+     <label class="toggle">
+      <span>
+       Kanji → kana
+      </span>
+      <input id="fromKanji" type="checkbox"/>
+     </label>
     </fieldset>
-    <label class="toggle">
-     <span>
-      Kana → kanji
-     </span>
-     <input id="toKanji" type="checkbox"/>
-    </label>
-    <label class="toggle">
-     <span>
-      Kanji → kana
-     </span>
-     <input id="fromKanji" type="checkbox"/>
-    </label>
     <fieldset>
      <legend>
       Leitura
@@ -242,10 +247,10 @@
        日本語
       </button>
       <button id="showKana">
-       あ
+       Furigana
       </button>
       <button id="showRomaji">
-       ABC
+       Romaji
       </button>
       <button id="showMeaning">
        PT
@@ -272,13 +277,13 @@
      </p>
      <div id="answers">
       <button aria-label="Não sei" id="no">
-       <svg aria-hidden="true" viewbox="0 0 24 24">
+       <svg aria-hidden="true" viewBox="0 0 24 24">
         <path d="m7 7 10 10M17 7 7 17">
         </path>
        </svg>
       </button>
       <button aria-label="Sei" id="yes">
-       <svg aria-hidden="true" viewbox="0 0 24 24">
+       <svg aria-hidden="true" viewBox="0 0 24 24">
         <path d="m5 12 4 4L19 6">
         </path>
        </svg>

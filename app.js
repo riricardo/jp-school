@@ -195,40 +195,50 @@
   }
 
   function visibility() {
-    const task = state.round?.queue[0],
-      c = data.find(c => c.id === task?.id);
-    if (!c) return;
-    const k = task.skill,
-      kana = E.reading(c),
-      show = !!revealed.answer;
-    $('japanese').replaceChildren();
-    $('japanese').hidden = false;
-    $('portuguesePrompt').hidden = k !== 'reverse';
-    $('portuguesePrompt').textContent = c.meaning;
-    // Nas traduções, o kanji pode aparecer com leitura automática até dominar.
-    const mastered = (state.stats[c.id]?.fromKanji?.streak || 0) >= 10;
-    const furigana = !!state.settings.autoFurigana && !mastered;
-    if (k === 'forward' || (k === 'reverse' && show)) appendJapanese(c, furigana);
-    else if (k === 'toKanji') {
-      if (show) appendJapanese(c, false);
-      else $('japanese').textContent = kana;
-    } else appendJapanese(c, show);
+    const task = state.round?.queue[0];
+    const card = data.find(card => card.id === task?.id);
+    if (!card) return;
+    const skill = task.skill;
+    const legacyAnswer = !!revealed.answer;
+    const japaneseShown = skill !== 'reverse' || revealed.japanese || revealed.furigana || legacyAnswer;
+    const mastered = (state.stats[card.id]?.fromKanji?.streak || 0) >= 10;
+    const automaticReading = !!state.settings.autoFurigana && !mastered;
+    const readingShown = !!revealed.furigana || legacyAnswer ||
+      (['forward', 'reverse'].includes(skill) && automaticReading);
+    const kanjiShown = skill !== 'toKanji' || revealed.japanese || legacyAnswer;
 
-    $('japanese').hidden = k === 'reverse' && !show;
-    $('romajiText').textContent = c.romaji;
-    $('romajiText').hidden = !(state.settings.romaji || revealed.romaji) || (k === 'reverse' && !show) || (k === 'fromKanji' && !show && !revealed.romaji);
-    $('meaningText').textContent = c.meaning;
-    $('meaningText').hidden = k !== 'forward' || !(show || state.settings.meaning);
-    $('showJapanese').hidden = false;
-    $('showJapanese').textContent = 'Revelar resposta';
-    $('showJapanese').disabled = show;
-    $('showKana').hidden = true;
-    $('showMeaning').hidden = true;
+    $('japanese').replaceChildren();
+    $('japanese').hidden = !japaneseShown;
+    if (japaneseShown) {
+      if (kanjiShown) appendJapanese(card, readingShown);
+      else $('japanese').textContent = E.reading(card);
+    }
+    $('portuguesePrompt').hidden = skill !== 'reverse';
+    $('portuguesePrompt').textContent = card.meaning;
+    $('romajiText').textContent = card.romaji;
+    const automaticRomaji = state.settings.romaji && ['forward', 'toKanji'].includes(skill);
+    $('romajiText').hidden = !(automaticRomaji || revealed.romaji || legacyAnswer);
+    $('meaningText').textContent = card.meaning;
+    $('meaningText').hidden = skill === 'reverse' ||
+      !(revealed.meaning || legacyAnswer || (skill === 'forward' && state.settings.meaning));
+
+    // Controles independentes: mostram somente a ajuda solicitada.
+    $('showJapanese').hidden = !['reverse', 'toKanji'].includes(skill);
+    $('showJapanese').textContent = skill === 'toKanji' ? 'Kanji' : '日本語';
+    $('showJapanese').disabled = skill === 'toKanji' ? kanjiShown : japaneseShown;
+    $('showKana').hidden = false;
+    $('showKana').disabled = (skill === 'toKanji' && !kanjiShown) ||
+      (japaneseShown && readingShown) || !card.segments?.some(segment => Array.isArray(segment));
     $('showRomaji').hidden = false;
     $('showRomaji').disabled = !$('romajiText').hidden;
-    $('usage').hidden = !(c.note && show);
-    // Tradução automática também entrega a resposta no treino JP → PT.
-    if (k === 'forward' && !$('meaningText').hidden && !state.round.assisted) invalidateAttempt();
+    $('showMeaning').hidden = skill === 'reverse';
+    $('showMeaning').disabled = !$('meaningText').hidden;
+
+    const answerVisible = skill === 'forward' ? !$('meaningText').hidden :
+      skill === 'reverse' ? japaneseShown || !$('romajiText').hidden :
+      skill === 'toKanji' ? kanjiShown : readingShown || !$('romajiText').hidden;
+    if (answerVisible && !state.round.assisted) invalidateAttempt();
+    $('usage').hidden = !(card.note && answerVisible);
     $('yes').disabled = !!state.round.assisted;
     $('yes').setAttribute('aria-label', state.round.assisted ? 'Resposta revelada: use Não sei' : 'Sei');
     $('attemptHint').hidden = !state.round.assisted;
@@ -244,13 +254,13 @@
   $('yes').onclick = () => answer(true);
   $('no').onclick = () => answer(false);
   for (const [button, key] of [
-      ['showJapanese', 'answer'],
-      ['showRomaji', 'romaji']
+      ['showJapanese', 'japanese'],
+      ['showKana', 'furigana'],
+      ['showRomaji', 'romaji'],
+      ['showMeaning', 'meaning']
     ]) $(button).onclick = () => {
     revealed[key] = true;
     state.round.revealed = revealed;
-    const skill = state.round.queue[0].skill;
-    if (key === 'answer' || (key === 'romaji' && ['reverse', 'fromKanji'].includes(skill))) invalidateAttempt();
     save();
     visibility();
   };

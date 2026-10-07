@@ -1,3 +1,4 @@
+// Revisão 5.4: interface minimalista e ajudas individuais.
 // Revisão 5.3: zerar progresso com confirmação.
 // Revisão 5.2: uma revisão por erro e intervalo configurável.
 // Japcket: quatro habilidades e ajudas — revisão 5.1

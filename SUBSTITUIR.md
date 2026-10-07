@@ -42,3 +42,7 @@ O código está formatado, com recuos e comentários.
 ## Zerar progresso
 
 Em Configurações, toque em “Zerar progresso” e confirme. Apaga as quatro proficiências, o histórico antigo e a rodada atual, mantendo as configurações e o banco de conteúdo. Não é possível desfazer. Uma nova rodada começa se houver conteúdo e habilidades selecionados.
+
+## Interface
+
+Indicadores compactos com percentual e barra, opções agrupadas por seção e botões de tamanhos consistentes. Ajudas separadas: Furigana, Romaji e PT; 日本語 ou Kanji nos modos inversos. Cada botão revela somente aquela informação. Revelar furigana ou romaji em kanji → kana invalida a tentativa; revelar PT em japonês → português também. O progresso e suas configurações são mantidos.
