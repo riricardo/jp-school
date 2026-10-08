@@ -48,10 +48,12 @@ test('Study situations provide the complete ordered taxonomy',()=>{
  assert.equal(new Set(studySituations).size,25);
  assert.deepEqual(cards.flatMap(item=>item.situations),cards.flatMap(item=>item.situations)
   .filter(situation=>studySituations.includes(situation)));
- assert.deepEqual(
-  filtered(cards,{...structuredClone(defaults),situation:'🍜 Restaurante'}).map(item=>item.id),
-  ['taberu','mizu','arigatou','menu','grammar-wo-object','grammar-de-location','grammar-te-kudasai']
- );
+ const restaurantCards=filtered(cards,{...structuredClone(defaults),situation:'🍜 Restaurante'});
+ assert.ok(['taberu','mizu','arigatou','menu','grammar-wo-object','grammar-de-location','grammar-te-kudasai']
+  .every(id=>restaurantCards.some(item=>item.id===id)));
+ assert.ok(restaurantCards.every(item=>item.situations.includes('🍜 Restaurante')));
+ assert.equal(new Set(cards.map(item=>item.id)).size,cards.length);
+ assert.equal(cards.filter(item=>item.id.startsWith('mj-')).length,1343);
 });
 test('Grammar is an independently selectable content kind',()=>{
  const s={...structuredClone(defaults),kinds:['grammar']};
