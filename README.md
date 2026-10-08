@@ -1,15 +1,29 @@
-# Japcket v4
+# ManJapa · v0.1.0
 
-Substitua os arquivos do repositório e abra o mesmo endereço com internet. Na primeira migração da v3, espere alguns segundos e recarregue uma vez caso ainda veja a versão antiga. Da v4 em diante, uma navegação/recarregamento online busca o conjunto completo atualizado; não precisa limpar dados ou incrementar versão de cache ao editar HTML/CSS/JS/dados.
+Protótipo funcional feito com Vite + JavaScript Vanilla. Dados de teste em `src/data.js`.
 
-O Service Worker busca todos os arquivos essenciais, ignora o cache HTTP e só troca o conjunto offline quando todos chegaram com sucesso. Se a rede falhar, mantém o conjunto anterior. Há limite de 8 segundos para a busca. GitHub Pages ainda pode demorar a publicar; o app só pode baixar o que já está disponível. Evite abrir durante uma publicação parcial de arquivos: publique o conjunto num único commit.
+## Rodar
 
-Progresso mantido no mesmo navegador e URL. A troca de cache não apaga localStorage. Se o próprio Service Worker mudar, o aplicativo verifica atualização e recarrega após a troca de controlador.
+```bash
+npm install
+npm run dev
+```
 
-Categoria Gramática prática: 21 cartões de famílias dos verbos ir/comer/beber e 10 padrões/partículas. Os 20 cartões originais permanecem. Ative Gramática prática nas configurações. Abra Como usar após revelar a resposta para ver explicação e exemplo com kana/romaji/tradução.
+## Publicação
 
-Pontos internos continuam como sequências de até 10; erro zera o item. A proficiência global inclui todo o conteúdo, então adicionar itens aumenta o denominador e reduz o percentual sem apagar acertos anteriores.
+Execute `npm run deploy` para gerar o build e publicar a pasta `dist` na branch `gh-pages`. No GitHub → Settings → Pages, configure **Deploy from a branch**, selecione `gh-pages` e a pasta `/ (root)`. Se renomear o repositório, altere `base` em `vite.config.js`.
 
-No modo inverso o japonês e a explicação não aparecem antes de revelar a resposta. Nenhum parágrafo adicionado neste lote.
+## Recursos
 
-Chrome Android: Instalar aplicativo / Adicionar à tela inicial. Teste offline após a primeira abertura com internet. Cache/PWA exige HTTPS ou localhost.
+- Quatro habilidades independentes: Japonês → Português, Português → Japonês, Kana → Kanji e Kanji → Kana.
+- Progresso independente para cada habilidade, com sequência de 10 acertos.
+- Furigana opcional nos cartões Japonês → Português até cada cartão alcançar 10 acertos em Kanji → Kana.
+- Listening com segunda oportunidade de leitura depois de errar: o erro em Listening é salvo e a leitura é avaliada separadamente.
+- Conteúdo por Situação, Vocabulário, Frases e Gramática (partículas, conjugações e estruturas); revisão de erro em N cartões (padrão 20) e uma única reentrada agendada por erro.
+- Botões de resposta no estilo suave do EN; versão visível no rodapé das Configurações; zerar progresso.
+- Nas Configurações, combine por switches os quatro modos Japonês → Português, Português → Japonês, Kana → Kanji e Kanji → Kana; selecione Vocabulário, Frases e Gramática e personalize dicas, rodadas e áudio.
+- Voz japonesa via Web Speech API sem custo de API, com seleção preferencial de vozes cuja identificação sugere serem femininas. NÃO garante voz feminina em todos os dispositivos. Se não houver voz japonesa, Listening não terá som. **Piper Plus ainda não está integrado**: requer empacotar runtime, dicionário/modelo japonês e verificar licença da voz.
+
+## Limitações deste protótipo
+
+O modelo de dados do antigo Japcket não é importado automaticamente: para testar use o `src/data.js` incluído. Não há Service Worker/PWA offline integrado nesta etapa. Vozes e qualidade dependem do navegador/SO. A implementação não inclui testes automatizados suficientes para publicação em produção sem validação adicional. A revisão fica na fila da sessão (não persiste entre recargas). A dica de leitura em Kanji impede pontuar aquele acerto como Kanji, mas não cria uma habilidade separada para escrita manual.
