@@ -20,6 +20,7 @@ Execute `npm run deploy` para gerar o build e publicar a pasta `dist` na branch 
 - Furigana opcional nos cartões Japonês → Português até cada cartão alcançar 10 acertos em Kanji → Kana.
 - Listening com segunda oportunidade de leitura depois de errar: o erro em Listening é salvo e a leitura é avaliada separadamente.
 - Conteúdo por Situação, Vocabulário, Frases e Gramática (partículas, conjugações e estruturas); revisão de erro em N cartões (padrão 20) e uma única reentrada agendada por erro.
+- As situações de estudo seguem o catálogo ordenado de 25 temas definido em `src/data.js`; cada cartão pode pertencer a uma ou mais situações.
 - Botões de resposta no estilo suave do EN; versão visível no rodapé das Configurações; zerar progresso.
 - Nas Configurações, combine por switches os quatro modos Japonês → Português, Português → Japonês, Kana → Kanji e Kanji → Kana; selecione Vocabulário, Frases e Gramática e personalize dicas, rodadas e áudio.
 - Voz japonesa via Web Speech API sem custo de API, com seleção preferencial de vozes cuja identificação sugere serem femininas. NÃO garante voz feminina em todos os dispositivos. Se não houver voz japonesa, Listening não terá som. **Piper Plus ainda não está integrado**: requer empacotar runtime, dicionário/modelo japonês e verificar licença da voz.

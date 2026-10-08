@@ -1,5 +1,5 @@
 import './style.css';
-import { cards } from './data.js';
+import { cards, studySituations } from './data.js';
 import {
   MAX, load, save, record, pool, hasKanji, score,
   summarize, choose
@@ -45,8 +45,7 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '"': '&quot;',
   "'": '&#39;'
 }[char]));
-const situations = [...new Set(cards.flatMap(card => card.situations || []))]
-  .sort((a, b) => a.localeCompare(b, 'pt'));
+const situations = studySituations;
 
 app.innerHTML = `
   <main>

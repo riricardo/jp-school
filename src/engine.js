@@ -1,6 +1,14 @@
 export const MAX=10;
 export const SKILLS=['kana','reverse','toKanji','fromKanji'];
 export const STORAGE='manjapa-v1';
+const legacySituations={
+  Cotidiano:'🏠 Cotidiano',
+  Restaurante:'🍜 Restaurante',
+  Transporte:'🚆 Transporte',
+  Aeroporto:'✈️ Viagens',
+  Hotel:'✈️ Viagens',
+  Emergências:'🤝 Problemas cotidianos'
+};
 export const defaults={
   mode:'mixed',
   skills:[...SKILLS],
@@ -54,6 +62,7 @@ export function load(){
   }catch{return structuredClone(defaults);}
   if(!stored||typeof stored!=='object')return structuredClone(defaults);
   const state={...structuredClone(defaults),...stored};
+  state.situation=legacySituations[state.situation]||state.situation;
   if(!Array.isArray(stored.skills)){
     const modeMap={kanji:'kana',listening:'kana'};
     const mode=modeMap[stored.mode]||stored.mode;

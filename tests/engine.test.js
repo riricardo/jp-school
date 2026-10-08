@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {record,score,eligible,pool,summarize,defaults,filtered,load,SKILLS,hasKanji} from '../src/engine.js';
-import {cards} from '../src/data.js';
+import {cards,studySituations} from '../src/data.js';
 const card={id:'x',japanese:'水',kana:'みず',kind:'word',situations:['Restaurante']};
 const noKanji={id:'y',japanese:'すみません',kana:'すみません',kind:'phrase',situations:['Aeroporto']};
 const katakanaOnly={id:'k',japanese:'パスポート',kana:'パスポート',kind:'word',situations:['Aeroporto']};
@@ -43,6 +43,16 @@ test('Content checkboxes filter words and phrases independently',()=>{
  const s={...structuredClone(defaults),kinds:['phrase']};
  assert.deepEqual(filtered([card,noKanji],s).map(item=>item.id),['y']);
 });
+test('Study situations provide the complete ordered taxonomy',()=>{
+ assert.equal(studySituations.length,25);
+ assert.equal(new Set(studySituations).size,25);
+ assert.deepEqual(cards.flatMap(item=>item.situations),cards.flatMap(item=>item.situations)
+  .filter(situation=>studySituations.includes(situation)));
+ assert.deepEqual(
+  filtered(cards,{...structuredClone(defaults),situation:'🍜 Restaurante'}).map(item=>item.id),
+  ['taberu','mizu','arigatou','menu','grammar-wo-object','grammar-de-location','grammar-te-kudasai']
+ );
+});
 test('Grammar is an independently selectable content kind',()=>{
  const s={...structuredClone(defaults),kinds:['grammar']};
  const grammarCards=filtered(cards,s);
@@ -59,6 +69,18 @@ test('Existing mode and content preferences migrate to checkbox settings',()=>{
   assert.deepEqual(s.kinds,['word']);
   assert.equal(score(s,'x','kana'),3);
   assert.equal(s.autoFurigana,true);
+ }finally{
+  if(previous===undefined)delete globalThis.localStorage;
+  else globalThis.localStorage=previous;
+ }
+});
+test('Saved legacy situation filters migrate to the new labels',()=>{
+ const previous=globalThis.localStorage;
+ globalThis.localStorage={
+  getItem:()=>JSON.stringify({situation:'Restaurante'})
+ };
+ try{
+  assert.equal(load().situation,'🍜 Restaurante');
  }finally{
   if(previous===undefined)delete globalThis.localStorage;
   else globalThis.localStorage=previous;
