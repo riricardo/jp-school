@@ -2,16 +2,16 @@ import './style.css';
 import { cards, studySituations } from './data.js';
 import {
   MAX, load, save, record, pool, hasKanji, score,
-  summarize, choose
+  summarize, buildRound
 } from './engine.js';
 import {
   japaneseMarkup,
   solutionJapaneseMarkup,
   studyPromptMarkup
 } from './japanese.js';
-import { japaneseVoices, speak, stopAudio } from './audio.js';
+import { aiJapaneseVoices, japaneseVoices, speak, stopAudio } from './audio.js';
 
-const APP_VERSION = '0.1.0';
+const APP_VERSION = '0.2.0';
 const labels = {
   kana: 'Japonês → Português',
   reverse: 'Português → Japonês',
@@ -37,6 +37,8 @@ let previous = '';
 let counter = 0;
 let deck = [];
 let retries = [];
+let roundGeneration = 0;
+let buildingRound = false;
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;',
@@ -184,11 +186,12 @@ app.innerHTML = `
         </select>
       </label>
       <label class="check-option"><input id="autoAudio" type="checkbox"><span>Listening: reproduzir áudio automaticamente</span></label>
-      <p class="small">A voz japonesa depende das vozes instaladas no dispositivo.</p>
+      <p class="small">Kokoro IA usa Hugging Face/CDN no primeiro uso; depois o navegador pode reutilizar o cache. Voz do dispositivo funciona sem rede quando instalada.</p>
     </fieldset>
     <p id="available" class="small" role="status"></p>
     <button id="newRound" class="primary">Iniciar rodada nova</button>
     <button id="reset" class="danger">Zerar progresso</button>
+    <button id="refreshApp" class="secondary" type="button">Atualizar aplicativo</button>
     <footer>ManJapa · v${APP_VERSION}</footer>
   </dialog>`;
 
@@ -205,8 +208,9 @@ function updateSetting(key, value, startNewRound = false) {
 
 function fillVoices() {
   const voices = japaneseVoices();
-  $('voice').innerHTML = `<option value="auto">Automática (preferir feminina)</option>` +
-    voices.map(voice => `<option value="${esc(voice.voiceURI)}">${esc(voice.name)}</option>`).join('');
+  $('voice').innerHTML = `<option value="auto">Dispositivo · automática japonesa</option>` +
+    aiJapaneseVoices.map(([value, label]) => `<option value="hf:kokoro:${esc(value)}">${esc(label)}</option>`).join('') +
+    voices.map(voice => `<option value="${esc(voice.voiceURI)}">Dispositivo · ${esc(voice.name)}</option>`).join('');
   $('voice').value = [...$('voice').options].some(option => option.value === state.voice)
     ? state.voice
     : 'auto';
@@ -263,8 +267,36 @@ $('settings').addEventListener('close', () => {
   $('settingsButton').setAttribute('aria-expanded', 'false');
 });
 window.speechSynthesis?.addEventListener?.('voiceschanged', fillVoices);
+// Mobile browsers often populate voices only after an explicit user gesture.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopAudio();
+  else fillVoices();
+});
+window.addEventListener('pageshow', fillVoices);
+$('refreshApp').onclick = async () => {
+  stopAudio();
+  const button = $('refreshApp');
+  button.disabled = true;
+  button.textContent = navigator.onLine ? 'Verificando...' : 'Sem conexão';
+  try {
+    if (!navigator.onLine) throw new Error('offline');
+    const registration = await navigator.serviceWorker?.getRegistration();
+    if (registration) {
+      await registration.update();
+      registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+    }
+    window.location.reload();
+  } catch {
+    button.disabled = false;
+    button.textContent = 'Atualizar aplicativo';
+    $('available').textContent = navigator.onLine
+      ? 'Não foi possível verificar agora. O app continua funcionando com o cache local.'
+      : 'Conecte à internet para buscar uma atualização.';
+  }
+};
 
 function resetRound() {
+  roundGeneration++;
   stopAudio();
   current = null;
   phase = 'question';
@@ -274,25 +306,28 @@ function resetRound() {
   previous = '';
 }
 
-function createRound(closeDialog = true, playAutomatically = closeDialog) {
+async function createRound(closeDialog = true, playAutomatically = closeDialog) {
   resetRound();
-  const candidates = pool(cards, state);
-  const count = Math.min(state.amount, candidates.length);
-
-  for (let index = 0; index < count; index++) {
-    const item = choose(candidates, state, previous);
-    if (!item) break;
-    deck.push(item);
-    previous = `${item.id}/${item.skill}`;
-    candidates.splice(candidates.findIndex(candidate =>
-      candidate.id === item.id && candidate.skill === item.skill), 1);
-  }
-
-  previous = '';
-  nextCard(playAutomatically);
-  save(state);
-  syncSettings();
+  const generation = roundGeneration;
+  buildingRound = true;
+  render();
   if (closeDialog && $('settings').open) closeSettings();
+  try {
+    const snapshot = structuredClone(state);
+    const result = await buildRound(pool(cards, snapshot), snapshot, snapshot.amount, {
+      cancelled: () => generation !== roundGeneration
+    });
+    if (generation !== roundGeneration || !result) return;
+    deck = result;
+    buildingRound = false;
+    nextCard(playAutomatically);
+    syncSettings();
+  } catch {
+    if (generation !== roundGeneration) return;
+    buildingRound = false;
+    render();
+    $('prompt').textContent = 'Não foi possível preparar a rodada. Tente novamente.';
+  }
 }
 
 function pull() {
@@ -341,10 +376,6 @@ function answer(correct) {
   if (!correct) scheduleRetry(id, skill);
   save(state);
   if (correct) {
-    nextCard();
-    return;
-  }
-  if (!hasUnrevealedHints()) {
     nextCard();
     return;
   }
@@ -515,10 +546,11 @@ function render() {
   const remaining = deck.length + retries.length;
   $('round').textContent = current
     ? `${remaining + 1} cartões restantes nesta rodada · meta ${MAX}/10`
-    : 'Rodada concluída';
+    : buildingRound ? 'Preparando rodada...' : 'Rodada concluída';
   if (!current) {
-    $('badge').textContent = pool(cards, state).length ? 'Rodada concluída' : 'Sem desafios';
-    $('prompt').textContent = pool(cards, state).length
+    const available = pool(cards, state).length;
+    $('badge').textContent = buildingRound ? '' : available ? 'Rodada concluída' : 'Sem desafios';
+    $('prompt').textContent = buildingRound ? 'Preparando rodada...' : available
       ? 'Muito bem. Comece uma nova rodada quando quiser.'
       : 'Ajuste os modos ou o conteúdo nas configurações.';
     $('solution').hidden = true;
@@ -526,9 +558,9 @@ function render() {
     $('hints').hidden = true;
     $('audioMsg').textContent = '';
     $('actions').hidden = true;
-    $('next').hidden = false;
+    $('next').hidden = buildingRound;
     $('next').textContent = 'Nova rodada';
-    $('next').disabled = pool(cards, state).length === 0;
+    $('next').disabled = buildingRound || available === 0;
     return;
   }
 
@@ -595,3 +627,14 @@ function solutionMarkup(card, skill, revealed) {
 
 render();
 if (!current && pool(cards, state).length) createRound();
+
+// Reload automatically when a new service worker takes control.
+if ('serviceWorker' in navigator) {
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) { refreshing = true; window.location.reload(); }
+  });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
+  });
+}

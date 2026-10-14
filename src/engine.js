@@ -124,4 +124,42 @@ export function pool(cards,state){
     .filter(item=>score(state,item.id,item.skill)<MAX);
 }
 export function summarize(cards,state){return SKILLS.map(skill=>{const applicable=filtered(cards,state).filter(c=>eligible(c,skill));const earned=applicable.reduce((t,c)=>t+score(state,c.id,skill),0);const total=applicable.length*MAX;return {skill,earned,total,percent:total?Math.round(earned/total*100):0};});}
-export function choose(candidates,state,previous){const items=candidates.filter(x=>`${x.id}/${x.skill}`!==previous);const selected=items.length?items:candidates;if(!selected.length)return null;const sorted=[...selected].sort((a,b)=>score(state,a.id,a.skill)-score(state,b.id,b.skill)+Math.random()*.1-.05);return sorted[0];}
+export function choose(candidates,state,previous){
+  let selected=null;
+  let lowest=Infinity;
+  let ties=0;
+  for(const item of candidates){
+    if(`${item.id}/${item.skill}`===previous)continue;
+    const value=score(state,item.id,item.skill);
+    if(value<lowest){selected=item;lowest=value;ties=1;}
+    else if(value===lowest&&Math.random()<1/++ties)selected=item;
+  }
+  return selected||candidates[0]||null;
+}
+
+const yieldToBrowser=()=>globalThis.scheduler?.yield
+  ?globalThis.scheduler.yield()
+  :new Promise(resolve=>setTimeout(resolve,0));
+
+export async function buildRound(candidates,state,amount,{cancelled=()=>false,yieldTask=yieldToBrowser}={}){
+  const remaining=[...candidates];
+  const result=[];
+  const count=Math.min(amount,remaining.length);
+  let previous='';
+  let sliceStarted=performance.now();
+  // Yield to a browser task, so input and painting can run between batches.
+  await yieldTask();
+  for(let index=0;index<count;index++){
+    if(cancelled())return null;
+    const item=choose(remaining,state,previous);
+    if(!item)break;
+    result.push(item);
+    previous=`${item.id}/${item.skill}`;
+    remaining.splice(remaining.indexOf(item),1);
+    if(performance.now()-sliceStarted>=8){
+      await yieldTask();
+      sliceStarted=performance.now();
+    }
+  }
+  return cancelled()?null:result;
+}

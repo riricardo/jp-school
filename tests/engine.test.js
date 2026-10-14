@@ -1,11 +1,42 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {record,score,eligible,pool,summarize,defaults,filtered,load,SKILLS,hasKanji} from '../src/engine.js';
+import {record,score,eligible,pool,summarize,defaults,filtered,load,SKILLS,hasKanji,choose,buildRound} from '../src/engine.js';
 import {cards,studySituations} from '../src/data.js';
 const card={id:'x',japanese:'水',kana:'みず',kind:'word',situations:['Restaurante']};
 const noKanji={id:'y',japanese:'すみません',kana:'すみません',kind:'phrase',situations:['Aeroporto']};
 const katakanaOnly={id:'k',japanese:'パスポート',kana:'パスポート',kind:'word',situations:['Aeroporto']};
 const grammar={id:'g',japanese:'水を飲みます',kana:'みずをのみます',kind:'grammar',situations:['Cotidiano']};
+test('Round selection prioritizes lower scores and avoids the previous challenge',()=>{
+ const state=structuredClone(defaults);
+ record(state,'x','kana',true);
+ const candidates=[{id:'x',skill:'kana'},{id:'y',skill:'kana'},{id:'k',skill:'kana'}];
+ assert.equal(choose(candidates,state,'y/kana').id,'k');
+ assert.equal(choose([candidates[0]],state,'x/kana'),candidates[0]);
+ assert.equal(choose([],state,''),null);
+});
+test('Round construction yields before work and preserves candidates and score priority',async()=>{
+ const state=structuredClone(defaults);
+ record(state,'x','kana',true);
+ const candidates=pool([card,noKanji,katakanaOnly],state);
+ const original=[...candidates];
+ let yielded=false;
+ const task=buildRound(candidates,state,candidates.length,{yieldTask:async()=>{yielded=true;}});
+ assert.equal(yielded,true);
+ const round=await task;
+ assert.deepEqual(candidates,original);
+ assert.equal(new Set(round.map(item=>`${item.id}/${item.skill}`)).size,candidates.length);
+ assert.equal(round.at(-1).id,'x');
+ assert.equal(round.at(-1).skill,'kana');
+});
+test('Cancelled round construction stops when a new configuration replaces it',async()=>{
+ const state=structuredClone(defaults);
+ let cancelled=false;
+ const round=await buildRound(pool([card],state),state,4,{
+   cancelled:()=>cancelled,
+   yieldTask:async()=>{cancelled=true;}
+ });
+ assert.equal(round,null);
+});
 test('Progress is tracked in the four learning directions',()=>{
  assert.deepEqual(SKILLS,['kana','reverse','toKanji','fromKanji']);
  const s=structuredClone(defaults);
