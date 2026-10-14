@@ -2,10 +2,8 @@ import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 
-const repository = process.env.GITHUB_REPOSITORY?.split('/')[1];
-
-export default defineConfig({
-  base: process.env.GITHUB_ACTIONS && repository && !repository.endsWith('.github.io') ? `/${repository}/` : '/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/jp-school/' : '/',
   plugins: [{
     name: 'offline-shell',
     apply: 'build',
@@ -24,4 +22,4 @@ export default defineConfig({
       this.emitFile({ type: 'asset', fileName: 'sw.js', source });
     }
   }]
-});
+}));
