@@ -10,7 +10,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)));
+    await Promise.all(keys.filter(key => key.startsWith('manjapa-shell-') && key !== CACHE).map(key => caches.delete(key)));
     await self.registration.navigationPreload?.enable();
     await self.clients.claim();
   })());

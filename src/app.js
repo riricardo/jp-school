@@ -10,6 +10,7 @@ import {
   studyPromptMarkup
 } from './japanese.js';
 import { aiJapaneseVoices, japaneseVoices, speak, stopAudio } from './audio.js';
+import { setupInstall } from './install.js';
 
 const APP_VERSION = '0.2.0';
 const labels = {
@@ -192,11 +193,14 @@ app.innerHTML = `
     <button id="newRound" class="primary">Iniciar rodada nova</button>
     <button id="reset" class="danger">Zerar progresso</button>
     <button id="refreshApp" class="secondary" type="button">Atualizar aplicativo</button>
+    <button id="installApp" class="secondary" type="button">Instalar ManJapa</button>
+    <p id="installStatus" class="small" role="status"></p>
     <footer>ManJapa · v${APP_VERSION}</footer>
   </dialog>`;
 
 const $ = id => document.getElementById(id);
 const selected = selector => [...document.querySelectorAll(selector)];
+setupInstall($('installApp'), $('installStatus'));
 
 function updateSetting(key, value, startNewRound = false) {
   state[key] = value;
@@ -208,9 +212,12 @@ function updateSetting(key, value, startNewRound = false) {
 
 function fillVoices() {
   const voices = japaneseVoices();
-  $('voice').innerHTML = `<option value="auto">Dispositivo · automática japonesa</option>` +
+  $('voice').innerHTML = `<optgroup label="Voz do sistema">
+    <option value="auto">Voz do sistema · Japonês</option>` +
+    voices.map(voice => `<option value="${esc(voice.voiceURI)}">${esc(voice.name)}</option>`).join('') +
+    `</optgroup><optgroup label="Hugging Face · Kokoro IA">` +
     aiJapaneseVoices.map(([value, label]) => `<option value="hf:kokoro:${esc(value)}">${esc(label)}</option>`).join('') +
-    voices.map(voice => `<option value="${esc(voice.voiceURI)}">Dispositivo · ${esc(voice.name)}</option>`).join('');
+    `</optgroup>`;
   $('voice').value = [...$('voice').options].some(option => option.value === state.voice)
     ? state.voice
     : 'auto';
@@ -467,8 +474,14 @@ $('autoAudio').onchange = event => {
   if (!enabled) stopAudio();
   else if (hasJapanesePrompt()) play();
 };
-$('speed').onchange = event => updateSetting('speed', Number(event.target.value));
-$('voice').onchange = event => updateSetting('voice', event.target.value);
+$('speed').onchange = event => {
+  stopAudio();
+  updateSetting('speed', Number(event.target.value));
+};
+$('voice').onchange = event => {
+  stopAudio();
+  updateSetting('voice', event.target.value);
+};
 
 $('reset').onclick = () => {
   if (!confirm('Zerar todo o progresso das quatro habilidades?')) return;
@@ -629,12 +642,16 @@ render();
 if (!current && pool(cards, state).length) createRound();
 
 // Reload automatically when a new service worker takes control.
-if ('serviceWorker' in navigator) {
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   let refreshing = false;
+  let controlled = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!refreshing) { refreshing = true; window.location.reload(); }
+    if (controlled && !refreshing) { refreshing = true; window.location.reload(); }
+    controlled = true;
   });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
+      $('installStatus').textContent = 'Não foi possível preparar o acesso offline. Reabra o aplicativo com conexão.';
+    });
   });
 }

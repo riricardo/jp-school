@@ -2,9 +2,16 @@
   "name": "ManJapa",
   "short_name": "ManJapa",
   "description": "Treino mobile-first de japonês com kana, kanji, listening e situações.",
-  "start_url": ".",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f5f5f7",
   "theme_color": "#f5f5f7",
-  "lang": "pt-BR"
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
 }

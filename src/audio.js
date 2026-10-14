@@ -13,9 +13,11 @@ let activeMedia = null;
 let activeUrl = null;
 let generation = 0;
 let lastText = null;
+let lastPlayback = null;
 let voiceWorker = null;
 let pendingVoice = null;
 const synth = () => globalThis.window?.speechSynthesis || globalThis.speechSynthesis;
+const playbackRate = state => Math.max(0.5, Math.min(2, Number(state.speed) || 1));
 
 export function japaneseVoices() {
   try { return (synth()?.getVoices() || []).filter(v => /^ja(?:-|$)/i.test(v.lang)); }
@@ -38,6 +40,7 @@ export function preferVoice(voices, chosen = 'auto') {
 export function stopAudio() {
   generation++;
   lastText = null;
+  lastPlayback = null;
   if (pendingVoice) {
     const pending = pendingVoice;
     pendingVoice = null;
@@ -94,27 +97,29 @@ function generateVoice(text, voice, token) {
 }
 function nativeSpeak(text, state, onError, token) {
   const speech = synth();
-  if (!text || !speech || typeof globalThis.SpeechSynthesisUtterance !== 'function') {
+  const Utterance = globalThis.window?.SpeechSynthesisUtterance || globalThis.SpeechSynthesisUtterance;
+  if (!text || !speech || typeof Utterance !== 'function') {
     onError('Áudio indisponível neste navegador. O estudo continua normalmente.');
     return false;
   }
   const voices = japaneseVoices();
-  if (!voices.length) {
-    onError('Sem voz japonesa neste dispositivo. Instale uma voz japonesa nas configurações do sistema; o estudo continua normalmente.');
-    return false;
-  }
   try {
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new Utterance(text);
     utterance.lang = 'ja-JP';
-    utterance.rate = Math.max(0.5, Math.min(2, Number(state.speed) || 1));
-    utterance.voice = preferVoice(voices, state.voice);
+    utterance.rate = playbackRate(state);
+    // Android can speak by language before getVoices() has populated its list.
+    const voice = preferVoice(voices, state.voice);
+    if (voice) utterance.voice = voice;
     active = utterance;
     lastText = text;
+    utterance.onstart = () => { if (token === generation) onError(''); };
     utterance.onend = () => { if (token === generation) active = null; };
     utterance.onerror = event => {
       if (token !== generation || ['canceled', 'interrupted'].includes(event.error)) return;
       active = null;
-      onError('Não foi possível reproduzir o áudio. Você pode continuar estudando.');
+      onError(['language-unavailable', 'voice-unavailable'].includes(event.error)
+        ? 'Voz japonesa indisponível no sistema. No Samsung: Configurações → Gerenciamento geral → Texto para voz → mecanismo Google → instalar dados de voz → Japonês.'
+        : 'Não foi possível reproduzir o áudio do sistema. Você pode continuar estudando.');
     };
     speech.speak(utterance);
     return true;
@@ -132,7 +137,7 @@ async function kokoroSpeak(text, state, onError, token) {
     if (token !== generation) return;
     activeUrl = URL.createObjectURL(blob);
     activeMedia = new Audio(activeUrl);
-    activeMedia.playbackRate = Math.max(0.5, Math.min(2, Number(state.speed) || 1));
+    activeMedia.playbackRate = playbackRate(state);
     activeMedia.onended = () => {
       if (token === generation) stopAudio();
     };
@@ -149,12 +154,14 @@ async function kokoroSpeak(text, state, onError, token) {
   }
 }
 export function speak(text, state = {}, onError = () => {}) {
-  if (pendingVoice && lastText === text) return true;
-  if (active && lastText === text && synth()?.speaking) return true;
-  if (activeMedia && lastText === text && !activeMedia.paused) return true;
+  const playback = `${state.voice || 'auto'}/${playbackRate(state)}`;
+  if (lastText === text && lastPlayback === playback) {
+    if (pendingVoice || (active && synth()?.speaking) || (activeMedia && !activeMedia.paused)) return true;
+  }
   stopAudio();
   const token = generation;
   lastText = text;
+  lastPlayback = playback;
   if (isAiVoice(state.voice)) {
     kokoroSpeak(text, state, onError, token);
     return true;

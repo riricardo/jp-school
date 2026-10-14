@@ -2,6 +2,69 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { speak, stopAudio } from '../src/audio.js';
 
+test('System voice speaks Japanese with an empty Android voice list and applies speed changes', () => {
+  const previousWindow = globalThis.window;
+  const previousWorker = globalThis.Worker;
+  const spoken = [];
+  globalThis.Worker = class { constructor() { throw new Error('System voice must not start AI'); } };
+  globalThis.window = {
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    speechSynthesis: {
+      speaking: false,
+      getVoices: () => [],
+      cancel() { this.speaking = false; },
+      speak(utterance) { spoken.push(utterance); this.speaking = true; }
+    }
+  };
+  try {
+    const messages = [];
+    assert.equal(speak('みず', { voice: 'auto', speed: 0.7 }, message => messages.push(message)), true);
+    assert.equal(spoken[0].lang, 'ja-JP');
+    assert.equal(spoken[0].rate, 0.7);
+    assert.equal(spoken[0].voice, undefined);
+    assert.deepEqual(messages, []);
+    const staleError = spoken[0].onerror;
+    assert.equal(speak('みず', { voice: 'auto', speed: 1.5 }), true);
+    assert.equal(spoken.length, 2);
+    assert.equal(spoken[1].rate, 1.5);
+    speak('こんにちは', { voice: 'auto', speed: 99 });
+    assert.equal(spoken[2].rate, 2);
+    staleError({ error: 'language-unavailable' });
+    assert.deepEqual(messages, []);
+  } finally {
+    stopAudio();
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+    if (previousWorker === undefined) delete globalThis.Worker;
+    else globalThis.Worker = previousWorker;
+  }
+});
+
+test('System voice uses the selected Japanese voice and reports a missing language', () => {
+  const previousWindow = globalThis.window;
+  const voice = { lang: 'ja-JP', name: 'Japanese', voiceURI: 'system-ja' };
+  let utterance;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: {
+      getVoices: () => [voice], cancel() {},
+      speak(value) { utterance = value; }
+    }
+  };
+  try {
+    const messages = [];
+    speak('みず', { voice: 'system-ja', speed: 0.5 }, message => messages.push(message));
+    assert.equal(utterance.voice, voice);
+    assert.equal(utterance.rate, 0.5);
+    utterance.onerror({ error: 'language-unavailable' });
+    assert.match(messages[0], /Voz japonesa indisponível/);
+  } finally {
+    stopAudio();
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
+});
+
 test('AI generation runs in a worker, deduplicates play and cancels on stop', async () => {
   const previousWorker = globalThis.Worker;
   const workers = [];
