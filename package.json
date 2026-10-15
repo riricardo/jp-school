@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "node --test",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --dotfiles"
+    "deploy": "gh-pages -d dist --dotfiles",
+    "merge-dev": "bash .github/scripts/merge-dev.sh"
   },
   "devDependencies": {
     "gh-pages": "6.1.1",
