@@ -92,14 +92,29 @@ echo "✅ Both branches are synchronized."
 # Run mandatory checks before merging
 echo "🧪 Running project checks..."
 
-echo "📦 Installing dependencies..."
-npm ci || fail "Dependency installation failed. Merge cancelled."
+run_check() {
+  local MESSAGE="$1"
+  shift
 
-echo "🔨 Building project..."
-npm run build || fail "Build failed. Merge cancelled."
+  local LOG_FILE
+  LOG_FILE=$(mktemp)
 
-echo "🧪 Running automated tests..."
-npm test || fail "Tests failed. Merge cancelled."
+  echo "⏳ $MESSAGE..."
+
+  if "$@" >"$LOG_FILE" 2>&1; then
+    echo "✅ $MESSAGE passed."
+    rm -f "$LOG_FILE"
+  else
+    echo "❌ $MESSAGE failed."
+    cat "$LOG_FILE"
+    rm -f "$LOG_FILE"
+    fail "Validation failed. Merge cancelled."
+  fi
+}
+
+run_check "Dependency installation" npm ci
+run_check "Build" npm run build
+run_check "Tests" npm test
 
 echo "✅ All project checks passed."
 
