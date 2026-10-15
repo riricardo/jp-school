@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
+import * as engine from '../src/engine.js';
+import * as japanese from '../src/japanese.js';
+import { clampPlaybackRate, MIN_PLAYBACK_RATE } from '../src/audio.js';
 
 const scope = 'https://example.test/jp-school/';
 const shell = ['./', './assets/app.js', './assets/app.css', './assets/audio-worker.js'];
@@ -131,9 +134,11 @@ function appFixture() {
   const events = {};
   const timers = new Map();
   const channels = [];
+  const plays = [];
   let timerId = 0;
   const element = () => ({
-    textContent: '', hidden: false, options: [],
+    textContent: '', innerHTML: '', hidden: false, options: [],
+    insertAdjacentHTML(_, html) { this.innerHTML += html; },
     addEventListener() {}, setAttribute() {}, showModal() {}, close() {}
   });
   const app = element();
@@ -150,6 +155,7 @@ function appFixture() {
     async getRegistration() { return registration; }
   };
   const context = vm.createContext({
+    ...engine, ...japanese, structuredClone, performance, clampPlaybackRate, MIN_PLAYBACK_RATE,
     document: {
       querySelector: () => app, querySelectorAll: () => [],
       getElementById: id => elements.get(id), addEventListener() {}
@@ -168,8 +174,10 @@ function appFixture() {
     },
     setTimeout(handler) { timers.set(++timerId, handler); return timerId; },
     clearTimeout(id) { timers.delete(id); },
-    cards: [], studySituations: [], MAX: 10,
-    load: () => ({ skills: [], kinds: [] }), pool: () => [], summarize: () => [],
+    cards: [], studySituations: [],
+    load: () => structuredClone(engine.defaults), save() {}, stopAudio() {},
+    speak(text, state, _, options) { plays.push({ text, speed: state.speed, restart: options?.restart }); },
+    japaneseVoices: () => [], aiJapaneseVoices: [],
     setupInstall(button, status) { assert.ok(button); assert.ok(status); }
   });
   const source = readFileSync(new URL('../src/app.js', import.meta.url), 'utf8')
@@ -177,7 +185,16 @@ function appFixture() {
     .replaceAll('import.meta.env.PROD', 'true')
     .replaceAll('import.meta.env.BASE_URL', JSON.stringify('/jp-school/'));
   vm.runInContext(source, context);
-  return { context, elements, events, timers, channels, registration, serviceWorker };
+  const startExercise = (skill, settings = {}) => {
+    context.fixtureSettings = settings;
+    context.fixtureCard = { id: 'x', kind: 'word', japanese: '水', kana: 'みず', romaji: 'mizu', pt: 'água' };
+    context.cards.splice(0, context.cards.length, context.fixtureCard);
+    vm.runInContext(`state = { ...structuredClone(defaults), ...fixtureSettings };
+      current = { id: fixtureCard.id, skill: ${JSON.stringify(skill)}, card: fixtureCard };
+      phase = 'question'; deck = []; retries = []; counter = 1;
+      resetAudioControls(); render();`, context);
+  };
+  return { context, elements, events, timers, channels, registration, serviceWorker, plays, startExercise };
 }
 
 test('App readiness handles controller arrival, all-file results, timeout and closed ports', async () => {
@@ -248,4 +265,96 @@ test('App rejects inconsistent messages, posting errors and absent SW support', 
   delete app.context.navigator.serviceWorker;
   await app.context.checkOfflineReady();
   assert.match(app.elements.get('offlineStatus').textContent, /indisponível/);
+});
+
+test('Manual and automatic romaji do not assist JP-PT or Kana-Kanji; PT does assist JP-PT', () => {
+  const app = appFixture();
+  for (const skill of ['kana', 'toKanji']) {
+    app.startExercise(skill, { progress: { x: { [skill]: 2 } } });
+    app.context.showHint('romaji');
+    assert.equal(app.elements.get('yes').disabled, false);
+    assert.equal(vm.runInContext(`state.progress.x.${skill}`, app.context), 2);
+    assert.equal(vm.runInContext('retries.length', app.context), 0);
+    app.startExercise(skill, { romaji: true, progress: { x: { [skill]: 2 } } });
+    assert.equal(app.elements.get('yes').disabled, false);
+    assert.equal(vm.runInContext(`state.progress.x.${skill}`, app.context), 2);
+  }
+  app.startExercise('kana', { progress: { x: { kana: 2, fromKanji: 3 } } });
+  app.context.showHint('meaning');
+  assert.equal(app.elements.get('yes').disabled, true);
+  assert.equal(vm.runInContext('state.progress.x.kana', app.context), 0);
+  assert.equal(vm.runInContext('state.progress.x.fromKanji', app.context), 3);
+  assert.equal(vm.runInContext('retries.length', app.context), 1);
+  app.startExercise('fromKanji', { romaji: true });
+  assert.equal(app.elements.get('yes').disabled, true);
+  assert.match(app.elements.get('prompt').innerHTML, /mizu/);
+});
+
+test('Slow audio uses 70% twice, minimum speed from the third click, and resets on every exercise', () => {
+  const app = appFixture();
+  app.startExercise('kana', { speed: 1.4 });
+  app.context.play();
+  assert.equal(app.plays.at(-1).restart, false);
+  assert.equal(vm.runInContext('normalAudioClicks', app.context), 0);
+  app.elements.get('audioButton').onclick();
+  assert.equal(app.plays.at(-1).restart, true);
+  assert.equal(app.elements.get('slowAudioButton').hidden, true);
+  app.elements.get('audioButton').onclick();
+  assert.equal(app.elements.get('slowAudioButton').hidden, false);
+  for (let i = 0; i < 4; i++) app.elements.get('slowAudioButton').onclick();
+  assert.ok(app.plays.slice(-4).every(play => play.restart));
+  assert.deepEqual(app.plays.slice(-4).map(play => Number(play.speed.toFixed(2))), [0.98, 0.98, 0.25, 0.25]);
+  assert.equal(vm.runInContext('state.speed', app.context), 1.4);
+  vm.runInContext("retries = [{id:'x',skill:'kana',due:0}];", app.context);
+  app.context.nextCard(false);
+  assert.equal(vm.runInContext('current.isRetry', app.context), true);
+  assert.equal(vm.runInContext('normalAudioClicks + slowAudioClicks', app.context), 0);
+  assert.equal(app.elements.get('slowAudioButton').hidden, true);
+  app.elements.get('audioButton').onclick();
+  app.elements.get('audioButton').onclick();
+  app.elements.get('slowAudioButton').onclick();
+  assert.equal(Number(app.plays.at(-1).speed.toFixed(2)), 0.98);
+  vm.runInContext('state.speed = 0.5;', app.context);
+  app.elements.get('slowAudioButton').onclick();
+  assert.equal(app.plays.at(-1).speed, 0.35);
+  app.elements.get('slowAudioButton').onclick();
+  app.elements.get('slowAudioButton').onclick();
+  assert.equal(app.plays.at(-1).speed, 0.25);
+  assert.equal(vm.runInContext('state.speed', app.context), 0.5);
+});
+
+test('A correct retry resumes the normal deck and keeps the independent streak', () => {
+  const app = appFixture();
+  app.startExercise('kana', { retry: 1 });
+  app.context.answer(false);
+  assert.match(app.elements.get('solution').innerHTML, /mizu/);
+  assert.match(app.elements.get('solution').innerHTML, /água/);
+  vm.runInContext("deck = [{id:'y',skill:'kana',card:{...fixtureCard,id:'y'}}];", app.context);
+  app.context.nextCard(false);
+  assert.equal(vm.runInContext('current.id', app.context), 'y');
+  app.context.answer(true);
+  assert.equal(vm.runInContext('current.isRetry', app.context), true);
+  vm.runInContext("deck = [{id:'z',skill:'kana',card:{...fixtureCard,id:'z'}}];", app.context);
+  app.context.answer(true);
+  assert.equal(vm.runInContext('current.id', app.context), 'z');
+  assert.equal(vm.runInContext('state.progress.x.kana', app.context), 1);
+  assert.equal(vm.runInContext('retries.length', app.context), 0);
+});
+
+test('Answer reveal includes kana-only Japanese and preserves already visible PT and romaji', () => {
+  const app = appFixture();
+  app.startExercise('reverse');
+  vm.runInContext("current.card = {...fixtureCard,japanese:'テレビ',kana:'テレビ',romaji:'terebi',pt:'televisão'}; render();", app.context);
+  app.context.answer(false);
+  assert.match(app.elements.get('solution').innerHTML, /テレビ/);
+  assert.match(app.elements.get('solution').innerHTML, /terebi/);
+  assert.ok(!app.elements.get('solution').innerHTML.includes('televisão'));
+  app.startExercise('kana', { autoFurigana: false });
+  app.context.showHint('romaji');
+  app.context.showHint('meaning');
+  app.context.answer(false);
+  assert.match(app.elements.get('prompt').innerHTML, /mizu/);
+  assert.match(app.elements.get('prompt').innerHTML, /água/);
+  assert.match(app.elements.get('solution').innerHTML, /水/);
+  assert.ok(!app.elements.get('solution').innerHTML.includes('mizu'));
 });

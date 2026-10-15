@@ -36,8 +36,8 @@ export const cards = [
   {id:'eki',kind:'word',category:'noun',japanese:'駅',kana:'えき',romaji:'eki',pt:'estação',situations:['🚆 Transporte']},
   {id:'arigatou',kind:'phrase',category:'phrase',japanese:'ありがとうございます',kana:'ありがとうございます',romaji:'arigatou gozaimasu',pt:'muito obrigado(a)',situations:['👋 Cumprimentos','🍜 Restaurante']},
   {id:'eki-doko',kind:'phrase',category:'phrase',japanese:'すみません、駅はどこですか？',kana:'すみません、えきはどこですか？',romaji:'sumimasen, eki wa doko desu ka?',pt:'com licença, onde fica a estação?',situations:['❓ Perguntas comuns','🚆 Transporte']},
-  {id:'menu',kind:'phrase',category:'phrase',japanese:'メニューをください',kana:'めにゅーをください',romaji:'menyuu o kudasai',pt:'o cardápio, por favor',situations:['🍜 Restaurante']},
-  {id:'passport',kind:'word',category:'noun',japanese:'パスポート',kana:'ぱすぽーと',romaji:'pasupooto',pt:'passaporte',situations:['✈️ Viagens']},
+  {id:'menu',kind:'phrase',category:'phrase',japanese:'メニューをください',kana:'メニューをください',romaji:'menyuu o kudasai',pt:'o cardápio, por favor',situations:['🍜 Restaurante']},
+  {id:'passport',kind:'word',category:'noun',japanese:'パスポート',kana:'パスポート',romaji:'pasupooto',pt:'passaporte',situations:['✈️ Viagens']},
   {id:'kankou',kind:'phrase',category:'phrase',japanese:'観光で来ました',kana:'かんこうできました',romaji:'kankou de kimashita',pt:'vim a turismo',situations:['✈️ Viagens','🇯🇵 Cultura japonesa']},
   {id:'hotel',kind:'phrase',category:'phrase',japanese:'予約しています',kana:'よやくしています',romaji:'yoyaku shite imasu',pt:'tenho uma reserva',situations:['✈️ Viagens']},
   {id:'tasukete',kind:'phrase',category:'phrase',japanese:'助けてください',kana:'たすけてください',romaji:'tasukete kudasai',pt:'por favor, me ajude',situations:['🤝 Problemas cotidianos']},
@@ -552,7 +552,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ノート',
-  kana: 'のーと',
+  kana: 'ノート',
   romaji: 'nooto',
   pt: 'caderno',
   situations: ['🎓 Aula de japonês']
@@ -782,7 +782,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ラーメン',
-  kana: 'らーめん',
+  kana: 'ラーメン',
   romaji: 'raamen',
   pt: 'lámen',
   situations: ['🍜 Restaurante']
@@ -922,7 +922,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'メニュー',
-  kana: 'めにゅー',
+  kana: 'メニュー',
   romaji: 'menyuu',
   pt: 'cardápio',
   situations: ['🍜 Restaurante']
@@ -972,7 +972,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'コーヒー',
-  kana: 'こーひー',
+  kana: 'コーヒー',
   romaji: 'koohii',
   pt: 'café',
   situations: ['☕ Cafeteria']
@@ -1012,7 +1012,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ジュース',
-  kana: 'じゅーす',
+  kana: 'ジュース',
   romaji: 'juusu',
   pt: 'suco',
   situations: ['☕ Cafeteria']
@@ -1032,7 +1032,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ケーキ',
-  kana: 'けーき',
+  kana: 'ケーキ',
   romaji: 'keeki',
   pt: 'bolo',
   situations: ['☕ Cafeteria']
@@ -1042,7 +1042,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'パン',
-  kana: 'ぱん',
+  kana: 'パン',
   romaji: 'pan',
   pt: 'pão',
   situations: ['☕ Cafeteria']
@@ -1052,7 +1052,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'サンドイッチ',
-  kana: 'さんどいっち',
+  kana: 'サンドイッチ',
   romaji: 'sandoitchi',
   pt: 'sanduíche',
   situations: ['☕ Cafeteria']
@@ -1062,7 +1062,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'クッキー',
-  kana: 'くっきー',
+  kana: 'クッキー',
   romaji: 'kukkii',
   pt: 'biscoito',
   situations: ['☕ Cafeteria']
@@ -1072,7 +1072,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'カフェラテ',
-  kana: 'かふぇらて',
+  kana: 'カフェラテ',
   romaji: 'kaferate',
   pt: 'café com leite (latte)',
   situations: ['☕ Cafeteria']
@@ -1082,7 +1082,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'カプチーノ',
-  kana: 'かぷちーの',
+  kana: 'カプチーノ',
   romaji: 'kapuchiino',
   pt: 'cappuccino',
   situations: ['☕ Cafeteria']
@@ -1152,7 +1152,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'トイレ',
-  kana: 'といれ',
+  kana: 'トイレ',
   romaji: 'toire',
   pt: 'banheiro',
   situations: ['🏠 Cotidiano']
@@ -1172,7 +1172,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ベッド',
-  kana: 'べっど',
+  kana: 'ベッド',
   romaji: 'beddo',
   pt: 'cama',
   situations: ['🏠 Cotidiano']
@@ -1212,7 +1212,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ドア',
-  kana: 'どあ',
+  kana: 'ドア',
   romaji: 'doa',
   pt: 'porta',
   situations: ['🏠 Cotidiano']
@@ -1572,7 +1572,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ゲーム',
-  kana: 'げーむ',
+  kana: 'ゲーム',
   romaji: 'geemu',
   pt: 'jogo',
   situations: ['❤️ Gostos e preferências']
@@ -1932,7 +1932,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'パーティー',
-  kana: 'ぱーてぃー',
+  kana: 'パーティー',
   romaji: 'paatii',
   pt: 'festa',
   situations: ['👥 Amigos e socialização']
@@ -1972,7 +1972,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'メッセージ',
-  kana: 'めっせーじ',
+  kana: 'メッセージ',
   romaji: 'messeeji',
   pt: 'mensagem',
   situations: ['👥 Amigos e socialização']
@@ -2212,7 +2212,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'カード',
-  kana: 'かーど',
+  kana: 'カード',
   romaji: 'kaado',
   pt: 'cartão',
   situations: ['🛍️ Compras']
@@ -2242,7 +2242,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'レシート',
-  kana: 'れしーと',
+  kana: 'レシート',
   romaji: 'reshiito',
   pt: 'recibo',
   situations: ['🛍️ Compras']
@@ -2252,7 +2252,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'サイズ',
-  kana: 'さいず',
+  kana: 'サイズ',
   romaji: 'saizu',
   pt: 'tamanho',
   situations: ['🛍️ Compras']
@@ -2322,7 +2322,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'コンビニ',
-  kana: 'こんびに',
+  kana: 'コンビニ',
   romaji: 'konbini',
   pt: 'loja de conveniência',
   situations: ['🛍️ Compras']
@@ -2332,7 +2332,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'スーパー',
-  kana: 'すーぱー',
+  kana: 'スーパー',
   romaji: 'suupaa',
   pt: 'supermercado',
   situations: ['🛍️ Compras']
@@ -2382,7 +2382,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'バス',
-  kana: 'ばす',
+  kana: 'バス',
   romaji: 'basu',
   pt: 'ônibus',
   situations: ['🚆 Transporte']
@@ -2392,7 +2392,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'タクシー',
-  kana: 'たくしー',
+  kana: 'タクシー',
   romaji: 'takushii',
   pt: 'táxi',
   situations: ['🚆 Transporte']
@@ -2422,7 +2422,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ホーム',
-  kana: 'ほーむ',
+  kana: 'ホーム',
   romaji: 'hoomu',
   pt: 'plataforma da estação',
   situations: ['🚆 Transporte']
@@ -2642,7 +2642,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ホテル',
-  kana: 'ほてる',
+  kana: 'ホテル',
   romaji: 'hoteru',
   pt: 'hotel',
   situations: ['✈️ Viagens']
@@ -2752,7 +2752,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'アルバム',
-  kana: 'あるばむ',
+  kana: 'アルバム',
   romaji: 'arubamu',
   pt: 'álbum',
   situations: ['🎵 Música']
@@ -2762,7 +2762,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'バンド',
-  kana: 'ばんど',
+  kana: 'バンド',
   romaji: 'bando',
   pt: 'banda',
   situations: ['🎵 Música']
@@ -2812,7 +2812,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ギター',
-  kana: 'ぎたー',
+  kana: 'ギター',
   romaji: 'gitaa',
   pt: 'guitarra',
   situations: ['🎵 Música']
@@ -2822,7 +2822,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ピアノ',
-  kana: 'ぴあの',
+  kana: 'ピアノ',
   romaji: 'piano',
   pt: 'piano',
   situations: ['🎵 Música']
@@ -2832,7 +2832,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ドラム',
-  kana: 'どらむ',
+  kana: 'ドラム',
   romaji: 'doramu',
   pt: 'bateria',
   situations: ['🎵 Música']
@@ -2842,7 +2842,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'バイオリン',
-  kana: 'ばいおりん',
+  kana: 'バイオリン',
   romaji: 'baiorin',
   pt: 'violino',
   situations: ['🎵 Música']
@@ -2852,7 +2852,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'メロディー',
-  kana: 'めろでぃー',
+  kana: 'メロディー',
   romaji: 'merodii',
   pt: 'melodia',
   situations: ['🎵 Música']
@@ -2862,7 +2862,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'リズム',
-  kana: 'りずむ',
+  kana: 'リズム',
   romaji: 'rizumu',
   pt: 'ritmo',
   situations: ['🎵 Música']
@@ -2882,7 +2882,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ロック',
-  kana: 'ろっく',
+  kana: 'ロック',
   romaji: 'rokku',
   pt: 'rock',
   situations: ['🎵 Música']
@@ -2892,7 +2892,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'クラシック',
-  kana: 'くらしっく',
+  kana: 'クラシック',
   romaji: 'kurashikku',
   pt: 'música clássica',
   situations: ['🎵 Música']
@@ -2912,7 +2912,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'コンサート',
-  kana: 'こんさーと',
+  kana: 'コンサート',
   romaji: 'konsaato',
   pt: 'concerto; show',
   situations: ['🎵 Música']
@@ -2922,7 +2922,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ライブ',
-  kana: 'らいぶ',
+  kana: 'ライブ',
   romaji: 'raibu',
   pt: 'show ao vivo',
   situations: ['🎵 Música']
@@ -2932,7 +2932,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'イヤホン',
-  kana: 'いやほん',
+  kana: 'イヤホン',
   romaji: 'iyahon',
   pt: 'fones de ouvido',
   situations: ['🎵 Música']
@@ -2942,7 +2942,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ヘッドホン',
-  kana: 'へっどほん',
+  kana: 'ヘッドホン',
   romaji: 'heddohon',
   pt: 'headphones',
   situations: ['🎵 Música']
@@ -2962,7 +2962,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ゲーム',
-  kana: 'げーむ',
+  kana: 'ゲーム',
   romaji: 'geemu',
   pt: 'jogo eletrônico',
   situations: ['🎮 Videogames']
@@ -2972,7 +2972,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'テレビゲーム',
-  kana: 'てれびげーむ',
+  kana: 'テレビゲーム',
   romaji: 'terebigeemu',
   pt: 'videogame',
   situations: ['🎮 Videogames']
@@ -2992,7 +2992,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'コントローラー',
-  kana: 'こんとろーらー',
+  kana: 'コントローラー',
   romaji: 'kontorooraa',
   pt: 'controle de videogame',
   situations: ['🎮 Videogames']
@@ -3012,7 +3012,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'キャラクター',
-  kana: 'きゃらくたー',
+  kana: 'キャラクター',
   romaji: 'kyarakutaa',
   pt: 'personagem',
   situations: ['🎮 Videogames']
@@ -3062,7 +3062,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ステージ',
-  kana: 'すてーじ',
+  kana: 'ステージ',
   romaji: 'suteeji',
   pt: 'fase de jogo',
   situations: ['🎮 Videogames']
@@ -3072,7 +3072,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'レベル',
-  kana: 'れべる',
+  kana: 'レベル',
   romaji: 'reberu',
   pt: 'nível',
   situations: ['🎮 Videogames']
@@ -3112,7 +3112,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'スピード',
-  kana: 'すぴーど',
+  kana: 'スピード',
   romaji: 'supiido',
   pt: 'velocidade',
   situations: ['🎮 Videogames']
@@ -3122,7 +3122,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ジャンプ',
-  kana: 'じゃんぷ',
+  kana: 'ジャンプ',
   romaji: 'janpu',
   pt: 'pulo',
   situations: ['🎮 Videogames']
@@ -3132,7 +3132,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'スケートボード',
-  kana: 'すけーとぼーど',
+  kana: 'スケートボード',
   romaji: 'sukeetoboodo',
   pt: 'skate',
   situations: ['🎮 Videogames']
@@ -3142,7 +3142,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'トリック',
-  kana: 'とりっく',
+  kana: 'トリック',
   romaji: 'torikku',
   pt: 'manobra',
   situations: ['🎮 Videogames']
@@ -3152,7 +3152,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'セーブ',
-  kana: 'せーぶ',
+  kana: 'セーブ',
   romaji: 'seebu',
   pt: 'salvar o progresso',
   situations: ['🎮 Videogames']
@@ -3182,7 +3182,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ボス',
-  kana: 'ぼす',
+  kana: 'ボス',
   romaji: 'bosu',
   pt: 'chefe de fase',
   situations: ['🎮 Videogames']
@@ -3192,7 +3192,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'クリア',
-  kana: 'くりあ',
+  kana: 'クリア',
   romaji: 'kuria',
   pt: 'completar uma fase ou jogo',
   situations: ['🎮 Videogames']
@@ -3202,7 +3202,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'アニメ',
-  kana: 'あにめ',
+  kana: 'アニメ',
   romaji: 'anime',
   pt: 'anime',
   situations: ['🍥 Anime e mangá']
@@ -3402,7 +3402,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'スマホ',
-  kana: 'すまほ',
+  kana: 'スマホ',
   romaji: 'sumaho',
   pt: 'smartphone',
   situations: ['💻 Tecnologia']
@@ -3422,7 +3422,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'パソコン',
-  kana: 'ぱそこん',
+  kana: 'パソコン',
   romaji: 'pasokon',
   pt: 'computador pessoal',
   situations: ['💻 Tecnologia']
@@ -3432,7 +3432,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'プログラミング',
-  kana: 'ぷろぐらみんぐ',
+  kana: 'プログラミング',
   romaji: 'puroguramingu',
   pt: 'programação',
   situations: ['💻 Tecnologia']
@@ -3442,7 +3442,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'コード',
-  kana: 'こーど',
+  kana: 'コード',
   romaji: 'koodo',
   pt: 'código',
   situations: ['💻 Tecnologia']
@@ -3452,7 +3452,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ソフトウェア',
-  kana: 'そふとうぇあ',
+  kana: 'ソフトウェア',
   romaji: 'sofutowea',
   pt: 'software',
   situations: ['💻 Tecnologia']
@@ -3462,7 +3462,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ハードウェア',
-  kana: 'はーどうぇあ',
+  kana: 'ハードウェア',
   romaji: 'haadowea',
   pt: 'hardware',
   situations: ['💻 Tecnologia']
@@ -3472,7 +3472,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'アプリ',
-  kana: 'あぷり',
+  kana: 'アプリ',
   romaji: 'apuri',
   pt: 'aplicativo',
   situations: ['💻 Tecnologia']
@@ -3482,7 +3482,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ウェブサイト',
-  kana: 'うぇぶさいと',
+  kana: 'ウェブサイト',
   romaji: 'webusaito',
   pt: 'site',
   situations: ['💻 Tecnologia']
@@ -3492,7 +3492,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'インターネット',
-  kana: 'いんたーねっと',
+  kana: 'インターネット',
   romaji: 'intaanetto',
   pt: 'internet',
   situations: ['💻 Tecnologia']
@@ -3512,7 +3512,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'キーボード',
-  kana: 'きーぼーど',
+  kana: 'キーボード',
   romaji: 'kiiboodo',
   pt: 'teclado',
   situations: ['💻 Tecnologia']
@@ -3522,7 +3522,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'マウス',
-  kana: 'まうす',
+  kana: 'マウス',
   romaji: 'mausu',
   pt: 'mouse',
   situations: ['💻 Tecnologia']
@@ -3532,7 +3532,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'バグ',
-  kana: 'ばぐ',
+  kana: 'バグ',
   romaji: 'bagu',
   pt: 'bug; defeito no código',
   situations: ['💻 Tecnologia']
@@ -3542,7 +3542,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'エラー',
-  kana: 'えらー',
+  kana: 'エラー',
   romaji: 'eraa',
   pt: 'erro',
   situations: ['💻 Tecnologia']
@@ -3602,7 +3602,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ドラマ',
-  kana: 'どらま',
+  kana: 'ドラマ',
   romaji: 'dorama',
   pt: 'série; drama de TV',
   situations: ['🎬 Filmes e séries']
@@ -6532,7 +6532,7 @@ export const cards = [
   kind: 'word',
   category: 'other',
   japanese: 'ピンク',
-  kana: 'ぴんく',
+  kana: 'ピンク',
   romaji: 'pinku',
   pt: 'rosa',
   situations: ['🛍️ Compras']
@@ -7022,7 +7022,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'ニュース',
-  kana: 'にゅーす',
+  kana: 'ニュース',
   romaji: 'nyuusu',
   pt: 'notícias',
   situations: ['💬 Opiniões']
@@ -7052,7 +7052,7 @@ export const cards = [
   kind: 'word',
   category: 'noun',
   japanese: 'サウンドトラック',
-  kana: 'さうんどとらっく',
+  kana: 'サウンドトラック',
   romaji: 'saundotorakku',
   pt: 'trilha sonora',
   situations: ['🎵 Música', '🎬 Filmes e séries']
@@ -9423,7 +9423,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'おはようございます。',
   kana: 'おはようございます。',
-  romaji: 'owayougozaimasu。',
+  romaji: 'ohayou gozaimasu.',
   pt: 'Bom dia.',
   situations: ['👋 Cumprimentos']
 },
@@ -9443,7 +9443,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'こんばんは。',
   kana: 'こんばんは。',
-  romaji: 'konbanwa。',
+  romaji: 'konbanwa.',
   pt: 'Boa noite (cumprimento).',
   situations: ['👋 Cumprimentos']
 },
@@ -9453,7 +9453,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'おやすみなさい。',
   kana: 'おやすみなさい。',
-  romaji: 'oyasuminasai。',
+  romaji: 'oyasumi nasai.',
   pt: 'Boa noite (antes de dormir).',
   situations: ['👋 Cumprimentos']
 },
@@ -9463,7 +9463,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ありがとうございます。',
   kana: 'ありがとうございます。',
-  romaji: 'arigatougozaimasu。',
+  romaji: 'arigatou gozaimasu.',
   pt: 'Muito obrigado(a).',
   situations: ['👋 Cumprimentos']
 },
@@ -9473,7 +9473,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どうもありがとうございます。',
   kana: 'どうもありがとうございます。',
-  romaji: 'doumoarigatougozaimasu。',
+  romaji: 'doumo arigatou gozaimasu.',
   pt: 'Muito obrigado(a) mesmo.',
   situations: ['👋 Cumprimentos']
 },
@@ -9483,7 +9483,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どういたしまして。',
   kana: 'どういたしまして。',
-  romaji: 'douitashimashite。',
+  romaji: 'dou itashimashite.',
   pt: 'De nada.',
   situations: ['👋 Cumprimentos']
 },
@@ -9493,7 +9493,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'すみません。',
   kana: 'すみません。',
-  romaji: 'sumimasen。',
+  romaji: 'sumimasen.',
   pt: 'Com licença; desculpe.',
   situations: ['👋 Cumprimentos']
 },
@@ -9503,7 +9503,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ごめんなさい。',
   kana: 'ごめんなさい。',
-  romaji: 'gomennasai。',
+  romaji: 'gomen nasai.',
   pt: 'Me desculpe.',
   situations: ['👋 Cumprimentos']
 },
@@ -9513,7 +9513,7 @@ export const cards = [
   category: 'phrase',
   japanese: '失礼します。',
   kana: 'しつれいします。',
-  romaji: 'shitsureishimasu。',
+  romaji: 'shitsurei shimasu.',
   pt: 'Com licença (ao entrar ou sair).',
   situations: ['👋 Cumprimentos']
 },
@@ -9523,7 +9523,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'はじめまして。',
   kana: 'はじめまして。',
-  romaji: 'hajimemashite。',
+  romaji: 'hajimemashite.',
   pt: 'Prazer em conhecer você.',
   situations: ['👋 Cumprimentos']
 },
@@ -9533,7 +9533,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'よろしくお願いします。',
   kana: 'よろしくおねがいします。',
-  romaji: 'yoroshikuonegaishimasu。',
+  romaji: 'yoroshiku onegai shimasu.',
   pt: 'Conto com você; prazer em conhecê-lo(a).',
   situations: ['👋 Cumprimentos']
 },
@@ -9543,7 +9543,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'また明日。',
   kana: 'またあした。',
-  romaji: 'mataashita。',
+  romaji: 'mata ashita.',
   pt: 'Até amanhã.',
   situations: ['👋 Cumprimentos']
 },
@@ -9553,7 +9553,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'またね。',
   kana: 'またね。',
-  romaji: 'matane。',
+  romaji: 'mata ne.',
   pt: 'Até mais.',
   situations: ['👋 Cumprimentos']
 },
@@ -9563,7 +9563,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'じゃあ、また。',
   kana: 'じゃあ、また。',
-  romaji: 'jaa、mata。',
+  romaji: 'jaa, mata.',
   pt: 'Então, até mais.',
   situations: ['👋 Cumprimentos']
 },
@@ -9573,7 +9573,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お元気ですか？',
   kana: 'おげんきですか？',
-  romaji: 'ogenkidesuka？',
+  romaji: 'ogenki desu ka?',
   pt: 'Tudo bem com você?',
   situations: ['👋 Cumprimentos']
 },
@@ -9583,7 +9583,7 @@ export const cards = [
   category: 'phrase',
   japanese: '元気です。',
   kana: 'げんきです。',
-  romaji: 'genkidesu。',
+  romaji: 'genki desu.',
   pt: 'Estou bem.',
   situations: ['👋 Cumprimentos']
 },
@@ -9593,7 +9593,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お久しぶりです。',
   kana: 'おひさしぶりです。',
-  romaji: 'ohisashiburidesu。',
+  romaji: 'ohisashiburi desu.',
   pt: 'Quanto tempo!',
   situations: ['👋 Cumprimentos']
 },
@@ -9603,7 +9603,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お先に失礼します。',
   kana: 'おさきにしつれいします。',
-  romaji: 'osakinishitsureishimasu。',
+  romaji: 'osaki ni shitsurei shimasu.',
   pt: 'Com licença, vou indo antes.',
   situations: ['👋 Cumprimentos']
 },
@@ -9613,7 +9613,7 @@ export const cards = [
   category: 'phrase',
   japanese: '気をつけて。',
   kana: 'きをつけて。',
-  romaji: 'kiotsukete。',
+  romaji: 'ki o tsukete.',
   pt: 'Se cuida.',
   situations: ['👋 Cumprimentos']
 },
@@ -9623,7 +9623,7 @@ export const cards = [
   category: 'phrase',
   japanese: '私はブラジル人です。',
   kana: 'わたしはぶらじるじんです。',
-  romaji: 'watashiwaburajirujindesu。',
+  romaji: 'watashi wa burajirujin desu.',
   pt: 'Sou brasileiro(a).',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9633,7 +9633,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ブラジルから来ました。',
   kana: 'ぶらじるからきました。',
-  romaji: 'burajirukarakimashita。',
+  romaji: 'burajiru kara kimashita.',
   pt: 'Vim do Brasil.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9643,7 +9643,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今はアイルランドに住んでいます。',
   kana: 'いまはあいるらんどにすんでいます。',
-  romaji: 'imawaairurandonisundeimasu。',
+  romaji: 'ima wa airurando ni sunde imasu.',
   pt: 'Atualmente moro na Irlanda.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9653,7 +9653,7 @@ export const cards = [
   category: 'phrase',
   japanese: '日本語を勉強しています。',
   kana: 'にほんごをべんきょうしています。',
-  romaji: 'nihongoobenkyoushiteimasu。',
+  romaji: 'nihongo o benkyou shite imasu.',
   pt: 'Estou estudando japonês.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9663,7 +9663,7 @@ export const cards = [
   category: 'phrase',
   japanese: '日本語はまだ初心者です。',
   kana: 'にほんごはまだしょしんしゃです。',
-  romaji: 'nihongowamadashoshinshadesu。',
+  romaji: 'nihongo wa mada shoshinsha desu.',
   pt: 'Ainda sou iniciante em japonês.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9673,7 +9673,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'よろしくお願いします。',
   kana: 'よろしくおねがいします。',
-  romaji: 'yoroshikuonegaishimasu。',
+  romaji: 'yoroshiku onegai shimasu.',
   pt: 'Prazer; conto com você.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9683,7 +9683,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お名前は何ですか？',
   kana: 'おなまえはなんですか？',
-  romaji: 'onamaewanandesuka？',
+  romaji: 'onamae wa nan desu ka?',
   pt: 'Como você se chama?',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9693,7 +9693,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どこから来ましたか？',
   kana: 'どこからきましたか？',
-  romaji: 'dokokarakimashitaka？',
+  romaji: 'doko kara kimashita ka?',
   pt: 'De onde você veio?',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9703,7 +9703,7 @@ export const cards = [
   category: 'phrase',
   japanese: '何をしていますか？',
   kana: 'なにをしていますか？',
-  romaji: 'nanioshiteimasuka？',
+  romaji: 'nani o shite imasu ka?',
   pt: 'O que você está fazendo?',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9713,7 +9713,7 @@ export const cards = [
   category: 'phrase',
   japanese: '趣味は何ですか？',
   kana: 'しゅみはなんですか？',
-  romaji: 'shumiwanandesuka？',
+  romaji: 'shumi wa nan desu ka?',
   pt: 'Qual é seu hobby?',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9723,7 +9723,7 @@ export const cards = [
   category: 'phrase',
   japanese: '週末は何をしますか？',
   kana: 'しゅうまつはなにをしますか？',
-  romaji: 'shuumatsuwananioshimasuka？',
+  romaji: 'shuumatsu wa nani o shimasu ka?',
   pt: 'O que você faz no fim de semana?',
   situations: ['🗣️ Conversas básicas']
 },
@@ -9733,7 +9733,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'これは何ですか？',
   kana: 'これはなんですか？',
-  romaji: 'korewanandesuka？',
+  romaji: 'kore wa nan desu ka?',
   pt: 'O que é isto?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9743,7 +9743,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'それは何ですか？',
   kana: 'それはなんですか？',
-  romaji: 'sorewanandesuka？',
+  romaji: 'sore wa nan desu ka?',
   pt: 'O que é isso?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9753,7 +9753,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どういう意味ですか？',
   kana: 'どういういみですか？',
-  romaji: 'douiuimidesuka？',
+  romaji: 'dou iu imi desu ka?',
   pt: 'O que isso significa?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9763,7 +9763,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どうしてですか？',
   kana: 'どうしてですか？',
-  romaji: 'doushitedesuka？',
+  romaji: 'doushite desu ka?',
   pt: 'Por quê?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9773,7 +9773,7 @@ export const cards = [
   category: 'phrase',
   japanese: '本当ですか？',
   kana: 'ほんとうですか？',
-  romaji: 'hontoudesuka？',
+  romaji: 'hontou desu ka?',
   pt: 'É verdade?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9783,7 +9783,7 @@ export const cards = [
   category: 'phrase',
   japanese: '何時ですか？',
   kana: 'なんじですか？',
-  romaji: 'nanjidesuka？',
+  romaji: 'nanji desu ka?',
   pt: 'Que horas são?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9793,7 +9793,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'いくらですか？',
   kana: 'いくらですか？',
-  romaji: 'ikuradesuka？',
+  romaji: 'ikura desu ka?',
   pt: 'Quanto custa?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9803,7 +9803,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どちらが好きですか？',
   kana: 'どちらがすきですか？',
-  romaji: 'dochiragasukidesuka？',
+  romaji: 'dochira ga suki desu ka?',
   pt: 'Qual dos dois você prefere?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9813,7 +9813,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どう思いますか？',
   kana: 'どうおもいますか？',
-  romaji: 'douomoimasuka？',
+  romaji: 'dou omoimasu ka?',
   pt: 'O que você acha?',
   situations: ['❓ Perguntas comuns']
 },
@@ -9823,7 +9823,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もう一度お願いします。',
   kana: 'もういちどおねがいします。',
-  romaji: 'mouichidoonegaishimasu。',
+  romaji: 'mou ichido onegai shimasu.',
   pt: 'Mais uma vez, por favor.',
   situations: ['❓ Perguntas comuns']
 },
@@ -9833,7 +9833,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もう一度言ってください。',
   kana: 'もういちどいってください。',
-  romaji: 'mouichidoittekudasai。',
+  romaji: 'mou ichido itte kudasai.',
   pt: 'Diga mais uma vez, por favor.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9843,7 +9843,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ゆっくり話してください。',
   kana: 'ゆっくりはなしてください。',
-  romaji: 'yukkurihanashitekudasai。',
+  romaji: 'yukkuri hanashite kudasai.',
   pt: 'Fale devagar, por favor.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9853,7 +9853,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'よく分かりません。',
   kana: 'よくわかりません。',
-  romaji: 'yokuwakarimasen。',
+  romaji: 'yoku wakarimasen.',
   pt: 'Não entendi muito bem.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9863,7 +9863,7 @@ export const cards = [
   category: 'phrase',
   japanese: '分かりました。',
   kana: 'わかりました。',
-  romaji: 'wakarimashita。',
+  romaji: 'wakarimashita.',
   pt: 'Entendi.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9873,7 +9873,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'まだ分かりません。',
   kana: 'まだわかりません。',
-  romaji: 'madawakarimasen。',
+  romaji: 'mada wakarimasen.',
   pt: 'Ainda não entendi.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9883,7 +9883,7 @@ export const cards = [
   category: 'phrase',
   japanese: '質問があります。',
   kana: 'しつもんがあります。',
-  romaji: 'shitsumongaarimasu。',
+  romaji: 'shitsumon ga arimasu.',
   pt: 'Tenho uma pergunta.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9893,7 +9893,7 @@ export const cards = [
   category: 'phrase',
   japanese: '質問してもいいですか？',
   kana: 'しつもんしてもいいですか？',
-  romaji: 'shitsumonshitemoiidesuka？',
+  romaji: 'shitsumon shite mo ii desu ka?',
   pt: 'Posso fazer uma pergunta?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9903,7 +9903,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'これは日本語で何と言いますか？',
   kana: 'これはにほんごでなんといいますか？',
-  romaji: 'korewanihongodenantoiimasuka？',
+  romaji: 'kore wa nihongo de nan to iimasu ka?',
   pt: 'Como se diz isto em japonês?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9913,7 +9913,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'この漢字は何と読みますか？',
   kana: 'このかんじはなんとよみますか？',
-  romaji: 'konokanjiwanantoyomimasuka？',
+  romaji: 'kono kanji wa nan to yomimasu ka?',
   pt: 'Como se lê este kanji?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9923,7 +9923,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'この言葉はどういう意味ですか？',
   kana: 'このことばはどういういみですか？',
-  romaji: 'konokotobawadouiuimidesuka？',
+  romaji: 'kono kotoba wa dou iu imi desu ka?',
   pt: 'O que significa esta palavra?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9933,7 +9933,7 @@ export const cards = [
   category: 'phrase',
   japanese: '例文を教えてください。',
   kana: 'れいぶんをおしえてください。',
-  romaji: 'reibunooshietekudasai。',
+  romaji: 'reibun o oshiete kudasai.',
   pt: 'Por favor, me dê uma frase de exemplo.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9943,7 +9943,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ここを説明してください。',
   kana: 'ここをせつめいしてください。',
-  romaji: 'kokoosetsumeishitekudasai。',
+  romaji: 'koko o setsumei shite kudasai.',
   pt: 'Por favor, explique esta parte.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9953,7 +9953,7 @@ export const cards = [
   category: 'phrase',
   japanese: '発音は合っていますか？',
   kana: 'はつおんはあっていますか？',
-  romaji: 'watsuonhaatteimasuka？',
+  romaji: 'hatsuon wa atte imasu ka?',
   pt: 'Minha pronúncia está correta?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9963,7 +9963,7 @@ export const cards = [
   category: 'phrase',
   japanese: '宿題は何ですか？',
   kana: 'しゅくだいはなんですか？',
-  romaji: 'shukudaiwanandesuka？',
+  romaji: 'shukudai wa nan desu ka?',
   pt: 'Qual é a lição de casa?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9973,7 +9973,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日はここまでですか？',
   kana: 'きょうはここまでですか？',
-  romaji: 'kyouwakokomadedesuka？',
+  romaji: 'kyou wa koko made desu ka?',
   pt: 'A aula termina por aqui hoje?',
   situations: ['🎓 Aula de japonês']
 },
@@ -9983,7 +9983,7 @@ export const cards = [
   category: 'phrase',
   japanese: '日本語で話してみたいです。',
   kana: 'にほんごではなしてみたいです。',
-  romaji: 'nihongodehanashitemitaidesu。',
+  romaji: 'nihongo de hanashite mitai desu.',
   pt: 'Quero tentar conversar em japonês.',
   situations: ['🎓 Aula de japonês']
 },
@@ -9993,7 +9993,7 @@ export const cards = [
   category: 'phrase',
   japanese: '一人です。',
   kana: 'ひとりです。',
-  romaji: 'hitoridesu。',
+  romaji: 'hitori desu.',
   pt: 'É para uma pessoa.',
   situations: ['🍜 Restaurante']
 },
@@ -10003,7 +10003,7 @@ export const cards = [
   category: 'phrase',
   japanese: '二人です。',
   kana: 'ふたりです。',
-  romaji: 'futaridesu。',
+  romaji: 'futari desu.',
   pt: 'É para duas pessoas.',
   situations: ['🍜 Restaurante']
 },
@@ -10013,7 +10013,7 @@ export const cards = [
   category: 'phrase',
   japanese: '予約していません。',
   kana: 'よやくしていません。',
-  romaji: 'yoyakushiteimasen。',
+  romaji: 'yoyaku shite imasen.',
   pt: 'Não tenho reserva.',
   situations: ['🍜 Restaurante']
 },
@@ -10023,7 +10023,7 @@ export const cards = [
   category: 'phrase',
   japanese: '予約しています。',
   kana: 'よやくしています。',
-  romaji: 'yoyakushiteimasu。',
+  romaji: 'yoyaku shite imasu.',
   pt: 'Tenho uma reserva.',
   situations: ['🍜 Restaurante']
 },
@@ -10033,7 +10033,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'おすすめは何ですか？',
   kana: 'おすすめはなんですか？',
-  romaji: 'osusumewanandesuka？',
+  romaji: 'osusume wa nan desu ka?',
   pt: 'O que você recomenda?',
   situations: ['🍜 Restaurante']
 },
@@ -10043,7 +10043,7 @@ export const cards = [
   category: 'phrase',
   japanese: '辛くしないでください。',
   kana: 'からくしないでください。',
-  romaji: 'karakushinaidekudasai。',
+  romaji: 'karaku shinaide kudasai.',
   pt: 'Por favor, não deixe apimentado.',
   situations: ['🍜 Restaurante']
 },
@@ -10053,7 +10053,7 @@ export const cards = [
   category: 'phrase',
   japanese: '肉は食べません。',
   kana: 'にくはたべません。',
-  romaji: 'nikuwatabemasen。',
+  romaji: 'niku wa tabemasen.',
   pt: 'Eu não como carne.',
   situations: ['🍜 Restaurante']
 },
@@ -10063,7 +10063,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'アレルギーがあります。',
   kana: 'あれるぎーがあります。',
-  romaji: 'arerugiigaarimasu。',
+  romaji: 'arerugii ga arimasu.',
   pt: 'Tenho alergia.',
   situations: ['🍜 Restaurante']
 },
@@ -10073,7 +10073,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お会計をお願いします。',
   kana: 'おかいけいをおねがいします。',
-  romaji: 'okaikeioonegaishimasu。',
+  romaji: 'okaikei o onegai shimasu.',
   pt: 'A conta, por favor.',
   situations: ['🍜 Restaurante']
 },
@@ -10083,7 +10083,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'とても美味しいです。',
   kana: 'とてもおいしいです。',
-  romaji: 'totemooishiidesu。',
+  romaji: 'totemo oishii desu.',
   pt: 'Está muito gostoso.',
   situations: ['🍜 Restaurante']
 },
@@ -10093,7 +10093,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ごちそうさまでした。',
   kana: 'ごちそうさまでした。',
-  romaji: 'gochisousamadeshita。',
+  romaji: 'gochisousama deshita.',
   pt: 'Obrigado(a) pela refeição.',
   situations: ['🍜 Restaurante']
 },
@@ -10103,7 +10103,7 @@ export const cards = [
   category: 'phrase',
   japanese: '店内で飲みます。',
   kana: 'てんないでのみます。',
-  romaji: 'tennaidenomimasu。',
+  romaji: 'tennai de nomimasu.',
   pt: 'Vou beber aqui.',
   situations: ['☕ Cafeteria']
 },
@@ -10113,7 +10113,7 @@ export const cards = [
   category: 'phrase',
   japanese: '持ち帰りでお願いします。',
   kana: 'もちかえりでおねがいします。',
-  romaji: 'mochikaerideonegaishimasu。',
+  romaji: 'mochikaeri de onegai shimasu.',
   pt: 'Para viagem, por favor.',
   situations: ['☕ Cafeteria']
 },
@@ -10123,7 +10123,7 @@ export const cards = [
   category: 'phrase',
   japanese: '砂糖なしでお願いします。',
   kana: 'さとうなしでおねがいします。',
-  romaji: 'satounashideonegaishimasu。',
+  romaji: 'satou nashi de onegai shimasu.',
   pt: 'Sem açúcar, por favor.',
   situations: ['☕ Cafeteria']
 },
@@ -10133,7 +10133,7 @@ export const cards = [
   category: 'phrase',
   japanese: '氷なしでお願いします。',
   kana: 'こおりなしでおねがいします。',
-  romaji: 'koorinashideonegaishimasu。',
+  romaji: 'koori nashi de onegai shimasu.',
   pt: 'Sem gelo, por favor.',
   situations: ['☕ Cafeteria']
 },
@@ -10143,7 +10143,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ここに座ってもいいですか？',
   kana: 'ここにすわってもいいですか？',
-  romaji: 'kokonisuwattemoiidesuka？',
+  romaji: 'koko ni suwatte mo ii desu ka?',
   pt: 'Posso sentar aqui?',
   situations: ['☕ Cafeteria']
 },
@@ -10153,7 +10153,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今、家にいます。',
   kana: 'いま、いえにいます。',
-  romaji: 'ima、ieniimasu。',
+  romaji: 'ima, ie ni imasu.',
   pt: 'Estou em casa agora.',
   situations: ['🏠 Cotidiano']
 },
@@ -10163,7 +10163,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は仕事があります。',
   kana: 'きょうはしごとがあります。',
-  romaji: 'kyouwashigotogaarimasu。',
+  romaji: 'kyou wa shigoto ga arimasu.',
   pt: 'Tenho trabalho hoje.',
   situations: ['🏠 Cotidiano']
 },
@@ -10173,7 +10173,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今から勉強します。',
   kana: 'いまからべんきょうします。',
-  romaji: 'imakarabenkyoushimasu。',
+  romaji: 'ima kara benkyou shimasu.',
   pt: 'Vou estudar agora.',
   situations: ['🏠 Cotidiano']
 },
@@ -10183,7 +10183,7 @@ export const cards = [
   category: 'phrase',
   japanese: '毎朝コーヒーを飲みます。',
   kana: 'まいあさこーひーをのみます。',
-  romaji: 'maiasakoohiionomimasu。',
+  romaji: 'maiasa koohii o nomimasu.',
   pt: 'Bebo café toda manhã.',
   situations: ['🏠 Cotidiano']
 },
@@ -10193,7 +10193,7 @@ export const cards = [
   category: 'phrase',
   japanese: '週末に掃除します。',
   kana: 'しゅうまつにそうじします。',
-  romaji: 'shuumatsunisoujishimasu。',
+  romaji: 'shuumatsu ni souji shimasu.',
   pt: 'Faço limpeza no fim de semana.',
   situations: ['🏠 Cotidiano']
 },
@@ -10203,7 +10203,7 @@ export const cards = [
   category: 'phrase',
   japanese: '少し休みたいです。',
   kana: 'すこしやすみたいです。',
-  romaji: 'sukoshiyasumitaidesu。',
+  romaji: 'sukoshi yasumitai desu.',
   pt: 'Quero descansar um pouco.',
   situations: ['🏠 Cotidiano']
 },
@@ -10213,7 +10213,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'そろそろ寝ます。',
   kana: 'そろそろねます。',
-  romaji: 'sorosoronemasu。',
+  romaji: 'sorosoro nemasu.',
   pt: 'Vou dormir daqui a pouco.',
   situations: ['🏠 Cotidiano']
 },
@@ -10223,7 +10223,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は何曜日ですか？',
   kana: 'きょうはなんようびですか？',
-  romaji: 'kyouwananyoubidesuka？',
+  romaji: 'kyou wa nanyoubi desu ka?',
   pt: 'Que dia da semana é hoje?',
   situations: ['📅 Planos e horários']
 },
@@ -10233,7 +10233,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は何日ですか？',
   kana: 'きょうはなんにちですか？',
-  romaji: 'kyouwanannichidesuka？',
+  romaji: 'kyou wa nannichi desu ka?',
   pt: 'Que dia do mês é hoje?',
   situations: ['📅 Planos e horários']
 },
@@ -10243,7 +10243,7 @@ export const cards = [
   category: 'phrase',
   japanese: '何時に始まりますか？',
   kana: 'なんじにはじまりますか？',
-  romaji: 'nanjinihajimarimasuka？',
+  romaji: 'nanji ni hajimarimasu ka?',
   pt: 'A que horas começa?',
   situations: ['📅 Planos e horários']
 },
@@ -10253,7 +10253,7 @@ export const cards = [
   category: 'phrase',
   japanese: '何時に終わりますか？',
   kana: 'なんじにおわりますか？',
-  romaji: 'nanjiniowarimasuka？',
+  romaji: 'nanji ni owarimasu ka?',
   pt: 'A que horas termina?',
   situations: ['📅 Planos e horários']
 },
@@ -10263,7 +10263,7 @@ export const cards = [
   category: 'phrase',
   japanese: '明日は暇ですか？',
   kana: 'あしたはひまですか？',
-  romaji: 'ashitawahimadesuka？',
+  romaji: 'ashita wa hima desu ka?',
   pt: 'Você está livre amanhã?',
   situations: ['📅 Planos e horários']
 },
@@ -10273,7 +10273,7 @@ export const cards = [
   category: 'phrase',
   japanese: '週末に予定があります。',
   kana: 'しゅうまつによていがあります。',
-  romaji: 'shuumatsuniyoteigaarimasu。',
+  romaji: 'shuumatsu ni yotei ga arimasu.',
   pt: 'Tenho planos para o fim de semana.',
   situations: ['📅 Planos e horários']
 },
@@ -10283,7 +10283,7 @@ export const cards = [
   category: 'phrase',
   japanese: '来週会いましょう。',
   kana: 'らいしゅうあいましょう。',
-  romaji: 'raishuuaimashou。',
+  romaji: 'raishuu aimashou.',
   pt: 'Vamos nos encontrar na semana que vem.',
   situations: ['📅 Planos e horários']
 },
@@ -10293,7 +10293,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どんな音楽が好きですか？',
   kana: 'どんなおんがくがすきですか？',
-  romaji: 'donnaongakugasukidesuka？',
+  romaji: 'donna ongaku ga suki desu ka?',
   pt: 'De que tipo de música você gosta?',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10303,7 +10303,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どんなゲームが好きですか？',
   kana: 'どんなげーむがすきですか？',
-  romaji: 'donnageemugasukidesuka？',
+  romaji: 'donna geemu ga suki desu ka?',
   pt: 'De que tipo de jogos você gosta?',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10313,7 +10313,7 @@ export const cards = [
   category: 'phrase',
   japanese: '一番好きな映画は何ですか？',
   kana: 'いちばんすきなえいがはなんですか？',
-  romaji: 'ichibansukinaeigawanandesuka？',
+  romaji: 'ichiban suki na eiga wa nan desu ka?',
   pt: 'Qual é seu filme favorito?',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10323,7 +10323,7 @@ export const cards = [
   category: 'phrase',
   japanese: '私もそう思います。',
   kana: 'わたしもそうおもいます。',
-  romaji: 'watashimosouomoimasu。',
+  romaji: 'watashi mo sou omoimasu.',
   pt: 'Eu também acho isso.',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10333,7 +10333,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'あまり好きではありません。',
   kana: 'あまりすきではありません。',
-  romaji: 'amarisukidewaarimasen。',
+  romaji: 'amari suki dewa arimasen.',
   pt: 'Não gosto muito.',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10343,7 +10343,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どちらも好きです。',
   kana: 'どちらもすきです。',
-  romaji: 'dochiramosukidesu。',
+  romaji: 'dochira mo suki desu.',
   pt: 'Gosto dos dois.',
   situations: ['❤️ Gostos e preferências']
 },
@@ -10353,7 +10353,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は暑いですね。',
   kana: 'きょうはあついですね。',
-  romaji: 'kyouwaatsuidesune。',
+  romaji: 'kyou wa atsui desu ne.',
   pt: 'Hoje está quente, né?',
   situations: ['🌦️ Clima']
 },
@@ -10363,7 +10363,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は寒いですね。',
   kana: 'きょうはさむいですね。',
-  romaji: 'kyouwasamuidesune。',
+  romaji: 'kyou wa samui desu ne.',
   pt: 'Hoje está frio, né?',
   situations: ['🌦️ Clima']
 },
@@ -10373,7 +10373,7 @@ export const cards = [
   category: 'phrase',
   japanese: '雨が降っています。',
   kana: 'あめがふっています。',
-  romaji: 'amegafutteimasu。',
+  romaji: 'ame ga futte imasu.',
   pt: 'Está chovendo.',
   situations: ['🌦️ Clima']
 },
@@ -10383,7 +10383,7 @@ export const cards = [
   category: 'phrase',
   japanese: '雪が降っています。',
   kana: 'ゆきがふっています。',
-  romaji: 'yukigafutteimasu。',
+  romaji: 'yuki ga futte imasu.',
   pt: 'Está nevando.',
   situations: ['🌦️ Clima']
 },
@@ -10393,7 +10393,7 @@ export const cards = [
   category: 'phrase',
   japanese: '明日は晴れますか？',
   kana: 'あしたははれますか？',
-  romaji: 'ashitawaharemasuka？',
+  romaji: 'ashita wa haremasu ka?',
   pt: 'Amanhã fará sol?',
   situations: ['🌦️ Clima']
 },
@@ -10403,7 +10403,7 @@ export const cards = [
   category: 'phrase',
   japanese: '傘を持っていますか？',
   kana: 'かさをもっていますか？',
-  romaji: 'kasaomotteimasuka？',
+  romaji: 'kasa o motte imasu ka?',
   pt: 'Você está com guarda-chuva?',
   situations: ['🌦️ Clima']
 },
@@ -10413,7 +10413,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今度一緒に遊びませんか？',
   kana: 'こんどいっしょにあそびませんか？',
-  romaji: 'kondoisshoniasobimasenka？',
+  romaji: 'kondo issho ni asobimasen ka?',
   pt: 'Quer fazer alguma coisa junto outro dia?',
   situations: ['👥 Amigos e socialização']
 },
@@ -10423,7 +10423,7 @@ export const cards = [
   category: 'phrase',
   japanese: '一緒にご飯を食べませんか？',
   kana: 'いっしょにごはんをたべませんか？',
-  romaji: 'isshonigohanotabemasenka？',
+  romaji: 'issho ni gohan o tabemasen ka?',
   pt: 'Vamos comer juntos?',
   situations: ['👥 Amigos e socialização']
 },
@@ -10433,7 +10433,7 @@ export const cards = [
   category: 'phrase',
   japanese: '連絡してもいいですか？',
   kana: 'れんらくしてもいいですか？',
-  romaji: 'renrakushitemoiidesuka？',
+  romaji: 'renraku shite mo ii desu ka?',
   pt: 'Posso entrar em contato?',
   situations: ['👥 Amigos e socialização']
 },
@@ -10443,7 +10443,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'また会いたいです。',
   kana: 'またあいたいです。',
-  romaji: 'mataaitaidesu。',
+  romaji: 'mata aitai desu.',
   pt: 'Quero encontrar você de novo.',
   situations: ['👥 Amigos e socialização']
 },
@@ -10453,7 +10453,7 @@ export const cards = [
   category: 'phrase',
   japanese: '楽しかったです。',
   kana: 'たのしかったです。',
-  romaji: 'tanoshikattadesu。',
+  romaji: 'tanoshikatta desu.',
   pt: 'Foi divertido.',
   situations: ['👥 Amigos e socialização']
 },
@@ -10463,7 +10463,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は嬉しいです。',
   kana: 'きょうはうれしいです。',
-  romaji: 'kyouwaureshiidesu。',
+  romaji: 'kyou wa ureshii desu.',
   pt: 'Hoje estou feliz.',
   situations: ['😊 Sentimentos']
 },
@@ -10473,7 +10473,7 @@ export const cards = [
   category: 'phrase',
   japanese: '少し緊張しています。',
   kana: 'すこしきんちょうしています。',
-  romaji: 'sukoshikinchoushiteimasu。',
+  romaji: 'sukoshi kinchou shite imasu.',
   pt: 'Estou um pouco nervoso(a).',
   situations: ['😊 Sentimentos']
 },
@@ -10483,7 +10483,7 @@ export const cards = [
   category: 'phrase',
   japanese: '少し不安です。',
   kana: 'すこしふあんです。',
-  romaji: 'sukoshifuandesu。',
+  romaji: 'sukoshi fuan desu.',
   pt: 'Estou um pouco ansioso(a).',
   situations: ['😊 Sentimentos']
 },
@@ -10493,7 +10493,7 @@ export const cards = [
   category: 'phrase',
   japanese: '安心しました。',
   kana: 'あんしんしました。',
-  romaji: 'anshinshimashita。',
+  romaji: 'anshin shimashita.',
   pt: 'Fiquei aliviado(a).',
   situations: ['😊 Sentimentos']
 },
@@ -10503,7 +10503,7 @@ export const cards = [
   category: 'phrase',
   japanese: '今日は疲れています。',
   kana: 'きょうはつかれています。',
-  romaji: 'kyouwatsukareteimasu。',
+  romaji: 'kyou wa tsukarete imasu.',
   pt: 'Estou cansado(a) hoje.',
   situations: ['😊 Sentimentos']
 },
@@ -10513,7 +10513,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ちょっと寂しいです。',
   kana: 'ちょっとさびしいです。',
-  romaji: 'chottosabishiidesu。',
+  romaji: 'chotto sabishii desu.',
   pt: 'Estou um pouco solitário(a).',
   situations: ['😊 Sentimentos']
 },
@@ -10523,7 +10523,7 @@ export const cards = [
   category: 'phrase',
   japanese: '自信がありません。',
   kana: 'じしんがありません。',
-  romaji: 'jishingaarimasen。',
+  romaji: 'jishin ga arimasen.',
   pt: 'Não tenho confiança em mim.',
   situations: ['😊 Sentimentos']
 },
@@ -10533,7 +10533,7 @@ export const cards = [
   category: 'phrase',
   japanese: '気持ちを伝えたいです。',
   kana: 'きもちをつたえたいです。',
-  romaji: 'kimochiotsutaetaidesu。',
+  romaji: 'kimochi o tsutaetai desu.',
   pt: 'Quero expressar meus sentimentos.',
   situations: ['😊 Sentimentos']
 },
@@ -10543,7 +10543,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'これを見せてください。',
   kana: 'これをみせてください。',
-  romaji: 'koreomisetekudasai。',
+  romaji: 'kore o misete kudasai.',
   pt: 'Mostre-me isto, por favor.',
   situations: ['🛍️ Compras']
 },
@@ -10553,7 +10553,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もっと小さいサイズはありますか？',
   kana: 'もっとちいさいさいずはありますか？',
-  romaji: 'mottochiisaisaizuwaarimasuka？',
+  romaji: 'motto chiisai saizu wa arimasu ka?',
   pt: 'Tem um tamanho menor?',
   situations: ['🛍️ Compras']
 },
@@ -10563,7 +10563,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もっと大きいサイズはありますか？',
   kana: 'もっとおおきいさいずはありますか？',
-  romaji: 'mottoookiisaizuwaarimasuka？',
+  romaji: 'motto ookii saizu wa arimasu ka?',
   pt: 'Tem um tamanho maior?',
   situations: ['🛍️ Compras']
 },
@@ -10573,7 +10573,7 @@ export const cards = [
   category: 'phrase',
   japanese: '試着してもいいですか？',
   kana: 'しちゃくしてもいいですか？',
-  romaji: 'shichakushitemoiidesuka？',
+  romaji: 'shichaku shite mo ii desu ka?',
   pt: 'Posso experimentar a roupa?',
   situations: ['🛍️ Compras']
 },
@@ -10583,7 +10583,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'カードで払えますか？',
   kana: 'かーどではらえますか？',
-  romaji: 'kaadodeharaemasuka？',
+  romaji: 'kaado de haraemasu ka?',
   pt: 'Posso pagar com cartão?',
   situations: ['🛍️ Compras']
 },
@@ -10593,7 +10593,7 @@ export const cards = [
   category: 'phrase',
   japanese: '袋はいりません。',
   kana: 'ふくろはいりません。',
-  romaji: 'fukurowairimasen。',
+  romaji: 'fukuro wa irimasen.',
   pt: 'Não preciso de sacola.',
   situations: ['🛍️ Compras']
 },
@@ -10603,7 +10603,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'この電車は東京に行きますか？',
   kana: 'このでんしゃはとうきょうにいきますか？',
-  romaji: 'konodenshawatoukyouniikimasuka？',
+  romaji: 'kono densha wa toukyou ni ikimasu ka?',
   pt: 'Este trem vai para Tóquio?',
   situations: ['🚆 Transporte']
 },
@@ -10613,7 +10613,7 @@ export const cards = [
   category: 'phrase',
   japanese: '次の駅はどこですか？',
   kana: 'つぎのえきはどこですか？',
-  romaji: 'tsuginoekiwadokodesuka？',
+  romaji: 'tsugi no eki wa doko desu ka?',
   pt: 'Qual é a próxima estação?',
   situations: ['🚆 Transporte']
 },
@@ -10623,7 +10623,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どこで乗り換えますか？',
   kana: 'どこでのりかえますか？',
-  romaji: 'dokodenorikaemasuka？',
+  romaji: 'doko de norikaemasu ka?',
   pt: 'Onde faço a baldeação?',
   situations: ['🚆 Transporte']
 },
@@ -10633,7 +10633,7 @@ export const cards = [
   category: 'phrase',
   japanese: '切符はどこで買えますか？',
   kana: 'きっぷはどこでかえますか？',
-  romaji: 'kippuwadokodekaemasuka？',
+  romaji: 'kippu wa doko de kaemasu ka?',
   pt: 'Onde posso comprar a passagem?',
   situations: ['🚆 Transporte']
 },
@@ -10643,7 +10643,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ここで降ります。',
   kana: 'ここでおります。',
-  romaji: 'kokodeorimasu。',
+  romaji: 'koko de orimasu.',
   pt: 'Vou descer aqui.',
   situations: ['🚆 Transporte']
 },
@@ -10653,7 +10653,7 @@ export const cards = [
   category: 'phrase',
   japanese: '右に曲がってください。',
   kana: 'みぎにまがってください。',
-  romaji: 'miginimagattekudasai。',
+  romaji: 'migi ni magatte kudasai.',
   pt: 'Vire à direita, por favor.',
   situations: ['🚆 Transporte']
 },
@@ -10663,7 +10663,7 @@ export const cards = [
   category: 'phrase',
   japanese: '左に曲がってください。',
   kana: 'ひだりにまがってください。',
-  romaji: 'hidarinimagattekudasai。',
+  romaji: 'hidari ni magatte kudasai.',
   pt: 'Vire à esquerda, por favor.',
   situations: ['🚆 Transporte']
 },
@@ -10673,7 +10673,7 @@ export const cards = [
   category: 'phrase',
   japanese: '真っすぐ行ってください。',
   kana: 'まっすぐいってください。',
-  romaji: 'massuguittekudasai。',
+  romaji: 'massugu itte kudasai.',
   pt: 'Siga em frente, por favor.',
   situations: ['🚆 Transporte']
 },
@@ -10683,7 +10683,7 @@ export const cards = [
   category: 'phrase',
   japanese: '観光で来ました。',
   kana: 'かんこうできました。',
-  romaji: 'kankoudekimashita。',
+  romaji: 'kankou de kimashita.',
   pt: 'Vim a turismo.',
   situations: ['✈️ Viagens']
 },
@@ -10693,7 +10693,7 @@ export const cards = [
   category: 'phrase',
   japanese: '五日間滞在します。',
   kana: 'いつかかんたいざいします。',
-  romaji: 'itsukakantaizaishimasu。',
+  romaji: 'itsukakan taizai shimasu.',
   pt: 'Vou ficar por cinco dias.',
   situations: ['✈️ Viagens']
 },
@@ -10703,7 +10703,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'パスポートを見せます。',
   kana: 'ぱすぽーとをみせます。',
-  romaji: 'pasupootoomisemasu。',
+  romaji: 'pasupooto o misemasu.',
   pt: 'Vou mostrar meu passaporte.',
   situations: ['✈️ Viagens']
 },
@@ -10713,7 +10713,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'チェックインをお願いします。',
   kana: 'ちぇっくいんをおねがいします。',
-  romaji: 'chekkuinoonegaishimasu。',
+  romaji: 'chekkuin o onegai shimasu.',
   pt: 'Gostaria de fazer o check-in.',
   situations: ['✈️ Viagens']
 },
@@ -10723,7 +10723,7 @@ export const cards = [
   category: 'phrase',
   japanese: '朝食は何時からですか？',
   kana: 'ちょうしょくはなんじからですか？',
-  romaji: 'choushokuwananjikaradesuka？',
+  romaji: 'choushoku wa nanji kara desu ka?',
   pt: 'A partir de que horas é o café da manhã?',
   situations: ['✈️ Viagens']
 },
@@ -10733,7 +10733,7 @@ export const cards = [
   category: 'phrase',
   japanese: '荷物を預けてもいいですか？',
   kana: 'にもつをあずけてもいいですか？',
-  romaji: 'nimotsuoazuketemoiidesuka？',
+  romaji: 'nimotsu o azukete mo ii desu ka?',
   pt: 'Posso deixar minha bagagem?',
   situations: ['✈️ Viagens']
 },
@@ -10743,7 +10743,7 @@ export const cards = [
   category: 'phrase',
   japanese: '写真を撮ってもいいですか？',
   kana: 'しゃしんをとってもいいですか？',
-  romaji: 'shashinotottemoiidesuka？',
+  romaji: 'shashin o totte mo ii desu ka?',
   pt: 'Posso tirar foto?',
   situations: ['✈️ Viagens']
 },
@@ -10753,7 +10753,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ロックをよく聴きます。',
   kana: 'ろっくをよくききます。',
-  romaji: 'rokkuoyokukikimasu。',
+  romaji: 'rokku o yoku kikimasu.',
   pt: 'Escuto rock com frequência.',
   situations: ['🎵 Música']
 },
@@ -10763,7 +10763,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'クラシックも好きです。',
   kana: 'くらしっくもすきです。',
-  romaji: 'kurashikkumosukidesu。',
+  romaji: 'kurashikku mo suki desu.',
   pt: 'Também gosto de música clássica.',
   situations: ['🎵 Música']
 },
@@ -10773,7 +10773,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'この曲のメロディーが好きです。',
   kana: 'このきょくのめろでぃーがすきです。',
-  romaji: 'konokyokunomerodiigasukidesu。',
+  romaji: 'kono kyoku no merodii ga suki desu.',
   pt: 'Gosto da melodia desta música.',
   situations: ['🎵 Música']
 },
@@ -10783,7 +10783,7 @@ export const cards = [
   category: 'phrase',
   japanese: '歌詞の意味を知りたいです。',
   kana: 'かしのいみをしりたいです。',
-  romaji: 'kashinoimioshiritaidesu。',
+  romaji: 'kashi no imi o shiritai desu.',
   pt: 'Quero entender o significado da letra.',
   situations: ['🎵 Música']
 },
@@ -10793,7 +10793,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'おすすめの曲はありますか？',
   kana: 'おすすめのきょくはありますか？',
-  romaji: 'osusumenokyokuwaarimasuka？',
+  romaji: 'osusume no kyoku wa arimasu ka?',
   pt: 'Tem alguma música para recomendar?',
   situations: ['🎵 Música']
 },
@@ -10803,7 +10803,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どんなバンドを聴きますか？',
   kana: 'どんなばんどをききますか？',
-  romaji: 'donnabandookikimasuka？',
+  romaji: 'donna bando o kikimasu ka?',
   pt: 'Que bandas você costuma ouvir?',
   situations: ['🎵 Música']
 },
@@ -10813,7 +10813,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ソニックが好きです。',
   kana: 'そにっくがすきです。',
-  romaji: 'sonikkugasukidesu。',
+  romaji: 'sonikku ga suki desu.',
   pt: 'Gosto de Sonic.',
   situations: ['🎮 Videogames']
 },
@@ -10823,7 +10823,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'トニーホークのゲームが好きです。',
   kana: 'とにーほーくのげーむがすきです。',
-  romaji: 'toniihookunogeemugasukidesu。',
+  romaji: 'tonii hooku no geemu ga suki desu.',
   pt: 'Gosto dos jogos do Tony Hawk.',
   situations: ['🎮 Videogames']
 },
@@ -10833,7 +10833,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'このゲームは難しいです。',
   kana: 'このげーむはむずかしいです。',
-  romaji: 'konogeemuwamuzukashiidesu。',
+  romaji: 'kono geemu wa muzukashii desu.',
   pt: 'Este jogo é difícil.',
   situations: ['🎮 Videogames']
 },
@@ -10843,7 +10843,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'このボスに勝てません。',
   kana: 'このぼすにかてません。',
-  romaji: 'konobosunikatemasen。',
+  romaji: 'kono bosu ni katemasen.',
   pt: 'Não consigo vencer este chefe.',
   situations: ['🎮 Videogames']
 },
@@ -10853,7 +10853,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もう一回やってみます。',
   kana: 'もういっかいやってみます。',
-  romaji: 'mouikkaiyattemimasu。',
+  romaji: 'mou ikkai yatte mimasu.',
   pt: 'Vou tentar de novo.',
   situations: ['🎮 Videogames']
 },
@@ -10863,7 +10863,7 @@ export const cards = [
   category: 'phrase',
   japanese: '一緒にゲームをしませんか？',
   kana: 'いっしょにげーむをしませんか？',
-  romaji: 'isshonigeemuoshimasenka？',
+  romaji: 'issho ni geemu o shimasen ka?',
   pt: 'Quer jogar comigo?',
   situations: ['🎮 Videogames']
 },
@@ -10873,7 +10873,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'どのゲーム機を使っていますか？',
   kana: 'どのげーむきをつかっていますか？',
-  romaji: 'donogeemukiotsukatteimasuka？',
+  romaji: 'dono geemuki o tsukatte imasu ka?',
   pt: 'Qual console você usa?',
   situations: ['🎮 Videogames']
 },
@@ -10883,7 +10883,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ナルトが好きです。',
   kana: 'なるとがすきです。',
-  romaji: 'narutogasukidesu。',
+  romaji: 'naruto ga suki desu.',
   pt: 'Gosto de Naruto.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10893,7 +10893,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ハンター×ハンターが好きです。',
   kana: 'はんたー×はんたーがすきです。',
-  romaji: 'hantaa×hantaagasukidesu。',
+  romaji: 'hantaa × hantaa ga suki desu.',
   pt: 'Gosto de Hunter × Hunter.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10903,7 +10903,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'オーバーロードも見ています。',
   kana: 'おーばーろーどもみています。',
-  romaji: 'oobaaroodomomiteimasu。',
+  romaji: 'oobaaroodo mo mite imasu.',
   pt: 'Também estou assistindo Overlord.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10913,7 +10913,7 @@ export const cards = [
   category: 'phrase',
   japanese: '好きなキャラクターは誰ですか？',
   kana: 'すきなきゃらくたーはだれですか？',
-  romaji: 'sukinakyarakutaawadaredesuka？',
+  romaji: 'suki na kyarakutaa wa dare desu ka?',
   pt: 'Qual é seu personagem favorito?',
   situations: ['🍥 Anime e mangá']
 },
@@ -10923,7 +10923,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'この物語は面白いです。',
   kana: 'このものがたりはおもしろいです。',
-  romaji: 'konomonogatariwaomoshiroidesu。',
+  romaji: 'kono monogatari wa omoshiroi desu.',
   pt: 'Esta história é interessante.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10933,7 +10933,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ネタバレしないでください。',
   kana: 'ねたばれしないでください。',
-  romaji: 'netabareshinaidekudasai。',
+  romaji: 'netabare shinaide kudasai.',
   pt: 'Por favor, não dê spoilers.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10943,7 +10943,7 @@ export const cards = [
   category: 'phrase',
   japanese: '原作も読みたいです。',
   kana: 'げんさくもよみたいです。',
-  romaji: 'gensakumoyomitaidesu。',
+  romaji: 'gensaku mo yomitai desu.',
   pt: 'Também quero ler a obra original.',
   situations: ['🍥 Anime e mangá']
 },
@@ -10953,7 +10953,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'プログラミングを勉強しています。',
   kana: 'ぷろぐらみんぐをべんきょうしています。',
-  romaji: 'puroguraminguobenkyoushiteimasu。',
+  romaji: 'puroguramingu o benkyou shite imasu.',
   pt: 'Estou estudando programação.',
   situations: ['💻 Tecnologia']
 },
@@ -10963,7 +10963,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'ソフトウェアを作っています。',
   kana: 'そふとうぇあをつくっています。',
-  romaji: 'sofutoweaotsukutteimasu。',
+  romaji: 'sofutowea o tsukutte imasu.',
   pt: 'Estou desenvolvendo software.',
   situations: ['💻 Tecnologia']
 },
@@ -10973,7 +10973,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'このコードを直したいです。',
   kana: 'このこーどをなおしたいです。',
-  romaji: 'konokoodoonaoshitaidesu。',
+  romaji: 'kono koodo o naoshitai desu.',
   pt: 'Quero corrigir este código.',
   situations: ['💻 Tecnologia']
 },
@@ -10983,7 +10983,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'アプリが動きません。',
   kana: 'あぷりがうごきません。',
-  romaji: 'apurigaugokimasen。',
+  romaji: 'apuri ga ugokimasen.',
   pt: 'O aplicativo não funciona.',
   situations: ['💻 Tecnologia']
 },
@@ -10993,7 +10993,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'スマホの電池がありません。',
   kana: 'すまほのでんちがありません。',
-  romaji: 'sumahonodenchigaarimasen。',
+  romaji: 'sumaho no denchi ga arimasen.',
   pt: 'Meu celular está sem bateria.',
   situations: ['💻 Tecnologia']
 },
@@ -11003,7 +11003,7 @@ export const cards = [
   category: 'phrase',
   japanese: '充電してもいいですか？',
   kana: 'じゅうでんしてもいいですか？',
-  romaji: 'juudenshitemoiidesuka？',
+  romaji: 'juuden shite mo ii desu ka?',
   pt: 'Posso carregar a bateria?',
   situations: ['💻 Tecnologia']
 },
@@ -11013,7 +11013,7 @@ export const cards = [
   category: 'phrase',
   japanese: '人工知能について話しましょう。',
   kana: 'じんこうちのうについてはなしましょう。',
-  romaji: 'jinkouchinounitsuitehanashimashou。',
+  romaji: 'jinkou chinou ni tsuite hanashimashou.',
   pt: 'Vamos conversar sobre inteligência artificial.',
   situations: ['💻 Tecnologia', '👥 Amigos e socialização']
 },
@@ -11023,7 +11023,7 @@ export const cards = [
   category: 'phrase',
   japanese: '最近どんな映画を見ましたか？',
   kana: 'さいきんどんなえいがをみましたか？',
-  romaji: 'saikindonnaeigaomimashitaka？',
+  romaji: 'saikin donna eiga o mimashita ka?',
   pt: 'Que filmes você viu recentemente?',
   situations: ['🎬 Filmes e séries']
 },
@@ -11033,7 +11033,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'このドラマをおすすめします。',
   kana: 'このどらまをおすすめします。',
-  romaji: 'konodoramaoosusumeshimasu。',
+  romaji: 'kono dorama o osusume shimasu.',
   pt: 'Recomendo esta série.',
   situations: ['🎬 Filmes e séries']
 },
@@ -11043,7 +11043,7 @@ export const cards = [
   category: 'phrase',
   japanese: '字幕で見ています。',
   kana: 'じまくでみています。',
-  romaji: 'jimakudemiteimasu。',
+  romaji: 'jimaku de mite imasu.',
   pt: 'Estou assistindo com legendas.',
   situations: ['🎬 Filmes e séries']
 },
@@ -11053,7 +11053,7 @@ export const cards = [
   category: 'phrase',
   japanese: '結末が意外でした。',
   kana: 'けつまつがいがいでした。',
-  romaji: 'ketsumatsugaigaideshita。',
+  romaji: 'ketsumatsu ga igai deshita.',
   pt: 'O final foi inesperado.',
   situations: ['🎬 Filmes e séries']
 },
@@ -11063,7 +11063,7 @@ export const cards = [
   category: 'phrase',
   japanese: '次の話が楽しみです。',
   kana: 'つぎのはなしがたのしみです。',
-  romaji: 'tsuginohanashigatanoshimidesu。',
+  romaji: 'tsugi no hanashi ga tanoshimi desu.',
   pt: 'Estou ansioso(a) pelo próximo episódio.',
   situations: ['🎬 Filmes e séries']
 },
@@ -11073,7 +11073,7 @@ export const cards = [
   category: 'phrase',
   japanese: '幸せとは何ですか？',
   kana: 'しあわせとはなんですか？',
-  romaji: 'shiawasetowanandesuka？',
+  romaji: 'shiawase to wa nan desu ka?',
   pt: 'O que é felicidade?',
   situations: ['💬 Opiniões']
 },
@@ -11083,7 +11083,7 @@ export const cards = [
   category: 'phrase',
   japanese: '人生の意味について考えます。',
   kana: 'じんせいのいみについてかんがえます。',
-  romaji: 'jinseinoiminitsuitekangaemasu。',
+  romaji: 'jinsei no imi ni tsuite kangaemasu.',
   pt: 'Penso sobre o sentido da vida.',
   situations: ['💬 Opiniões']
 },
@@ -11093,7 +11093,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'それは面白い考えですね。',
   kana: 'それはおもしろいかんがえですね。',
-  romaji: 'sorewaomoshiroikangaedesune。',
+  romaji: 'sore wa omoshiroi kangae desu ne.',
   pt: 'Essa é uma ideia interessante, né?',
   situations: ['💬 Opiniões']
 },
@@ -11103,7 +11103,7 @@ export const cards = [
   category: 'phrase',
   japanese: '少し違うと思います。',
   kana: 'すこしちがうとおもいます。',
-  romaji: 'sukoshichigautoomoimasu。',
+  romaji: 'sukoshi chigau to omoimasu.',
   pt: 'Acho um pouco diferente.',
   situations: ['💬 Opiniões']
 },
@@ -11113,7 +11113,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'あなたの意見を聞きたいです。',
   kana: 'あなたのいけんをききたいです。',
-  romaji: 'anatanoikenokikitaidesu。',
+  romaji: 'anata no iken o kikitai desu.',
   pt: 'Quero ouvir sua opinião.',
   situations: ['💬 Opiniões']
 },
@@ -11123,7 +11123,7 @@ export const cards = [
   category: 'phrase',
   japanese: '人それぞれだと思います。',
   kana: 'ひとそれぞれだとおもいます。',
-  romaji: 'hitosorezoredatoomoimasu。',
+  romaji: 'hito sorezore da to omoimasu.',
   pt: 'Acho que depende de cada pessoa.',
   situations: ['💬 Opiniões']
 },
@@ -11133,7 +11133,7 @@ export const cards = [
   category: 'phrase',
   japanese: '環境を大切にしたいです。',
   kana: 'かんきょうをたいせつにしたいです。',
-  romaji: 'kankyouotaisetsunishitaidesu。',
+  romaji: 'kankyou o taisetsu ni shitai desu.',
   pt: 'Quero cuidar do meio ambiente.',
   situations: ['💬 Opiniões']
 },
@@ -11143,7 +11143,7 @@ export const cards = [
   category: 'phrase',
   japanese: '政治にはあまり詳しくありません。',
   kana: 'せいじにはあまりくわしくありません。',
-  romaji: 'seijiniwaamarikuwashikuarimasen。',
+  romaji: 'seiji ni wa amari kuwashiku arimasen.',
   pt: 'Não entendo muito de política.',
   situations: ['💬 Opiniões']
 },
@@ -11153,7 +11153,7 @@ export const cards = [
   category: 'phrase',
   japanese: '昨日、映画を見ました。',
   kana: 'きのう、えいがをみました。',
-  romaji: 'kinou、eigaomimashita。',
+  romaji: 'kinou, eiga o mimashita.',
   pt: 'Ontem assisti a um filme.',
   situations: ['📖 Histórias pessoais']
 },
@@ -11163,7 +11163,7 @@ export const cards = [
   category: 'phrase',
   japanese: '先週、友達に会いました。',
   kana: 'せんしゅう、ともだちにあいました。',
-  romaji: 'senshuu、tomodachiniaimashita。',
+  romaji: 'senshuu, tomodachi ni aimashita.',
   pt: 'Semana passada encontrei um amigo.',
   situations: ['📖 Histórias pessoais']
 },
@@ -11173,7 +11173,7 @@ export const cards = [
   category: 'phrase',
   japanese: '子供の頃、よくゲームをしました。',
   kana: 'こどものころ、よくげーむをしました。',
-  romaji: 'kodomonokoro、yokugeemuoshimashita。',
+  romaji: 'kodomo no koro, yoku geemu o shimashita.',
   pt: 'Quando criança, jogava videogame com frequência.',
   situations: ['📖 Histórias pessoais']
 },
@@ -11183,7 +11183,7 @@ export const cards = [
   category: 'phrase',
   japanese: '初めて日本に行きました。',
   kana: 'はじめてにほんにいきました。',
-  romaji: 'hajimetenihonniikimashita。',
+  romaji: 'hajimete nihon ni ikimashita.',
   pt: 'Fui ao Japão pela primeira vez.',
   situations: ['📖 Histórias pessoais']
 },
@@ -11193,7 +11193,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'とてもいい経験でした。',
   kana: 'とてもいいけいけんでした。',
-  romaji: 'totemoiikeikendeshita。',
+  romaji: 'totemo ii keiken deshita.',
   pt: 'Foi uma experiência muito boa.',
   situations: ['📖 Histórias pessoais']
 },
@@ -11203,7 +11203,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'いつか日本に行きたいです。',
   kana: 'いつかにほんにいきたいです。',
-  romaji: 'itsukanihonniikitaidesu。',
+  romaji: 'itsuka nihon ni ikitai desu.',
   pt: 'Quero ir ao Japão algum dia.',
   situations: ['🔮 Planos futuros']
 },
@@ -11213,7 +11213,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もっと日本語が上手になりたいです。',
   kana: 'もっとにほんごがじょうずになりたいです。',
-  romaji: 'mottonihongogajouzuninaritaidesu。',
+  romaji: 'motto nihongo ga jouzu ni naritai desu.',
   pt: 'Quero melhorar meu japonês.',
   situations: ['🔮 Planos futuros']
 },
@@ -11223,7 +11223,7 @@ export const cards = [
   category: 'phrase',
   japanese: '将来、海外で働きたいです。',
   kana: 'しょうらい、かいがいではたらきたいです。',
-  romaji: 'shourai、kaigaidehatarakitaidesu。',
+  romaji: 'shourai, kaigai de hatarakitai desu.',
   pt: 'Quero trabalhar fora do país no futuro.',
   situations: ['🔮 Planos futuros']
 },
@@ -11233,7 +11233,7 @@ export const cards = [
   category: 'phrase',
   japanese: '毎日少しずつ勉強します。',
   kana: 'まいにちすこしずつべんきょうします。',
-  romaji: 'mainichisukoshizutsubenkyoushimasu。',
+  romaji: 'mainichi sukoshi zutsu benkyou shimasu.',
   pt: 'Vou estudar um pouco todos os dias.',
   situations: ['🔮 Planos futuros']
 },
@@ -11243,7 +11243,7 @@ export const cards = [
   category: 'phrase',
   japanese: '新しいことに挑戦したいです。',
   kana: 'あたらしいことにちょうせんしたいです。',
-  romaji: 'atarashiikotonichousenshitaidesu。',
+  romaji: 'atarashii koto ni chousen shitai desu.',
   pt: 'Quero experimentar novos desafios.',
   situations: ['🔮 Planos futuros']
 },
@@ -11253,7 +11253,7 @@ export const cards = [
   category: 'phrase',
   japanese: '道に迷いました。',
   kana: 'みちにまよいました。',
-  romaji: 'michinimayoimashita。',
+  romaji: 'michi ni mayoimashita.',
   pt: 'Me perdi.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11263,7 +11263,7 @@ export const cards = [
   category: 'phrase',
   japanese: '手伝ってもらえますか？',
   kana: 'てつだってもらえますか？',
-  romaji: 'tetsudattemoraemasuka？',
+  romaji: 'tetsudatte moraemasu ka?',
   pt: 'Pode me ajudar?',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11273,7 +11273,7 @@ export const cards = [
   category: 'phrase',
   japanese: '財布をなくしました。',
   kana: 'さいふをなくしました。',
-  romaji: 'saifuonakushimashita。',
+  romaji: 'saifu o nakushimashita.',
   pt: 'Perdi minha carteira.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11283,7 +11283,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'スマホが壊れました。',
   kana: 'すまほがこわれました。',
-  romaji: 'sumahogakowaremashita。',
+  romaji: 'sumaho ga kowaremashita.',
   pt: 'Meu celular quebrou.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11293,7 +11293,7 @@ export const cards = [
   category: 'phrase',
   japanese: '体調が悪いです。',
   kana: 'たいちょうがわるいです。',
-  romaji: 'taichougawaruidesu。',
+  romaji: 'taichou ga warui desu.',
   pt: 'Não estou me sentindo bem.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11303,7 +11303,7 @@ export const cards = [
   category: 'phrase',
   japanese: '病院に行きたいです。',
   kana: 'びょういんにいきたいです。',
-  romaji: 'byouinniikitaidesu。',
+  romaji: 'byouin ni ikitai desu.',
   pt: 'Quero ir ao hospital.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11313,7 +11313,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'もう少し待ってください。',
   kana: 'もうすこしまってください。',
-  romaji: 'mousukoshimattekudasai。',
+  romaji: 'mou sukoshi matte kudasai.',
   pt: 'Espere mais um pouco, por favor.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11323,7 +11323,7 @@ export const cards = [
   category: 'phrase',
   japanese: '助けてください。',
   kana: 'たすけてください。',
-  romaji: 'tasuketekudasai。',
+  romaji: 'tasukete kudasai.',
   pt: 'Por favor, me ajude.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -11333,7 +11333,7 @@ export const cards = [
   category: 'phrase',
   japanese: '日本の文化に興味があります。',
   kana: 'にほんのぶんかにきょうみがあります。',
-  romaji: 'nihonnobunkanikyoumigaarimasu。',
+  romaji: 'nihon no bunka ni kyoumi ga arimasu.',
   pt: 'Tenho interesse na cultura japonesa.',
   situations: ['🇯🇵 Cultura japonesa']
 },
@@ -11343,7 +11343,7 @@ export const cards = [
   category: 'phrase',
   japanese: 'お辞儀はいつしますか？',
   kana: 'おじぎはいつしますか？',
-  romaji: 'ojigiwaitsushimasuka？',
+  romaji: 'ojigi wa itsu shimasu ka?',
   pt: 'Quando se faz uma reverência?',
   situations: ['🇯🇵 Cultura japonesa']
 },
@@ -11353,7 +11353,7 @@ export const cards = [
   category: 'phrase',
   japanese: '神社で写真を撮ってもいいですか？',
   kana: 'じんじゃでしゃしんをとってもいいですか？',
-  romaji: 'jinjadeshashinotottemoiidesuka？',
+  romaji: 'jinja de shashin o totte mo ii desu ka?',
   pt: 'Posso tirar fotos no santuário?',
   situations: ['🇯🇵 Cultura japonesa']
 },
@@ -11363,7 +11363,7 @@ export const cards = [
   category: 'phrase',
   japanese: '日本の祭りに行ってみたいです。',
   kana: 'にほんのまつりにいってみたいです。',
-  romaji: 'nihonnomatsuriniittemitaidesu。',
+  romaji: 'nihon no matsuri ni itte mitai desu.',
   pt: 'Quero conhecer um festival japonês.',
   situations: ['🇯🇵 Cultura japonesa']
 },
@@ -11373,7 +11373,7 @@ export const cards = [
   category: 'phrase',
   japanese: '敬語は難しいですね。',
   kana: 'けいごはむずかしいですね。',
-  romaji: 'keigowamuzukashiidesune。',
+  romaji: 'keigo wa muzukashii desu ne.',
   pt: 'A linguagem honorífica é difícil, né?',
   situations: ['🇯🇵 Cultura japonesa']
 },
@@ -11933,7 +11933,7 @@ export const cards = [
   category: 'grammar',
   japanese: '私は学生です。',
   kana: 'わたしはがくせいです。',
-  romaji: 'watashiwagakuseidesu。',
+  romaji: 'watashi wa gakusei desu.',
   pt: 'Sou estudante. Estrutura: A は B です apresenta ou identifica A.',
   situations: ['🎓 Aula de japonês']
 },
@@ -11943,7 +11943,7 @@ export const cards = [
   category: 'grammar',
   japanese: '私は学生ではありません。',
   kana: 'わたしはがくせいではありません。',
-  romaji: 'watashiwagakuseidehaarimasen。',
+  romaji: 'watashi wa gakusei dewa arimasen.',
   pt: 'Não sou estudante. Estrutura: ではありません é negação educada de です.',
   situations: ['🎓 Aula de japonês']
 },
@@ -11953,7 +11953,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'これは本ですか？',
   kana: 'これはほんですか？',
-  romaji: 'korehahondesuka？',
+  romaji: 'kore wa hon desu ka?',
   pt: 'Isto é um livro? Estrutura: か transforma uma afirmação em pergunta.',
   situations: ['❓ Perguntas comuns']
 },
@@ -11963,7 +11963,7 @@ export const cards = [
   category: 'grammar',
   japanese: '私もブラジル人です。',
   kana: 'わたしもぶらじるじんです。',
-  romaji: 'watashimoburajirujindesu。',
+  romaji: 'watashi mo burajirujin desu.',
   pt: 'Também sou brasileiro(a). Estrutura: も indica também.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -11973,7 +11973,7 @@ export const cards = [
   category: 'grammar',
   japanese: '私の名前はリックです。',
   kana: 'わたしのなまえはりっくです。',
-  romaji: 'watashinonamaewarikkudesu。',
+  romaji: 'watashi no namae wa rikku desu.',
   pt: 'Meu nome é Ric. Estrutura: の indica posse ou relação.',
   situations: ['🗣️ Conversas básicas']
 },
@@ -11983,7 +11983,7 @@ export const cards = [
   category: 'grammar',
   japanese: '水を飲みます。',
   kana: 'みずをのみます。',
-  romaji: 'mizuonomimasu。',
+  romaji: 'mizu o nomimasu.',
   pt: 'Bebo água. Estrutura: を marca o objeto direto.',
   situations: ['🍜 Restaurante']
 },
@@ -11993,7 +11993,7 @@ export const cards = [
   category: 'grammar',
   japanese: '家で勉強します。',
   kana: 'いえでべんきょうします。',
-  romaji: 'iedebenkyoushimasu。',
+  romaji: 'ie de benkyou shimasu.',
   pt: 'Estudo em casa. Estrutura: で indica o lugar da ação.',
   situations: ['🏠 Cotidiano']
 },
@@ -12003,7 +12003,7 @@ export const cards = [
   category: 'grammar',
   japanese: '駅に行きます。',
   kana: 'えきにいきます。',
-  romaji: 'ekiniikimasu。',
+  romaji: 'eki ni ikimasu.',
   pt: 'Vou à estação. Estrutura: に indica destino.',
   situations: ['🚆 Transporte']
 },
@@ -12013,7 +12013,7 @@ export const cards = [
   category: 'grammar',
   japanese: '東京へ行きます。',
   kana: 'とうきょうへいきます。',
-  romaji: 'toukyoueikimasu。',
+  romaji: 'toukyou e ikimasu.',
   pt: 'Vou para Tóquio. Estrutura: へ (lido え) indica direção.',
   situations: ['🚆 Transporte']
 },
@@ -12023,7 +12023,7 @@ export const cards = [
   category: 'grammar',
   japanese: '九時に起きます。',
   kana: 'くじにおきます。',
-  romaji: 'kujiniokimasu。',
+  romaji: 'kuji ni okimasu.',
   pt: 'Acordo às nove. Estrutura: に marca um horário específico.',
   situations: ['📅 Planos e horários']
 },
@@ -12033,7 +12033,7 @@ export const cards = [
   category: 'grammar',
   japanese: '音楽が好きです。',
   kana: 'おんがくがすきです。',
-  romaji: 'ongakugasukidesu。',
+  romaji: 'ongaku ga suki desu.',
   pt: 'Gosto de música. Estrutura: が indica o objeto do gosto com 好き.',
   situations: ['❤️ Gostos e preferências']
 },
@@ -12043,7 +12043,7 @@ export const cards = [
   category: 'grammar',
   japanese: '誰が来ますか？',
   kana: 'だれがきますか？',
-  romaji: 'daregakimasuka？',
+  romaji: 'dare ga kimasu ka?',
   pt: 'Quem vem? Estrutura: が marca o sujeito interrogado.',
   situations: ['❓ Perguntas comuns']
 },
@@ -12053,7 +12053,7 @@ export const cards = [
   category: 'grammar',
   japanese: '駅はここです。',
   kana: 'えきはここです。',
-  romaji: 'ekiwakokodesu。',
+  romaji: 'eki wa koko desu.',
   pt: 'A estação é aqui. Estrutura: は indica o tópico da frase.',
   situations: ['🚆 Transporte']
 },
@@ -12063,7 +12063,7 @@ export const cards = [
   category: 'grammar',
   japanese: '日本語を勉強しています。',
   kana: 'にほんごをべんきょうしています。',
-  romaji: 'nihongoobenkyoushiteimasu。',
+  romaji: 'nihongo o benkyou shite imasu.',
   pt: 'Estou estudando japonês. Estrutura: ています indica ação em andamento.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12073,7 +12073,7 @@ export const cards = [
   category: 'grammar',
   japanese: '毎日勉強します。',
   kana: 'まいにちべんきょうします。',
-  romaji: 'mainichibenkyoushimasu。',
+  romaji: 'mainichi benkyou shimasu.',
   pt: 'Estudo todos os dias. Estrutura: ます expressa ação habitual ou futura com polidez.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12083,7 +12083,7 @@ export const cards = [
   category: 'grammar',
   japanese: '昨日勉強しました。',
   kana: 'きのうべんきょうしました。',
-  romaji: 'kinoubenkyoushimashita。',
+  romaji: 'kinou benkyou shimashita.',
   pt: 'Estudei ontem. Estrutura: ました é passado educado.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12093,7 +12093,7 @@ export const cards = [
   category: 'grammar',
   japanese: '今日は働きません。',
   kana: 'きょうははたらきません。',
-  romaji: 'kyouwahatarakimasen。',
+  romaji: 'kyou wa hatarakimasen.',
   pt: 'Hoje não trabalho. Estrutura: ません é negação educada.',
   situations: ['🏠 Cotidiano']
 },
@@ -12103,7 +12103,7 @@ export const cards = [
   category: 'grammar',
   japanese: '昨日は働きませんでした。',
   kana: 'きのうははたらきませんでした。',
-  romaji: 'kinouwahatarakimasendeshita。',
+  romaji: 'kinou wa hatarakimasen deshita.',
   pt: 'Ontem não trabalhei. Estrutura: ませんでした é passado negativo educado.',
   situations: ['🏠 Cotidiano']
 },
@@ -12113,7 +12113,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'ラーメンを食べたいです。',
   kana: 'らーめんをたべたいです。',
-  romaji: 'raamenotabetaidesu。',
+  romaji: 'raamen o tabetai desu.',
   pt: 'Quero comer lámen. Estrutura: forma ます sem ます + たいです expressa desejo.',
   situations: ['🍜 Restaurante']
 },
@@ -12123,7 +12123,7 @@ export const cards = [
   category: 'grammar',
   japanese: '漢字を読んでください。',
   kana: 'かんじをよんでください。',
-  romaji: 'kanjioyondekudasai。',
+  romaji: 'kanji o yonde kudasai.',
   pt: 'Leia o kanji, por favor. Estrutura: forma て + ください faz um pedido.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12133,7 +12133,7 @@ export const cards = [
   category: 'grammar',
   japanese: '写真を撮ってもいいですか？',
   kana: 'しゃしんをとってもいいですか？',
-  romaji: 'shashinotottemoiidesuka？',
+  romaji: 'shashin o totte mo ii desu ka?',
   pt: 'Posso tirar uma foto? Estrutura: てもいいですか pede permissão.',
   situations: ['🛍️ Compras']
 },
@@ -12143,7 +12143,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'ここで写真を撮らないでください。',
   kana: 'ここでしゃしんをとらないでください。',
-  romaji: 'kokodeshashinotoranaidekudasai。',
+  romaji: 'koko de shashin o toranaide kudasai.',
   pt: 'Não tire fotos aqui. Estrutura: forma ない + でください pede para não fazer algo.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -12153,7 +12153,7 @@ export const cards = [
   category: 'grammar',
   japanese: '一緒に食べましょう。',
   kana: 'いっしょにたべましょう。',
-  romaji: 'isshonitabemashou。',
+  romaji: 'issho ni tabemashou.',
   pt: 'Vamos comer juntos. Estrutura: ましょう sugere ação conjunta.',
   situations: ['👥 Amigos e socialização']
 },
@@ -12163,7 +12163,7 @@ export const cards = [
   category: 'grammar',
   japanese: '映画を見ませんか？',
   kana: 'えいがをみませんか？',
-  romaji: 'eigaomimasenka？',
+  romaji: 'eiga o mimasen ka?',
   pt: 'Quer assistir a um filme? Estrutura: ませんか convida educadamente.',
   situations: ['👥 Amigos e socialização']
 },
@@ -12173,7 +12173,7 @@ export const cards = [
   category: 'grammar',
   japanese: '面白いと思います。',
   kana: 'おもしろいとおもいます。',
-  romaji: 'omoshiroitoomoimasu。',
+  romaji: 'omoshiroi to omoimasu.',
   pt: 'Acho interessante. Estrutura: forma simples + と思います expressa opinião.',
   situations: ['💬 Opiniões']
 },
@@ -12183,7 +12183,7 @@ export const cards = [
   category: 'grammar',
   japanese: '日本語は難しいですが、面白いです。',
   kana: 'にほんごはむずかしいですが、おもしろいです。',
-  romaji: 'nihongowamuzukashiidesuga、omoshiroidesu。',
+  romaji: 'nihongo wa muzukashii desu ga, omoshiroi desu.',
   pt: 'Japonês é difícil, mas interessante. Estrutura: が pode indicar contraste.',
   situations: ['💬 Opiniões']
 },
@@ -12193,7 +12193,7 @@ export const cards = [
   category: 'grammar',
   japanese: '音楽が好きだから、毎日聴きます。',
   kana: 'おんがくがすきだから、まいにちききます。',
-  romaji: 'ongakugasukidakara、mainichikikimasu。',
+  romaji: 'ongaku ga suki dakara, mainichi kikimasu.',
   pt: 'Como gosto de música, escuto todos os dias. Estrutura: だから introduz motivo.',
   situations: ['💬 Opiniões']
 },
@@ -12203,7 +12203,7 @@ export const cards = [
   category: 'grammar',
   japanese: '明日、時間があったら行きます。',
   kana: 'あした、じかんがあったらいきます。',
-  romaji: 'ashita、jikangaattaraikimasu。',
+  romaji: 'ashita, jikan ga attara ikimasu.',
   pt: 'Se eu tiver tempo amanhã, vou. Estrutura: たら indica condição.',
   situations: ['📅 Planos e horários']
 },
@@ -12213,7 +12213,7 @@ export const cards = [
   category: 'grammar',
   japanese: '日本に行くつもりです。',
   kana: 'にほんにいくつもりです。',
-  romaji: 'nihonniikutsumoridesu。',
+  romaji: 'nihon ni iku tsumori desu.',
   pt: 'Pretendo ir ao Japão. Estrutura: verbo no dicionário + つもりです indica intenção.',
   situations: ['🔮 Planos futuros']
 },
@@ -12223,7 +12223,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'もっと勉強しようと思います。',
   kana: 'もっとべんきょうしようとおもいます。',
-  romaji: 'mottobenkyoushiyoutoomoimasu。',
+  romaji: 'motto benkyou shiyou to omoimasu.',
   pt: 'Acho que vou estudar mais. Estrutura: volitivo + と思います indica intenção.',
   situations: ['🔮 Planos futuros']
 },
@@ -12233,7 +12233,7 @@ export const cards = [
   category: 'grammar',
   japanese: '日本に行ったことがあります。',
   kana: 'にほんにいったことがあります。',
-  romaji: 'nihonniittakotogaarimasu。',
+  romaji: 'nihon ni itta koto ga arimasu.',
   pt: 'Já fui ao Japão. Estrutura: passado simples + ことがあります expressa experiência.',
   situations: ['📖 Histórias pessoais']
 },
@@ -12243,7 +12243,7 @@ export const cards = [
   category: 'grammar',
   japanese: '映画を見たあとで話しましょう。',
   kana: 'えいがをみたあとではなしましょう。',
-  romaji: 'eigaomitaatodehanashimashou。',
+  romaji: 'eiga o mita ato de hanashimashou.',
   pt: 'Vamos conversar depois de ver o filme. Estrutura: passado simples + あとで indica depois.',
   situations: ['📖 Histórias pessoais']
 },
@@ -12253,7 +12253,7 @@ export const cards = [
   category: 'grammar',
   japanese: '寝る前に本を読みます。',
   kana: 'ねるまえにほんをよみます。',
-  romaji: 'nerumaenihonoyomimasu。',
+  romaji: 'neru mae ni hon o yomimasu.',
   pt: 'Leio antes de dormir. Estrutura: verbo no dicionário + 前に indica antes.',
   situations: ['📅 Planos e horários']
 },
@@ -12263,7 +12263,7 @@ export const cards = [
   category: 'grammar',
   japanese: '音楽を聴きながら歩きます。',
   kana: 'おんがくをききながらあるきます。',
-  romaji: 'ongakuokikinagaraarukimasu。',
+  romaji: 'ongaku o kikinagara arukimasu.',
   pt: 'Caminho ouvindo música. Estrutura: radical ます + ながら indica ações simultâneas.',
   situations: ['🎵 Música']
 },
@@ -12273,7 +12273,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'この料理は辛すぎます。',
   kana: 'このりょうりはからすぎます。',
-  romaji: 'konoryouriwakarasugimasu。',
+  romaji: 'kono ryouri wa karasugimasu.',
   pt: 'Este prato está apimentado demais. Estrutura: radical de adjetivo + すぎます indica excesso.',
   situations: ['🍜 Restaurante']
 },
@@ -12283,7 +12283,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'もっとゆっくり話してほしいです。',
   kana: 'もっとゆっくりはなしてほしいです。',
-  romaji: 'mottoyukkurihanashitehoshiidesu。',
+  romaji: 'motto yukkuri hanashite hoshii desu.',
   pt: 'Quero que fale mais devagar. Estrutura: forma て + ほしい expressa desejo sobre ação alheia.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12293,7 +12293,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'スマホが壊れてしまいました。',
   kana: 'すまほがこわれてしまいました。',
-  romaji: 'sumahogakowareteshimaimashita。',
+  romaji: 'sumaho ga kowarete shimaimashita.',
   pt: 'Meu celular acabou quebrando. Estrutura: てしまう indica conclusão ou lamentação.',
   situations: ['💻 Tecnologia']
 },
@@ -12303,7 +12303,7 @@ export const cards = [
   category: 'grammar',
   japanese: '電車が遅れているようです。',
   kana: 'でんしゃがおくれているようです。',
-  romaji: 'denshagaokureteiruyoudesu。',
+  romaji: 'densha ga okurete iru you desu.',
   pt: 'Parece que o trem está atrasado. Estrutura: ようです exprime impressão fundamentada.',
   situations: ['🤝 Problemas cotidianos']
 },
@@ -12313,7 +12313,7 @@ export const cards = [
   category: 'grammar',
   japanese: '人によって考え方が違います。',
   kana: 'ひとによってかんがえかたがちがいます。',
-  romaji: 'hitoniyottekangaekatagachigaimasu。',
+  romaji: 'hito ni yotte kangaekata ga chigaimasu.',
   pt: 'A maneira de pensar varia de pessoa para pessoa. Estrutura: によって indica variação conforme algo.',
   situations: ['💬 Opiniões']
 },
@@ -12323,7 +12323,7 @@ export const cards = [
   category: 'grammar',
   japanese: '毎日練習すれば上手になります。',
   kana: 'まいにちれんしゅうすればじょうずになります。',
-  romaji: 'mainichirenshuusurebajouzuninarimasu。',
+  romaji: 'mainichi renshuu sureba jouzu ni narimasu.',
   pt: 'Se praticar diariamente, vai melhorar. Estrutura: ば indica condição.',
   situations: ['🎓 Aula de japonês']
 },
@@ -12333,7 +12333,7 @@ export const cards = [
   category: 'grammar',
   japanese: 'このアニメは子供だけでなく大人にも人気です。',
   kana: 'このあにめはこどもだけでなくおとなにもにんきです。',
-  romaji: 'konoanimewakodomodakedenakuotonanimoninkidesu。',
+  romaji: 'kono anime wa kodomo dake de naku otona ni mo ninki desu.',
   pt: 'Este anime é popular não só entre crianças, mas também entre adultos. Estrutura: だけでなく〜も indica não apenas, mas também.',
   situations: ['🍥 Anime e mangá']
 },
@@ -12343,7 +12343,7 @@ export const cards = [
   category: 'phrase',
   japanese: '一つください。',
   kana: 'ひとつください。',
-  romaji: 'hitotsukudasai。',
+  romaji: 'hitotsu kudasai.',
   pt: '1 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12353,7 +12353,7 @@ export const cards = [
   category: 'phrase',
   japanese: '二つください。',
   kana: 'ふたつください。',
-  romaji: 'futatsukudasai。',
+  romaji: 'futatsu kudasai.',
   pt: '2 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12363,7 +12363,7 @@ export const cards = [
   category: 'phrase',
   japanese: '三つください。',
   kana: 'みっつください。',
-  romaji: 'mittsukudasai。',
+  romaji: 'mittsu kudasai.',
   pt: '3 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12373,7 +12373,7 @@ export const cards = [
   category: 'phrase',
   japanese: '四つください。',
   kana: 'よっつください。',
-  romaji: 'yottsukudasai。',
+  romaji: 'yottsu kudasai.',
   pt: '4 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12383,7 +12383,7 @@ export const cards = [
   category: 'phrase',
   japanese: '五つください。',
   kana: 'いつつください。',
-  romaji: 'itsutsukudasai。',
+  romaji: 'itsutsu kudasai.',
   pt: '5 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12393,7 +12393,7 @@ export const cards = [
   category: 'phrase',
   japanese: '六つください。',
   kana: 'むっつください。',
-  romaji: 'muttsukudasai。',
+  romaji: 'muttsu kudasai.',
   pt: '6 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12403,7 +12403,7 @@ export const cards = [
   category: 'phrase',
   japanese: '七つください。',
   kana: 'ななつください。',
-  romaji: 'nanatsukudasai。',
+  romaji: 'nanatsu kudasai.',
   pt: '7 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12413,7 +12413,7 @@ export const cards = [
   category: 'phrase',
   japanese: '八つください。',
   kana: 'やっつください。',
-  romaji: 'yattsukudasai。',
+  romaji: 'yattsu kudasai.',
   pt: '8 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -12423,7 +12423,7 @@ export const cards = [
   category: 'phrase',
   japanese: '九つください。',
   kana: 'ここのつください。',
-  romaji: 'kokonotsukudasai。',
+  romaji: 'kokonotsu kudasai.',
   pt: '9 unidade(s), por favor.',
   situations: ['🍜 Restaurante', '🛍️ Compras']
 },
@@ -13373,6 +13373,8 @@ export const cards = [
   category: 'phrase',
   japanese: '発音は難しいです。',
   kana: 'はつおんはむずかしいです。',
+  segments: [['発音', 'はつおん'], 'は', ['難', 'むずか'], 'しいです。'],
+  ttsReading: 'ハツオン ワ ムズカシイデス。',
   romaji: 'hatsuon wa muzukashii desu.',
   pt: 'Pronúncia é difícil.',
   situations: ['🎓 Aula de japonês']

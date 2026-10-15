@@ -280,6 +280,33 @@ rt {
   stroke-linejoin: round;
 }
 
+.audio-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 116px;
+  height: 52px;
+  flex: 0 0 52px;
+  margin: 8px 0;
+}
+
+.audio-controls > .audio {
+  position: relative;
+  flex: 0 0 52px;
+  margin: 0;
+}
+
+.slow-audio .slow-clock {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--accent-soft);
+  border-radius: 50%;
+}
+
 .hints {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -2,14 +2,14 @@ import './style.css';
 import { cards, studySituations } from './data.js';
 import {
   MAX, load, save, record, pool, hasKanji, score,
-  summarize, buildRound
+  summarize, buildRound, hintRevealsAnswer
 } from './engine.js';
 import {
   japaneseMarkup,
   solutionJapaneseMarkup,
-  studyPromptMarkup
+  studyPromptMarkup, ttsText
 } from './japanese.js';
-import { aiJapaneseVoices, japaneseVoices, speak, stopAudio } from './audio.js';
+import { aiJapaneseVoices, japaneseVoices, speak, stopAudio, clampPlaybackRate, MIN_PLAYBACK_RATE } from './audio.js';
 import { setupInstall } from './install.js';
 
 const APP_VERSION = '0.2.0';
@@ -40,6 +40,8 @@ let deck = [];
 let retries = [];
 let roundGeneration = 0;
 let buildingRound = false;
+let normalAudioClicks = 0;
+let slowAudioClicks = 0;
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;',
@@ -85,11 +87,17 @@ app.innerHTML = `
     <article id="flashcard">
       <div id="badge" class="badge"></div>
       <div id="prompt" class="prompt"></div>
-      <button id="audioButton" class="audio" aria-label="Ouvir novamente" hidden>
+      <div id="audioControls" class="audio-controls" hidden>
+      <button id="audioButton" class="audio" aria-label="Ouvir novamente" title="Ouvir novamente" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M11 4 6 8H3v8h3l5 4Z M15 8a6 6 0 0 1 0 8 M18 5a10 10 0 0 1 0 14"></path>
         </svg>
       </button>
+      <button id="slowAudioButton" class="audio slow-audio" aria-label="Ouvir mais devagar" title="Ouvir mais devagar" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4 6 8H3v8h3l5 4Z M15 8a6 6 0 0 1 0 8"></path></svg>
+        <svg class="slow-clock" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 6v6l4 2"></path></svg>
+      </button>
+      </div>
       <p id="audioMsg" class="audio-msg" role="status"></p>
       <div id="hints" class="hints" hidden>
         <button id="hintJapanese" class="hint-button">Kanji</button>
@@ -145,7 +153,7 @@ app.innerHTML = `
     <fieldset>
       <legend>Exibição e dicas</legend>
       <label class="check-option"><input id="autoFurigana" type="checkbox"><span>Furigana até dominar o kanji</span></label>
-      <p class="small">Nos cartões Japonês → Português, mostra a leitura até alcançar 10 acertos em Kanji → Kana.</p>
+      <p class="small">Nos cartões Japonês → Português, mostra a leitura até alcançar ${MAX} acertos em Kanji → Kana.</p>
       <label class="check-option"><input id="romaji" type="checkbox"><span>Mostrar romaji automaticamente</span></label>
       <label class="check-option"><input id="meaning" type="checkbox"><span>Mostrar tradução automaticamente</span></label>
     </fieldset>
@@ -391,6 +399,7 @@ $('refreshApp').onclick = async () => {
 function resetRound() {
   roundGeneration++;
   stopAudio();
+  resetAudioControls();
   current = null;
   phase = 'question';
   counter = 0;
@@ -437,6 +446,7 @@ function pull() {
 
 function nextCard(playAutomatically = true) {
   stopAudio();
+  resetAudioControls();
   $('audioMsg').textContent = '';
   phase = 'question';
   current = pull();
@@ -484,12 +494,7 @@ function showHint(key) {
   current.revealed[key] = true;
   if (key === 'japanese') current.revealed.furigana = false;
   const { skill } = current;
-  const answerIsVisible = (
-    (skill === 'reverse' && ['japanese', 'furigana', 'romaji'].includes(key)) ||
-    (skill === 'toKanji' && ['japanese', 'furigana'].includes(key)) ||
-    (skill === 'fromKanji' && ['furigana', 'romaji'].includes(key)) ||
-    (skill === 'kana' && ['meaning', 'romaji'].includes(key))
-  );
+  const answerIsVisible = hintRevealsAnswer(skill, key);
 
   if (answerIsVisible && !current.assisted) {
     record(state, current.id, skill, false);
@@ -514,15 +519,33 @@ $('yes').onclick = () => answer(true);
 $('no').onclick = () => answer(false);
 $('next').onclick = () => current ? nextCard() : createRound();
 $('newRound').onclick = () => createRound();
-$('audioButton').onclick = play;
+$('audioButton').onclick = () => {
+  if (!current) return;
+  normalAudioClicks++;
+  $('slowAudioButton').hidden = normalAudioClicks < 2 && slowAudioClicks === 0;
+  play(1, true);
+};
+$('slowAudioButton').onclick = () => {
+  if (!current || $('slowAudioButton').hidden) return;
+  normalAudioClicks = 0;
+  slowAudioClicks++;
+  play(0.7, true, slowAudioClicks >= 3 ? MIN_PLAYBACK_RATE : undefined);
+};
 
-function play() {
+function resetAudioControls() {
+  normalAudioClicks = 0;
+  slowAudioClicks = 0;
+  $('slowAudioButton').hidden = true;
+}
+
+function play(speedFactor = 1, restart = false, rateOverride) {
   if (!current) return;
   const message = $('audioMsg');
   message.textContent = '';
-  speak(current.card.kana || current.card.japanese, state, text => {
+  const playback = { ...state, speed: clampPlaybackRate(rateOverride ?? state.speed * speedFactor) };
+  speak(ttsText(current.card), playback, text => {
     message.textContent = text;
-  });
+  }, { restart });
 }
 
 for (const input of selected('[data-skill]')) {
@@ -587,7 +610,7 @@ function renderHints(card, skill, revealed) {
   const visibleFurigana = !cardHasKanji || !!revealed.furigana ||
     (showAutomaticFurigana && !revealed.japanese);
   const visibleRomaji = !!revealed.romaji ||
-    (state.romaji && ['kana', 'toKanji'].includes(skill));
+    (state.romaji && ['kana', 'toKanji', 'fromKanji'].includes(skill));
   const visibleMeaning = !!revealed.meaning ||
     skill === 'reverse' ||
     (state.meaning && skill === 'kana');
@@ -622,8 +645,8 @@ function applyAutomaticAssistance() {
   if (!current || current.assisted || phase !== 'question') return;
   const { skill } = current;
   const answerVisible =
-    (state.meaning && skill === 'kana') ||
-    (state.romaji && ['kana', 'toKanji', 'fromKanji'].includes(skill));
+    (state.meaning && skill === 'kana' && hintRevealsAnswer(skill, 'meaning')) ||
+    (state.romaji && ['kana', 'toKanji', 'fromKanji'].includes(skill) && hintRevealsAnswer(skill, 'romaji'));
   if (!answerVisible) return;
 
   record(state, current.id, skill, false);
@@ -644,7 +667,7 @@ function render() {
 
   const remaining = deck.length + retries.length;
   $('round').textContent = current
-    ? `${remaining + 1} cartões restantes nesta rodada · meta ${MAX}/10`
+    ? `${remaining + 1} cartões restantes nesta rodada · meta ${MAX} acertos`
     : buildingRound ? 'Preparando rodada...' : 'Rodada concluída';
   if (!current) {
     const available = pool(cards, state).length;
@@ -654,6 +677,8 @@ function render() {
       : 'Ajuste os modos ou o conteúdo nas configurações.';
     $('solution').hidden = true;
     $('audioButton').hidden = true;
+    $('audioControls').hidden = true;
+    $('slowAudioButton').hidden = true;
     $('hints').hidden = true;
     $('audioMsg').textContent = '';
     $('actions').hidden = true;
@@ -669,7 +694,7 @@ function render() {
   const showAutomaticFurigana = shouldShowAutomaticFurigana(card, skill);
   const showFurigana = cardHasKanji && !revealed.japanese &&
     (revealed.furigana || showAutomaticFurigana);
-  const showRomaji = revealed.romaji || (state.romaji && ['kana', 'toKanji'].includes(skill));
+  const showRomaji = revealed.romaji || (state.romaji && ['kana', 'toKanji', 'fromKanji'].includes(skill));
   const showMeaning = revealed.meaning || (state.meaning && skill === 'kana');
   $('badge').textContent = current.isRetry ? 'Revisão' : '';
 
@@ -677,6 +702,7 @@ function render() {
 
   const answerShown = phase === 'revealed';
   $('audioButton').hidden = false;
+  $('audioControls').hidden = false;
   $('solution').hidden = !answerShown;
   $('solution').innerHTML = answerShown ? solutionMarkup(card, skill, revealed) : '';
 
@@ -684,7 +710,7 @@ function render() {
     showRomaji ? `<div class="romaji">${esc(card.romaji)}</div>` : '',
     showMeaning ? `<div class="meaning">${esc(card.pt)}</div>` : ''
   ].join('');
-  if (!answerShown && extra) $('prompt').insertAdjacentHTML('beforeend', extra);
+  if (extra) $('prompt').insertAdjacentHTML('beforeend', extra);
 
   renderHints(card, skill, revealed);
   $('actions').hidden = answerShown;
@@ -698,19 +724,21 @@ function render() {
 function solutionMarkup(card, skill, revealed) {
   const blocks = [];
   const promptShowsRomaji = revealed.romaji ||
-    (state.romaji && ['kana', 'toKanji'].includes(skill));
+    (state.romaji && ['kana', 'toKanji', 'fromKanji'].includes(skill));
   const promptShowsMeaning = revealed.meaning || (state.meaning && skill === 'kana') ||
     skill === 'reverse';
   const promptShowsJapanese = skill === 'fromKanji' ||
+    (['kana', 'toKanji'].includes(skill) && !hasKanji(card)) ||
     shouldShowAutomaticFurigana(card, skill) ||
     !!revealed.japanese || !!revealed.furigana;
   const promptShowsReading = skill === 'kana' || skill === 'toKanji' ||
     !!revealed.furigana || (skill === 'kana' && state.autoFurigana);
   let rubyAddsReading = false;
 
-  if (!promptShowsJapanese && card.japanese !== card.kana) {
-    rubyAddsReading = true;
-    blocks.push(solutionJapaneseMarkup(card, skill));
+  if (!promptShowsJapanese) {
+    const japanese = solutionJapaneseMarkup(card, skill);
+    rubyAddsReading = japanese.includes('<ruby>') || !hasKanji(card);
+    blocks.push(japanese);
   }
   if (!promptShowsReading && !rubyAddsReading && card.japanese !== card.kana) {
     blocks.push(`<div class="kana-reading">${esc(card.kana)}</div>`);

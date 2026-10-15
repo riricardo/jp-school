@@ -11,60 +11,45 @@ const normalizeKana = value => value.replace(/[\u30a1-\u30f6]/g, char =>
 
 function rubyMarkup(card) {
   const japanese = card.japanese || '';
-  const reading = normalizeKana(card.kana || '');
+  const reading = normalizeKana(card.kana || '').replace(/[\s\p{P}\p{S}]/gu, '');
   const tokens = japanese.match(/\p{Script=Han}+|[\p{Script=Hiragana}\p{Script=Katakana}ー]+|[^\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}ー]+/gu) || [];
-  const output = [];
-  let readingPosition = 0;
-  let kanji = '';
-
-  for (const token of tokens) {
+  const memo = new Map();
+  // Match the entire suffix, rather than accepting the first repeated kana anchor.
+  function align(index, position) {
+    if (index === tokens.length) return position === reading.length ? [[]] : [];
+    const key = `${index}/${position}`;
+    if (memo.has(key)) return memo.get(key);
+    const token = tokens[index];
+    const results = [];
     if (/^\p{Script=Han}+$/u.test(token)) {
-      kanji += token;
-      continue;
-    }
-
-    if (/^[\p{Script=Hiragana}\p{Script=Katakana}ー]+$/u.test(token)) {
-      const anchor = normalizeKana(token);
-      const anchorPosition = reading.indexOf(anchor, readingPosition);
-      if (anchorPosition < readingPosition) return escapeHtml(japanese);
-
-      const kanjiReading = reading.slice(readingPosition, anchorPosition);
-      if (kanji && kanjiReading) {
-        output.push(`<ruby>${escapeHtml(kanji)}<rt>${escapeHtml(kanjiReading)}</rt></ruby>`);
-      } else if (kanji) {
-        output.push(escapeHtml(kanji));
+      for (let end = position + 1; end <= reading.length && results.length < 2; end++) {
+        for (const suffix of align(index + 1, end)) {
+          results.push([[token, reading.slice(position, end)], ...suffix]);
+          if (results.length === 2) break;
+        }
       }
-      kanji = '';
-      output.push(escapeHtml(token));
-      readingPosition = anchorPosition + anchor.length;
-      continue;
-    }
-
-    const anchorPosition = reading.indexOf(token, readingPosition);
-    if (anchorPosition < readingPosition || kanji && anchorPosition !== readingPosition) {
-      return escapeHtml(japanese);
-    }
-
-    if (kanji) {
-      const kanjiReading = reading.slice(readingPosition, anchorPosition);
-      if (kanjiReading) {
-        output.push(`<ruby>${escapeHtml(kanji)}<rt>${escapeHtml(kanjiReading)}</rt></ruby>`);
-      } else {
-        output.push(escapeHtml(kanji));
+    } else {
+      const anchor = normalizeKana(token).replace(/[\s\p{P}\p{S}]/gu, '');
+      if (reading.startsWith(anchor, position)) {
+        for (const suffix of align(index + 1, position + anchor.length)) results.push([token, ...suffix]);
       }
-      kanji = '';
     }
-    output.push(escapeHtml(token));
-    readingPosition = anchorPosition + token.length;
+    memo.set(key, results);
+    return results;
   }
+  const matches = align(0, 0);
+  return matches.length === 1 ? segmentMarkup(matches[0]) : escapeHtml(japanese);
+}
 
-  if (kanji) {
-    const kanjiReading = reading.slice(readingPosition);
-    output.push(kanjiReading
-      ? `<ruby>${escapeHtml(kanji)}<rt>${escapeHtml(kanjiReading)}</rt></ruby>`
-      : escapeHtml(kanji));
-  }
-  return output.join('');
+function segmentMarkup(segments) {
+  return segments.map(segment => Array.isArray(segment)
+    ? `<ruby>${escapeHtml(segment[0])}<rt>${escapeHtml(segment[1])}</rt></ruby>`
+    : escapeHtml(segment)).join('');
+}
+
+export function ttsText(card) {
+  // Kanji supply lexical context: 話す starts with ha, unlike the topic particle は.
+  return card.ttsReading || card.japanese || card.kana || '';
 }
 
 export function japaneseMarkup(card, showFurigana) {
@@ -72,11 +57,15 @@ export function japaneseMarkup(card, showFurigana) {
     return `<div class="japanese">${escapeHtml(card.japanese)}</div>`;
   }
   if (Array.isArray(card.segments) && card.segments.some(Array.isArray)) {
-    const segmented = card.segments.map(segment => {
-      if (!Array.isArray(segment)) return escapeHtml(segment);
-      return `<ruby>${escapeHtml(segment[0])}<rt>${escapeHtml(segment[1])}</rt></ruby>`;
-    }).join('');
-    return `<div class="japanese">${segmented}</div>`;
+    const valid = card.segments.every(segment => typeof segment === 'string' ||
+      (Array.isArray(segment) && segment.length === 2 && segment.every(part => typeof part === 'string') &&
+       /\p{Script=Han}/u.test(segment[0]) && segment[1].length > 0));
+    const text = card.segments.map(segment => Array.isArray(segment) ? segment[0] : segment).join('');
+    const reading = card.segments.map(segment => Array.isArray(segment) ? segment[1] : segment).join('');
+    const readingKey = value => normalizeKana(value).replace(/[\s\p{P}\p{S}]/gu, '');
+    if (valid && text === card.japanese && readingKey(reading) === readingKey(card.kana || '')) {
+      return `<div class="japanese">${segmentMarkup(card.segments)}</div>`;
+    }
   }
   return `<div class="japanese">${rubyMarkup(card)}</div>`;
 }

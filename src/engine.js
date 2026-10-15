@@ -1,4 +1,5 @@
-export const MAX=10;
+export const MAX=5;
+const PROGRESS_VERSION=2;
 export const SKILLS=['kana','reverse','toKanji','fromKanji'];
 export const STORAGE='manjapa-v1';
 const legacySituations={
@@ -10,6 +11,7 @@ const legacySituations={
   Emergências:'🤝 Problemas cotidianos'
 };
 export const defaults={
+  progressVersion:PROGRESS_VERSION,
   mode:'mixed',
   skills:[...SKILLS],
   content:'all',
@@ -81,6 +83,14 @@ export function load(){
   state.amount=Math.max(1,Math.min(2000,Math.round(Number(state.amount)||100)));
   state.retry=Math.max(1,Math.min(2000,Math.round(Number(state.retry)||20)));
   state.progress={};
+  const oldScale=stored.progressVersion!==PROGRESS_VERSION;
+  const migratedScore=value=>{
+    const numeric=Number(value);
+    if(!Number.isFinite(numeric))return 0;
+    // Keep fractional credit: an incomplete 9/10 remains incomplete at 4.5/5.
+    return Math.max(0,Math.min(oldScale?10:MAX,numeric))/(oldScale?2:1);
+  };
+  state.progressVersion=PROGRESS_VERSION;
   if(stored.progress&&typeof stored.progress==='object'){
     for(const [id,scores] of Object.entries(stored.progress)){
       if(!scores||typeof scores!=='object')continue;
@@ -90,10 +100,10 @@ export function load(){
         Number(scores.listening)||0
       );
       state.progress[id]={};
-      if(kanaScore)state.progress[id].kana=Math.min(MAX,kanaScore);
-      if(Number(scores.fromKanji))state.progress[id].fromKanji=Math.min(MAX,Number(scores.fromKanji));
+      if(kanaScore)state.progress[id].kana=migratedScore(kanaScore);
+      if(Number(scores.fromKanji))state.progress[id].fromKanji=migratedScore(scores.fromKanji);
       for(const skill of ['reverse','toKanji']){
-        if(Number(scores[skill]))state.progress[id][skill]=Math.min(MAX,Number(scores[skill]));
+        if(Number(scores[skill]))state.progress[id][skill]=migratedScore(scores[skill]);
       }
     }
   }
@@ -102,6 +112,9 @@ export function load(){
 export function save(state){localStorage.setItem(STORAGE,JSON.stringify(state));}
 export function score(state,id,skill){return Math.max(0,Math.min(MAX,state.progress?.[id]?.[skill]||0));}
 export function record(state,id,skill,correct){state.progress[id]??={};state.progress[id][skill]=correct?Math.min(MAX,score(state,id,skill)+1):0;}
+export function hintRevealsAnswer(skill,key){
+  return ({kana:['meaning'],reverse:['japanese','furigana','romaji'],toKanji:['japanese','furigana'],fromKanji:['furigana','romaji']}[skill]||[]).includes(key);
+}
 export function hasKanji(card){return /\p{Script=Han}/u.test(card.japanese||'');}
 export function eligible(card,skill){
   return !(['toKanji','fromKanji'].includes(skill)&&!hasKanji(card));
