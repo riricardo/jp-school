@@ -1,8 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { speak, stopAudio } from '../src/audio.js';
+import { speak, stopAudio, clampPlaybackRate } from '../src/audio.js';
 
-test('System voice speaks Japanese with an empty Android voice list and applies speed changes', () => {
+test('Slow playback factors stay distinct below a configured 0.7x rate', () => {
+  assert.equal(clampPlaybackRate(0.7 * 0.7), 0.7 * 0.7);
+  assert.equal(clampPlaybackRate(0.7 * 0.5), 0.35);
+  assert.equal(clampPlaybackRate(0.5 * 0.7), 0.35);
+  assert.equal(clampPlaybackRate(0.5 * 0.5), 0.25);
+  assert.equal(clampPlaybackRate(0.01), 0.25);
+  assert.equal(clampPlaybackRate(9), 2);
+});
+
+test('System voice speaks Japanese with an empty Android voice list and applies speed changes', async () => {
   const previousWindow = globalThis.window;
   const previousWorker = globalThis.Worker;
   const spoken = [];
@@ -25,10 +34,18 @@ test('System voice speaks Japanese with an empty Android voice list and applies 
     assert.deepEqual(messages, []);
     const staleError = spoken[0].onerror;
     assert.equal(speak('みず', { voice: 'auto', speed: 1.5 }), true);
+    await new Promise(resolve => setTimeout(resolve, 5));
     assert.equal(spoken.length, 2);
     assert.equal(spoken[1].rate, 1.5);
     speak('こんにちは', { voice: 'auto', speed: 99 });
+    await new Promise(resolve => setTimeout(resolve, 5));
     assert.equal(spoken[2].rate, 2);
+    speak('こんにちは', { voice: 'auto', speed: 0.35 });
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.equal(spoken[3].rate, 0.35);
+    speak('こんにちは', { voice: 'auto', speed: 0.25 });
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.equal(spoken[4].rate, 0.25);
     staleError({ error: 'language-unavailable' });
     assert.deepEqual(messages, []);
   } finally {
@@ -37,6 +54,52 @@ test('System voice speaks Japanese with an empty Android voice list and applies 
     else globalThis.window = previousWindow;
     if (previousWorker === undefined) delete globalThis.Worker;
     else globalThis.Worker = previousWorker;
+  }
+});
+
+test('Manual native replay waits for cancellation, reapplies rate and cannot outlive the exercise', async () => {
+  const previousWindow = globalThis.window;
+  const spoken = [];
+  let cancelling = false;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: {
+      speaking: false, getVoices: () => [],
+      cancel() {
+        this.speaking = false;
+        cancelling = true;
+        queueMicrotask(() => { cancelling = false; });
+      },
+      speak(utterance) {
+        spoken.push({ rate: utterance.rate, cancelling });
+        this.speaking = true;
+      }
+    }
+  };
+  try {
+    speak('話しましょう', { speed: 1 });
+    speak('話しましょう', { speed: 0.7 }, () => {}, { restart: true });
+    assert.equal(spoken.length, 1);
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.deepEqual(spoken[1], { rate: 0.7, cancelling: false });
+    speak('話しましょう', { speed: 0.7 }, () => {}, { restart: true });
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.equal(spoken.length, 3);
+    speak('話しましょう', { speed: 0.5 }, () => {}, { restart: true });
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.deepEqual(spoken[3], { rate: 0.5, cancelling: false });
+    speak('話しましょう', { speed: 0.7 }, () => {}, { restart: true });
+    speak('話しましょう', { speed: 0.35 }, () => {}, { restart: true });
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.deepEqual(spoken[4], { rate: 0.35, cancelling: false });
+    speak('話しましょう', { speed: 0.25 }, () => {}, { restart: true });
+    stopAudio();
+    await new Promise(resolve => setTimeout(resolve, 5));
+    assert.equal(spoken.length, 5);
+  } finally {
+    stopAudio();
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
   }
 });
 
@@ -118,6 +181,66 @@ test('Failed AI worker is discarded so a later play can retry', async () => {
     stopAudio();
     if (previousWorker === undefined) delete globalThis.Worker;
     else globalThis.Worker = previousWorker;
+  }
+});
+
+test('Offline Kokoro selection prefers an available native Japanese voice', () => {
+  const previousWindow = globalThis.window;
+  const previousNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  let spoken;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: {
+      cancel() {},
+      getVoices: () => [{ lang: 'ja-JP', voiceURI: 'local-ja', localService: true }],
+      speak(utterance) { spoken = utterance; }
+    }
+  };
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { onLine: false } });
+  try {
+    speak('みず', { voice: 'hf:kokoro:jf_alpha', speed: 0.7 });
+    assert.equal(spoken.voice.voiceURI, 'local-ja');
+    assert.equal(spoken.rate, 0.7);
+  } finally {
+    stopAudio();
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+    if (previousNavigator) Object.defineProperty(globalThis, 'navigator', previousNavigator);
+    else delete globalThis.navigator;
+  }
+});
+
+test('Kokoro media playback errors fall back to native speech without blocking', async () => {
+  const originals = Object.fromEntries(['window', 'Worker', 'Audio'].map(key => [key, globalThis[key]]));
+  let media;
+  let spoken;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: { cancel() {}, getVoices: () => [], speak(utterance) { spoken = utterance; } }
+  };
+  globalThis.Worker = class {
+    postMessage({ token }) {
+      queueMicrotask(() => this.onmessage({ data: { token, blob: new Blob(['audio']) } }));
+    }
+    terminate() {}
+  };
+  globalThis.Audio = class {
+    constructor() { media = this; }
+    async play() {}
+    pause() { this.paused = true; }
+  };
+  try {
+    speak('みず', { voice: 'hf:kokoro:jf_alpha' });
+    await new Promise(resolve => setImmediate(resolve));
+    media.onerror();
+    assert.equal(media.paused, true);
+    assert.equal(spoken.lang, 'ja-JP');
+  } finally {
+    stopAudio();
+    for (const [key, value] of Object.entries(originals)) {
+      if (value === undefined) delete globalThis[key];
+      else globalThis[key] = value;
+    }
   }
 });
 

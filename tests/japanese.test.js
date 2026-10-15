@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { cards } from '../src/data.js';
 import {
   japaneseMarkup,
   solutionJapaneseMarkup,
-  studyPromptMarkup
+  studyPromptMarkup, ttsText
 } from '../src/japanese.js';
 
 test('furigana is applied to kanji only, not repeated above kana', () => {
@@ -15,6 +16,52 @@ test('furigana is applied to kanji only, not repeated above kana', () => {
     japaneseMarkup(card, true),
     '<div class="japanese"><ruby>助<rt>たす</rt></ruby>けてください</div>'
   );
+});
+
+test('Repeated は anchors align the full reading of 発音は難しいです', () => {
+  assert.equal(japaneseMarkup({japanese:'発音は難しいです。',kana:'はつおんはむずかしいです。'},true),
+    '<div class="japanese"><ruby>発音<rt>はつおん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいです。</div>');
+});
+
+test('Ambiguous furigana needs explicit segments and invalid segments cannot change displayed text', () => {
+  const card={japanese:'甲あ乙',kana:'かああおつ'};
+  assert.equal(japaneseMarkup(card,true),'<div class="japanese">甲あ乙</div>');
+  assert.equal(japaneseMarkup({...card,segments:[['甲','かあ'],'あ',['乙','おつ']]},true),
+    '<div class="japanese"><ruby>甲<rt>かあ</rt></ruby>あ<ruby>乙<rt>おつ</rt></ruby></div>');
+  assert.equal(japaneseMarkup({...card,segments:[['別','べつ']]},true),'<div class="japanese">甲あ乙</div>');
+});
+
+test('Furigana preserves katakana and rejects trailing unmatched readings', () => {
+  assert.match(japaneseMarkup({japanese:'テレビを見る',kana:'テレビをみる'},true),/テレビを<ruby>見<rt>み<\/rt><\/ruby>る/);
+  assert.equal(japaneseMarkup({japanese:'見る',kana:'みるもの'},true),'<div class="japanese">見る</div>');
+});
+
+test('TTS retains lexical kanji context and supports explicit particle readings without altering display', () => {
+  assert.equal(ttsText({japanese:'話しましょう',kana:'はなしましょう'}),'話しましょう');
+  assert.equal(ttsText({japanese:'私は話します',kana:'わたしははなします'}),'私は話します');
+  assert.equal(ttsText({japanese:'花',kana:'はな'}),'花');
+  const card={japanese:'発音は難しいです',kana:'はつおんはむずかしいです',ttsReading:'ハツオン ワ ムズカシイデス'};
+  assert.equal(ttsText(card),'ハツオン ワ ムズカシイデス');
+  assert.match(japaneseMarkup(card,true),/発音/);
+  assert.equal(card.kana,'はつおんはむずかしいです');
+});
+
+test('Reviewed corpus preserves katakana, lexical ha and explicit pronunciation segments', () => {
+  const television=cards.find(card=>card.japanese==='テレビゲーム');
+  assert.equal(television.kana,'テレビゲーム');
+  assert.equal(studyPromptMarkup(television,'kana'),'<div class="japanese">テレビゲーム</div>');
+  assert.equal(cards.find(card=>card.id==='mj-p-4c68112813b4').romaji,'ohayou gozaimasu.');
+  assert.equal(cards.find(card=>card.id==='mj-p-bb6e800adb89').romaji,'hatsuon wa atte imasu ka?');
+  for(const card of cards.filter(card=>card.japanese.includes('話しましょう'))){
+    assert.ok(ttsText(card).includes('話しましょう'));
+    assert.ok(card.romaji.includes('hanashimashou'));
+  }
+  const pronunciation=cards.find(card=>card.id==='mj-p-789a57e7c41f');
+  assert.match(japaneseMarkup(pronunciation,true),/<ruby>発音<rt>はつおん<\/rt><\/ruby>は<ruby>難<rt>むずか<\/rt><\/ruby>しいです。/);
+  assert.equal(ttsText(pronunciation),'ハツオン ワ ムズカシイデス。');
+  for(const card of cards.filter(card=>/^[\p{Script=Katakana}ー・]+$/u.test(card.japanese))){
+    assert.equal(card.kana,card.japanese,card.id);
+  }
 });
 
 test('furigana matches multiple kanji groups around kana anchors', () => {

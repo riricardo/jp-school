@@ -16,8 +16,11 @@ let lastText = null;
 let lastPlayback = null;
 let voiceWorker = null;
 let pendingVoice = null;
+let replayTimer = null;
 const synth = () => globalThis.window?.speechSynthesis || globalThis.speechSynthesis;
-const playbackRate = state => Math.max(0.5, Math.min(2, Number(state.speed) || 1));
+export const MIN_PLAYBACK_RATE = 0.25;
+export const clampPlaybackRate = speed => Math.max(MIN_PLAYBACK_RATE, Math.min(2, Number(speed) || 1));
+const playbackRate = state => clampPlaybackRate(state.speed);
 
 export function japaneseVoices() {
   try { return (synth()?.getVoices() || []).filter(v => /^ja(?:-|$)/i.test(v.lang)); }
@@ -39,6 +42,8 @@ export function preferVoice(voices, chosen = 'auto') {
 }
 export function stopAudio() {
   generation++;
+  clearTimeout(replayTimer);
+  replayTimer = null;
   lastText = null;
   lastPlayback = null;
   if (pendingVoice) {
@@ -142,28 +147,42 @@ async function kokoroSpeak(text, state, onError, token) {
       if (token === generation) stopAudio();
     };
     activeMedia.onerror = () => {
-      if (token === generation) onError('A voz IA falhou. Troque para voz do dispositivo ou tente online.');
+      fallback();
     };
     await activeMedia.play();
     if (token === generation) onError('');
   } catch {
-    if (token === generation) {
-      onError('A voz IA não ficou pronta. Tentando voz japonesa do dispositivo...');
-      nativeSpeak(text, { ...state, voice: 'auto' }, onError, token);
-    }
+    fallback();
+  }
+
+  function fallback() {
+    if (token !== generation) return;
+    onError('A voz IA não ficou pronta. Tentando voz japonesa do dispositivo...');
+    speak(text, { ...state, voice: 'auto' }, onError);
   }
 }
-export function speak(text, state = {}, onError = () => {}) {
+export function speak(text, state = {}, onError = () => {}, { restart = false } = {}) {
   const playback = `${state.voice || 'auto'}/${playbackRate(state)}`;
   if (lastText === text && lastPlayback === playback) {
-    if (pendingVoice || (active && synth()?.speaking) || (activeMedia && !activeMedia.paused)) return true;
+    if (pendingVoice) return true;
+    if (!restart && (replayTimer !== null || (active && synth()?.speaking) || (activeMedia && !activeMedia.paused))) return true;
   }
+  const replacingNative = active !== null || replayTimer !== null;
   stopAudio();
   const token = generation;
   lastText = text;
   lastPlayback = playback;
-  if (isAiVoice(state.voice)) {
+  const offlineNative = globalThis.navigator?.onLine === false && japaneseVoices().length > 0;
+  if (isAiVoice(state.voice) && !offlineNative) {
     kokoroSpeak(text, state, onError, token);
+    return true;
+  }
+  if (replacingNative) {
+    // Let the native engine process cancel() before submitting its replacement.
+    replayTimer = setTimeout(() => {
+      replayTimer = null;
+      if (token === generation) nativeSpeak(text, state, onError, token);
+    }, 0);
     return true;
   }
   return nativeSpeak(text, state, onError, token);

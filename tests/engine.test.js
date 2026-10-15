@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {record,score,eligible,pool,summarize,defaults,filtered,load,SKILLS,hasKanji,choose,buildRound} from '../src/engine.js';
+import {record,score,eligible,pool,summarize,defaults,filtered,load,save,MAX,SKILLS,hasKanji,choose,buildRound,hintRevealsAnswer} from '../src/engine.js';
 import {cards,studySituations} from '../src/data.js';
 const card={id:'x',japanese:'水',kana:'みず',kind:'word',situations:['Restaurante']};
 const noKanji={id:'y',japanese:'すみません',kana:'すみません',kind:'phrase',situations:['Aeroporto']};
@@ -43,7 +43,18 @@ test('Progress is tracked in the four learning directions',()=>{
  for(const skill of SKILLS)record(s,'x',skill,true);
  assert.deepEqual(Object.keys(s.progress.x),SKILLS);
 });
-test('10 correct cap and wrong resets',()=>{const s=structuredClone(defaults);for(let i=0;i<12;i++)record(s,'x','kana',true);assert.equal(score(s,'x','kana'),10);record(s,'x','kana',false);assert.equal(score(s,'x','kana'),0);});
+test('Five correct answers master only the exact card and skill; a wrong answer resets its streak',()=>{
+ const s=structuredClone(defaults);
+ for(let i=0;i<MAX-1;i++)record(s,'x','kana',true);
+ assert.ok(pool([card],s).some(item=>item.skill==='kana'));
+ record(s,'x','kana',true);
+ assert.equal(score(s,'x','kana'),5);
+ assert.ok(!pool([card],s).some(item=>item.skill==='kana'));
+ assert.equal(score(s,'y','kana'),0);
+ assert.equal(score(s,'x','reverse'),0);
+ record(s,'x','kana',false);
+ assert.equal(score(s,'x','kana'),0);
+});
 test('Japanese listening score does not reset Kanji → Kana progress',()=>{
  const s=structuredClone(defaults);
  record(s,'x','fromKanji',true);
@@ -65,7 +76,7 @@ test('Kanji detection ignores Kana-only cards and supports Han characters',()=>{
   assert.equal(eligible(card,skill),true);
  }
 });
-test('Progress summary reflects real denominator',()=>{const s=structuredClone(defaults);record(s,'x','kana',true);assert.equal(summarize([card],s).find(x=>x.skill==='kana').percent,10);});
+test('Progress summary reflects real denominator',()=>{const s=structuredClone(defaults);record(s,'x','kana',true);assert.equal(summarize([card],s).find(x=>x.skill==='kana').percent,20);});
 test('Selected skill checkboxes limit challenges without mixing disabled modes',()=>{
  const s={...structuredClone(defaults),skills:['toKanji'],kinds:['word']};
  assert.deepEqual(pool([card,noKanji],s).map(item=>item.skill),['toKanji']);
@@ -100,7 +111,7 @@ test('Existing mode and content preferences migrate to checkbox settings',()=>{
   const s=load();
   assert.deepEqual(s.skills,['kana']);
   assert.deepEqual(s.kinds,['word']);
-  assert.equal(score(s,'x','kana'),3);
+  assert.equal(score(s,'x','kana'),1.5);
   assert.equal(s.autoFurigana,true);
  }finally{
   if(previous===undefined)delete globalThis.localStorage;
@@ -160,13 +171,53 @@ test('Legacy JP-PT scores fold Listening and Kanji into the unified skill',()=>{
  try{
   const s=load();
   assert.deepEqual(s.skills,SKILLS);
-  assert.equal(score(s,'x','kana'),5);
-  assert.equal(score(s,'x','reverse'),2);
-  assert.equal(score(s,'x','toKanji'),6);
-  assert.equal(score(s,'x','fromKanji'),7);
+  assert.equal(score(s,'x','kana'),2.5);
+  assert.equal(score(s,'x','reverse'),1);
+  assert.equal(score(s,'x','toKanji'),3);
+  assert.equal(score(s,'x','fromKanji'),3.5);
   assert.equal(summarize([card],s).length,4);
  }finally{
   if(previous===undefined)delete globalThis.localStorage;
   else globalThis.localStorage=previous;
  }
+});
+
+test('Versioned score migration preserves percentage, incomplete mastery and saved settings exactly once',()=>{
+ const previous=globalThis.localStorage;
+ let stored=JSON.stringify({speed:0.8,voice:'local-ja',progress:{
+  zero:{kana:0},half:{kana:5,reverse:2},almost:{kana:9},complete:{kana:10},bad:{kana:-3,reverse:'invalid'}
+ }});
+ globalThis.localStorage={getItem:()=>stored,setItem:(_,value)=>{stored=value;}};
+ try{
+  const s=load();
+  for(let value=0;value<=10;value++){
+   const raw=stored;
+   stored=JSON.stringify({progress:{x:{kana:value}}});
+   assert.equal(score(load(),'x','kana')/MAX,value/10);
+   stored=raw;
+  }
+  assert.equal(score(s,'almost','kana'),4.5);
+  assert.equal(score(s,'complete','kana'),5);
+  assert.equal(score(s,'bad','kana'),0);
+  assert.equal(s.speed,0.8);
+  assert.equal(s.voice,'local-ja');
+  save(s);
+  assert.deepEqual(load().progress,s.progress);
+  record(s,'almost','kana',true);
+  assert.equal(score(s,'almost','kana'),5);
+ }finally{
+  if(previous===undefined)delete globalThis.localStorage;
+  else globalThis.localStorage=previous;
+ }
+});
+
+test('Hints penalize only the answer being tested',()=>{
+ assert.equal(hintRevealsAnswer('kana','romaji'),false);
+ assert.equal(hintRevealsAnswer('kana','meaning'),true);
+ assert.equal(hintRevealsAnswer('toKanji','romaji'),false);
+ assert.equal(hintRevealsAnswer('toKanji','japanese'),true);
+ assert.equal(hintRevealsAnswer('fromKanji','japanese'),false);
+ assert.equal(hintRevealsAnswer('fromKanji','furigana'),true);
+ assert.equal(hintRevealsAnswer('reverse','meaning'),false);
+ assert.equal(hintRevealsAnswer('reverse','romaji'),true);
 });
