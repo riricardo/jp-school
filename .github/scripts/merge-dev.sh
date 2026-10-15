@@ -29,14 +29,14 @@ trap cleanup EXIT
 
 echo "🔍 Checking repository..."
 
-# 1. Require develop branch
+# Require develop branch
 CURRENT=$(git branch --show-current)
 
 if [ "$CURRENT" != "$SOURCE" ]; then
   fail "Run this command from the '$SOURCE' branch."
 fi
 
-# 2. Check unfinished Git operations
+# Check unfinished Git operations
 GIT_DIR=$(git rev-parse --git-dir)
 
 if [ -f "$(git rev-parse --git-path MERGE_HEAD)" ]; then
@@ -49,16 +49,16 @@ if [ -d "$(git rev-parse --git-path rebase-merge)" ] ||
   fail "An unfinished rebase or cherry-pick exists."
 fi
 
-# 3. Require clean working tree
+# Require clean working tree
 if [ -n "$(git status --porcelain)" ]; then
   fail "Uncommitted or untracked changes detected."
 fi
 
-# 4. Fetch remote changes
+# Fetch remote changes
 echo "🔄 Fetching remote updates..."
 git fetch "$REMOTE" || fail "Failed to fetch remote updates."
 
-# 5. Verify branches and synchronization
+# Verify branches and synchronization
 for BRANCH in "$SOURCE" "$TARGET"; do
   git show-ref --verify --quiet "refs/heads/$BRANCH" ||
     fail "Local branch '$BRANCH' does not exist."
@@ -89,12 +89,26 @@ done
 
 echo "✅ Both branches are synchronized."
 
-# 6. Switch to main
+# Run mandatory checks before merging
+echo "🧪 Running project checks..."
+
+echo "📦 Installing dependencies..."
+npm ci || fail "Dependency installation failed. Merge cancelled."
+
+echo "🔨 Building project..."
+npm run build || fail "Build failed. Merge cancelled."
+
+echo "🧪 Running automated tests..."
+npm test || fail "Tests failed. Merge cancelled."
+
+echo "✅ All project checks passed."
+
+# Switch to main
 echo "🔀 Switching to $TARGET..."
 git switch "$TARGET"
 SWITCHED=true
 
-# 7. Merge develop into main
+# Merge develop into main
 echo "🔀 Merging $SOURCE into $TARGET..."
 MERGE_STARTED=true
 
@@ -102,7 +116,7 @@ if ! git merge --no-ff --no-commit "$SOURCE"; then
   fail "Merge conflicts detected. Merge cancelled."
 fi
 
-# 8. Commit merge when required
+# Commit merge when required
 if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
   git commit -m "Merge $SOURCE into $TARGET" ||
     fail "Merge commit failed."
@@ -110,14 +124,14 @@ fi
 
 MERGE_STARTED=false
 
-# 9. Push main to GitHub
+# Push main to GitHub
 echo "📤 Pushing $TARGET to GitHub..."
 
 if ! git push "$REMOTE" "$TARGET"; then
   fail "Push failed. Local main may contain an unpublished merge. Review before retrying."
 fi
 
-# 10. Return to develop
+# Return to develop
 git switch "$SOURCE"
 SWITCHED=false
 
@@ -125,4 +139,3 @@ echo ""
 echo "✅ Merge completed successfully!"
 echo "✅ Remote main is updated."
 echo "✅ Returned to develop."
-echo "🚀 Deploy remains manual."
