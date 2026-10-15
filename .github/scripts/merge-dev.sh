@@ -2,74 +2,127 @@
 #!/bin/bash
 set -euo pipefail
 
-SOURCE_BRANCH="develop"
-TARGET_BRANCH="main"
+SOURCE="develop"
+TARGET="main"
+REMOTE="origin"
+SWITCHED=false
+MERGE_STARTED=false
 
 fail() {
-  echo "❌ $1"
+  echo "❌ $1" >&2
   exit 1
 }
 
-echo "🔍 Checking repository status..."
+cleanup() {
+  if [ "$MERGE_STARTED" = true ]; then
+    if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
+      git merge --abort || echo "⚠️ Manual merge cleanup required." >&2
+    fi
+  fi
 
-# Ensure we're on develop
-CURRENT_BRANCH=$(git branch --show-current)
+  if [ "$SWITCHED" = true ]; then
+    git switch "$SOURCE" || echo "⚠️ Return to develop manually." >&2
+  fi
+}
 
-if [ "$CURRENT_BRANCH" != "$SOURCE_BRANCH" ]; then
-  fail "Please run this command from the develop branch."
+trap cleanup EXIT
+
+echo "🔍 Checking repository..."
+
+# 1. Require develop branch
+CURRENT=$(git branch --show-current)
+
+if [ "$CURRENT" != "$SOURCE" ]; then
+  fail "Run this command from the '$SOURCE' branch."
 fi
 
-# Ensure working tree is clean
+# 2. Check unfinished Git operations
+GIT_DIR=$(git rev-parse --git-dir)
+
+if [ -f "$(git rev-parse --git-path MERGE_HEAD)" ]; then
+  fail "An unfinished merge exists. Resolve or abort it first."
+fi
+
+if [ -d "$(git rev-parse --git-path rebase-merge)" ] ||
+   [ -d "$(git rev-parse --git-path rebase-apply)" ] ||
+   [ -f "$(git rev-parse --git-path CHERRY_PICK_HEAD)" ]; then
+  fail "An unfinished rebase or cherry-pick exists."
+fi
+
+# 3. Require clean working tree
 if [ -n "$(git status --porcelain)" ]; then
-  fail "Uncommitted or untracked changes detected. Commit or stash them first."
+  fail "Uncommitted or untracked changes detected."
 fi
 
-# Update remote references
-echo "🔄 Fetching latest remote changes..."
-git fetch origin || fail "Failed to fetch remote changes."
+# 4. Fetch remote changes
+echo "🔄 Fetching remote updates..."
+git fetch "$REMOTE" || fail "Failed to fetch remote updates."
 
-# Verify branches exist and are synchronized
-for BRANCH in "$SOURCE_BRANCH" "$TARGET_BRANCH"; do
+# 5. Verify branches and synchronization
+for BRANCH in "$SOURCE" "$TARGET"; do
   git show-ref --verify --quiet "refs/heads/$BRANCH" ||
     fail "Local branch '$BRANCH' does not exist."
 
-  git show-ref --verify --quiet "refs/remotes/origin/$BRANCH" ||
-    fail "Remote branch 'origin/$BRANCH' does not exist."
+  git show-ref --verify --quiet "refs/remotes/$REMOTE/$BRANCH" ||
+    fail "Remote branch '$REMOTE/$BRANCH' does not exist."
 
-  LOCAL_SHA=$(git rev-parse "$BRANCH")
-  REMOTE_SHA=$(git rev-parse "origin/$BRANCH")
+  LOCAL=$(git rev-parse "$BRANCH")
+  REMOTE_SHA=$(git rev-parse "$REMOTE/$BRANCH")
 
-  if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]; then
-    fail "Branch '$BRANCH' is not synchronized with origin/$BRANCH. Sync it before merging."
+  if [ "$LOCAL" != "$REMOTE_SHA" ]; then
+    AHEAD=$(git rev-list --count "$REMOTE/$BRANCH..$BRANCH")
+    BEHIND=$(git rev-list --count "$BRANCH..$REMOTE/$BRANCH")
+
+    echo "⚠️ $BRANCH is not synchronized."
+    echo "   Local commits ahead: $AHEAD"
+    echo "   Remote commits ahead: $BEHIND"
+
+    if [ "$AHEAD" -gt 0 ] && [ "$BEHIND" -eq 0 ]; then
+      fail "Pending push on '$BRANCH'. Review and push it before merging."
+    elif [ "$BEHIND" -gt 0 ] && [ "$AHEAD" -eq 0 ]; then
+      fail "Local '$BRANCH' is outdated. Fast-forward it before merging."
+    else
+      fail "'$BRANCH' has diverged. Resolve manually before merging."
+    fi
   fi
 done
 
 echo "✅ Both branches are synchronized."
 
-# Switch to main
-git switch "$TARGET_BRANCH"
+# 6. Switch to main
+echo "🔀 Switching to $TARGET..."
+git switch "$TARGET"
+SWITCHED=true
 
-echo "🔀 Merging develop into main..."
+# 7. Merge develop into main
+echo "🔀 Merging $SOURCE into $TARGET..."
+MERGE_STARTED=true
 
-# Attempt merge without committing
-if git merge --no-ff --no-commit "$SOURCE_BRANCH"; then
-
-  if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
-    if ! git commit -m "Merge develop into main"; then
-      git merge --abort
-      git switch "$SOURCE_BRANCH"
-      fail "Merge commit failed. Merge aborted."
-    fi
-  fi
-
-  git switch "$SOURCE_BRANCH"
-
-  echo "✅ Merge completed successfully!"
-  echo "📦 Main branch updated locally."
-  echo "🚀 Run your deploy command manually when ready."
-
-else
-  git merge --abort
-  git switch "$SOURCE_BRANCH"
-  fail "Merge conflicts detected. Merge aborted. Main remains unchanged."
+if ! git merge --no-ff --no-commit "$SOURCE"; then
+  fail "Merge conflicts detected. Merge cancelled."
 fi
+
+# 8. Commit merge when required
+if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
+  git commit -m "Merge $SOURCE into $TARGET" ||
+    fail "Merge commit failed."
+fi
+
+MERGE_STARTED=false
+
+# 9. Push main to GitHub
+echo "📤 Pushing $TARGET to GitHub..."
+
+if ! git push "$REMOTE" "$TARGET"; then
+  fail "Push failed. Local main may contain an unpublished merge. Review before retrying."
+fi
+
+# 10. Return to develop
+git switch "$SOURCE"
+SWITCHED=false
+
+echo ""
+echo "✅ Merge completed successfully!"
+echo "✅ Remote main is updated."
+echo "✅ Returned to develop."
+echo "🚀 Deploy remains manual."
