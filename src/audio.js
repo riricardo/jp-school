@@ -142,15 +142,18 @@ async function kokoroSpeak(text, state, onError, token) {
       if (token === generation) stopAudio();
     };
     activeMedia.onerror = () => {
-      if (token === generation) onError('A voz IA falhou. Troque para voz do dispositivo ou tente online.');
+      fallback();
     };
     await activeMedia.play();
     if (token === generation) onError('');
   } catch {
-    if (token === generation) {
-      onError('A voz IA não ficou pronta. Tentando voz japonesa do dispositivo...');
-      nativeSpeak(text, { ...state, voice: 'auto' }, onError, token);
-    }
+    fallback();
+  }
+
+  function fallback() {
+    if (token !== generation) return;
+    onError('A voz IA não ficou pronta. Tentando voz japonesa do dispositivo...');
+    speak(text, { ...state, voice: 'auto' }, onError);
   }
 }
 export function speak(text, state = {}, onError = () => {}) {
@@ -162,7 +165,8 @@ export function speak(text, state = {}, onError = () => {}) {
   const token = generation;
   lastText = text;
   lastPlayback = playback;
-  if (isAiVoice(state.voice)) {
+  const offlineNative = globalThis.navigator?.onLine === false && japaneseVoices().length > 0;
+  if (isAiVoice(state.voice) && !offlineNative) {
     kokoroSpeak(text, state, onError, token);
     return true;
   }

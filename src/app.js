@@ -187,7 +187,7 @@ app.innerHTML = `
         </select>
       </label>
       <label class="check-option"><input id="autoAudio" type="checkbox"><span>Listening: reproduzir áudio automaticamente</span></label>
-      <p class="small">Kokoro IA usa Hugging Face/CDN no primeiro uso; depois o navegador pode reutilizar o cache. Voz do dispositivo funciona sem rede quando instalada.</p>
+      <p class="small">Voz do sistema é a opção padrão. Áudio offline depende de uma voz japonesa local. Kokoro IA é opcional e pode precisar de internet; não faz parte do cache essencial.</p>
     </fieldset>
     <p id="available" class="small" role="status"></p>
     <button id="newRound" class="primary">Iniciar rodada nova</button>
@@ -195,6 +195,7 @@ app.innerHTML = `
     <button id="refreshApp" class="secondary" type="button">Atualizar aplicativo</button>
     <button id="installApp" class="secondary" type="button">Instalar ManJapa</button>
     <p id="installStatus" class="small" role="status"></p>
+    <p id="offlineStatus" class="small" role="status">Verificando disponibilidade offline...</p>
     <footer>ManJapa · v${APP_VERSION}</footer>
   </dialog>`;
 
@@ -253,9 +254,68 @@ function syncSettings() {
         : 'Não há desafios disponíveis para esta seleção.';
 }
 
+let offlineCheck = 0;
+
+function withTimeout(task, milliseconds = 5000) {
+  let timer;
+  return Promise.race([
+    task,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('timeout')), milliseconds);
+    })
+  ]).finally(() => clearTimeout(timer));
+}
+
+async function checkOfflineReady() {
+  const check = ++offlineCheck;
+  const status = $('offlineStatus');
+  if (!import.meta.env.PROD) {
+    status.textContent = 'Modo offline disponível no build de produção.';
+    return;
+  }
+  if (!('serviceWorker' in navigator) || !window.isSecureContext) {
+    status.textContent = 'Modo offline indisponível neste navegador ou endereço.';
+    return;
+  }
+  // Only the controlling worker can describe the version serving this tab.
+  const worker = navigator.serviceWorker.controller;
+  if (!worker) {
+    status.textContent = 'Acesso offline ainda não está pronto. Aguarde o carregamento com conexão.';
+    return;
+  }
+
+  let channel;
+  try {
+    channel = new MessageChannel();
+    const result = await withTimeout(new Promise((resolve, reject) => {
+      channel.port1.onmessage = event => {
+        const data = event.data;
+        if (data?.type !== 'OFFLINE_STATUS' || typeof data.ready !== 'boolean' ||
+            !Array.isArray(data.missing) || data.error || (data.ready && data.missing.length)) {
+          reject(new Error('Invalid offline response'));
+        } else resolve(data);
+      };
+      channel.port1.onmessageerror = () => reject(new Error('Invalid offline message'));
+      worker.postMessage({ type: 'CHECK_OFFLINE' }, [channel.port2]);
+    }));
+    if (check !== offlineCheck || worker !== navigator.serviceWorker.controller) return;
+    status.textContent = result.ready
+      ? 'Arquivos essenciais disponíveis offline. Áudio depende da voz escolhida.'
+      : `${result.missing.length} arquivos essenciais ainda não estão disponíveis offline.`;
+  } catch {
+    if (check === offlineCheck) {
+      status.textContent = 'Não foi possível confirmar o acesso offline. O estudo pode continuar.';
+    }
+  } finally {
+    channel?.port1.close();
+    channel?.port2.close();
+  }
+}
+
 function openSettings() {
   stopAudio();
   syncSettings();
+  checkOfflineReady();
   $('settingsButton').setAttribute('aria-expanded', 'true');
   $('settings').showModal();
 }
@@ -277,28 +337,54 @@ window.speechSynthesis?.addEventListener?.('voiceschanged', fillVoices);
 // Mobile browsers often populate voices only after an explicit user gesture.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopAudio();
-  else fillVoices();
+  else {
+    fillVoices();
+    checkOfflineReady();
+  }
 });
-window.addEventListener('pageshow', fillVoices);
+window.addEventListener('pageshow', () => {
+  fillVoices();
+  checkOfflineReady();
+});
+window.addEventListener('online', checkOfflineReady);
+window.addEventListener('offline', checkOfflineReady);
 $('refreshApp').onclick = async () => {
-  stopAudio();
   const button = $('refreshApp');
   button.disabled = true;
-  button.textContent = navigator.onLine ? 'Verificando...' : 'Sem conexão';
+  button.textContent = 'Verificando atualização...';
+
   try {
-    if (!navigator.onLine) throw new Error('offline');
-    const registration = await navigator.serviceWorker?.getRegistration();
-    if (registration) {
-      await registration.update();
-      registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+    if (!navigator.onLine) {
+      throw new Error('offline');
     }
-    window.location.reload();
+
+    const registration = await withTimeout(
+      navigator.serviceWorker?.getRegistration(import.meta.env.BASE_URL)
+    );
+
+    if (!registration) {
+      throw new Error('Service Worker indisponível');
+    }
+
+    await withTimeout(registration.update(), 15000);
+
+    if (registration.waiting) {
+      $('available').textContent =
+        'Atualização pronta. Feche todas as abas do ManJapa e reabra para usar a nova versão.';
+    } else if (registration.installing) {
+      $('available').textContent =
+        'Atualização em preparação. Aguarde e verifique novamente.';
+    } else {
+      $('available').textContent =
+        'Verificação concluída. Se houver uma atualização, ela estará disponível na próxima abertura.';
+    }
   } catch {
+    $('available').textContent =
+      'Não foi possível verificar atualizações. O estudo continua disponível.';
+  } finally {
     button.disabled = false;
     button.textContent = 'Atualizar aplicativo';
-    $('available').textContent = navigator.onLine
-      ? 'Não foi possível verificar agora. O app continua funcionando com o cache local.'
-      : 'Conecte à internet para buscar uma atualização.';
+    checkOfflineReady();
   }
 };
 
@@ -641,17 +727,28 @@ function solutionMarkup(card, skill, revealed) {
 render();
 if (!current && pool(cards, state).length) createRound();
 
-// Reload automatically when a new service worker takes control.
+// Updates wait for existing tabs to close; never reload a study session.
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-  let refreshing = false;
-  let controlled = !!navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (controlled && !refreshing) { refreshing = true; window.location.reload(); }
-    controlled = true;
-  });
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
-      $('installStatus').textContent = 'Não foi possível preparar o acesso offline. Reabra o aplicativo com conexão.';
+  navigator.serviceWorker.addEventListener('controllerchange', checkOfflineReady);
+  withTimeout(navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, { updateViaCache: 'none' }), 15000)
+    .then(registration => {
+      const watchInstalling = () => {
+        const worker = registration.installing;
+        worker?.addEventListener('statechange', () => {
+          checkOfflineReady();
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            $('available').textContent = 'Atualização pronta. Feche todas as abas do ManJapa e reabra para usar a nova versão.';
+          }
+        });
+      };
+      registration.addEventListener('updatefound', watchInstalling);
+      watchInstalling();
+      checkOfflineReady();
+    })
+    .catch(() => {
+      if (navigator.serviceWorker.controller) checkOfflineReady();
+      else $('offlineStatus').textContent = 'Não foi possível preparar o acesso offline. Reabra o aplicativo com conexão.';
     });
-  });
 }
+
+checkOfflineReady();

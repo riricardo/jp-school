@@ -121,6 +121,66 @@ test('Failed AI worker is discarded so a later play can retry', async () => {
   }
 });
 
+test('Offline Kokoro selection prefers an available native Japanese voice', () => {
+  const previousWindow = globalThis.window;
+  const previousNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  let spoken;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: {
+      cancel() {},
+      getVoices: () => [{ lang: 'ja-JP', voiceURI: 'local-ja', localService: true }],
+      speak(utterance) { spoken = utterance; }
+    }
+  };
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { onLine: false } });
+  try {
+    speak('みず', { voice: 'hf:kokoro:jf_alpha', speed: 0.7 });
+    assert.equal(spoken.voice.voiceURI, 'local-ja');
+    assert.equal(spoken.rate, 0.7);
+  } finally {
+    stopAudio();
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+    if (previousNavigator) Object.defineProperty(globalThis, 'navigator', previousNavigator);
+    else delete globalThis.navigator;
+  }
+});
+
+test('Kokoro media playback errors fall back to native speech without blocking', async () => {
+  const originals = Object.fromEntries(['window', 'Worker', 'Audio'].map(key => [key, globalThis[key]]));
+  let media;
+  let spoken;
+  globalThis.window = {
+    SpeechSynthesisUtterance: class {},
+    speechSynthesis: { cancel() {}, getVoices: () => [], speak(utterance) { spoken = utterance; } }
+  };
+  globalThis.Worker = class {
+    postMessage({ token }) {
+      queueMicrotask(() => this.onmessage({ data: { token, blob: new Blob(['audio']) } }));
+    }
+    terminate() {}
+  };
+  globalThis.Audio = class {
+    constructor() { media = this; }
+    async play() {}
+    pause() { this.paused = true; }
+  };
+  try {
+    speak('みず', { voice: 'hf:kokoro:jf_alpha' });
+    await new Promise(resolve => setImmediate(resolve));
+    media.onerror();
+    assert.equal(media.paused, true);
+    assert.equal(spoken.lang, 'ja-JP');
+  } finally {
+    stopAudio();
+    for (const [key, value] of Object.entries(originals)) {
+      if (value === undefined) delete globalThis[key];
+      else globalThis[key] = value;
+    }
+  }
+});
+
 test('Rapid repeated play requests do not cancel the active utterance', () => {
   const previousWindow = globalThis.window;
   const previousUtterance = globalThis.SpeechSynthesisUtterance;
