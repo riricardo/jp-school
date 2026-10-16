@@ -7,7 +7,7 @@ import {
 import {
   japaneseMarkup,
   solutionJapaneseMarkup,
-  studyPromptMarkup, ttsText
+  studyPromptMarkup, ttsText, japaneseWords
 } from './japanese.js';
 import { aiJapaneseVoices, japaneseVoices, speak, stopAudio, clampPlaybackRate, MIN_PLAYBACK_RATE } from './audio.js';
 import { setupInstall } from './install.js';
@@ -40,7 +40,6 @@ let deck = [];
 let retries = [];
 let roundGeneration = 0;
 let buildingRound = false;
-let normalAudioClicks = 0;
 let slowAudioClicks = 0;
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -75,12 +74,15 @@ app.innerHTML = `
           <circle cx="256" cy="256" r="110" fill="url(#flag-sun)"/>
         </svg>
       </div>
+      <div class="header-controls">
+      <span id="selectedSituation" class="icon selected-situation" role="img"></span>
       <button id="settingsButton" class="icon" title="Configurações" aria-label="Configurações" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m9 3-.5 2-2 1-2-.5-2 3L4 10v3l-1.5 2 2 3 2-.5 2 1L9 21h6l.5-2.5 2-1 2 .5 2-3-1.5-2v-3L21.5 9l-2-3-2 .5-2-1L15 3Z"/>
           <circle cx="12" cy="12" r="3"/>
         </svg>
       </button>
+      </div>
     </header>
     <section id="progress" class="progress" aria-label="Progresso por habilidade"></section>
     <div id="round" class="round" aria-live="polite"></div>
@@ -521,19 +523,16 @@ $('next').onclick = () => current ? nextCard() : createRound();
 $('newRound').onclick = () => createRound();
 $('audioButton').onclick = () => {
   if (!current) return;
-  normalAudioClicks++;
-  $('slowAudioButton').hidden = normalAudioClicks < 2 && slowAudioClicks === 0;
+  $('slowAudioButton').hidden = false;
   play(1, true);
 };
 $('slowAudioButton').onclick = () => {
   if (!current || $('slowAudioButton').hidden) return;
-  normalAudioClicks = 0;
   slowAudioClicks++;
-  play(0.7, true, slowAudioClicks >= 3 ? MIN_PLAYBACK_RATE : undefined);
+  play(1, true, slowAudioClicks % 2 === 1 ? 0.7 : MIN_PLAYBACK_RATE);
 };
 
 function resetAudioControls() {
-  normalAudioClicks = 0;
   slowAudioClicks = 0;
   $('slowAudioButton').hidden = true;
 }
@@ -628,6 +627,7 @@ function renderHints(card, skill, revealed) {
     button.setAttribute('aria-pressed', String(isVisible));
     if (relevant) visible = true;
   }
+  $('hints').style.gridTemplateColumns = `repeat(${availableHints.filter(item => item[2]).length}, minmax(0, 1fr))`;
   $('hints').hidden = !visible || phase === 'revealed';
 }
 
@@ -658,6 +658,9 @@ function applyAutomaticAssistance() {
 function render() {
   applyAutomaticAssistance();
   const stats = summarize(cards, state);
+  $('selectedSituation').textContent = state.situation === 'all' ? '✳' : state.situation.split(' ')[0];
+  $('selectedSituation').title = state.situation === 'all' ? 'Todas as situações' : state.situation;
+  $('selectedSituation').setAttribute('aria-label', $('selectedSituation').title);
   $('progress').innerHTML = stats.map(item => `
     <div class="metric">
       <span>${labels[item.skill]}</span>
@@ -665,9 +668,10 @@ function render() {
       <div class="bar"><i style="width:${item.percent}%"></i></div>
     </div>`).join('');
 
-  const remaining = deck.length + retries.length;
+  const remaining = deck.length + retries.filter(item =>
+    !current || item.id !== current.id || item.skill !== current.skill).length;
   $('round').textContent = current
-    ? `${remaining + 1} cartões restantes nesta rodada · meta ${MAX} acertos`
+    ? `${remaining + 1} cartões restantes nesta rodada · ${MAX} acertos por cartão e modo`
     : buildingRound ? 'Preparando rodada...' : 'Rodada concluída';
   if (!current) {
     const available = pool(cards, state).length;
@@ -712,6 +716,7 @@ function render() {
   ].join('');
   if (extra) $('prompt').insertAdjacentHTML('beforeend', extra);
 
+  enableWordAudio(card);
   renderHints(card, skill, revealed);
   $('actions').hidden = answerShown;
   $('yes').disabled = !!current.assisted;
@@ -720,6 +725,33 @@ function render() {
   $('next').textContent = 'Próximo →';
   $('next').disabled = false;
 }
+
+function enableWordAudio(card) {
+  const words = japaneseWords(card);
+  for (const element of selected('#prompt .japanese, #solution .japanese, #solution .kana-reading')) {
+    const copy = element.cloneNode(true);
+    copy.querySelectorAll('rt').forEach(node => node.remove());
+    const isKana = copy.textContent === card.kana && card.kana !== card.japanese;
+    if (isKana && words.map(word => word.reading).join('') !== card.kana) continue;
+    const furigana = !!element.querySelector('ruby');
+    element.innerHTML = words.map(word => {
+      const text = isKana ? word.reading : word.text;
+      const content = !isKana && furigana
+        ? japaneseMarkup({ japanese: word.text, kana: word.reading }, true)
+          .replace(/^<div class="japanese">|<\/div>$/g, '')
+        : esc(text);
+      return word.isWord
+        ? `<button type="button" class="spoken-word" data-speech="${esc(card.kind === 'word' ? ttsText(card) : word.spoken)}" aria-label="Ouvir ${esc(text)}">${content}</button>`
+        : content;
+    }).join('');
+  }
+}
+
+$('flashcard').addEventListener('click', event => {
+  const word = event.target.closest('[data-speech]');
+  if (!word) return;
+  speak(word.dataset.speech, state, text => { $('audioMsg').textContent = text; }, { restart: true });
+});
 
 function solutionMarkup(card, skill, revealed) {
   const blocks = [];

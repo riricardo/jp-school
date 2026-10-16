@@ -19,7 +19,10 @@ let pendingVoice = null;
 let replayTimer = null;
 const synth = () => globalThis.window?.speechSynthesis || globalThis.speechSynthesis;
 export const MIN_PLAYBACK_RATE = 0.25;
-export const clampPlaybackRate = speed => Math.max(MIN_PLAYBACK_RATE, Math.min(2, Number(speed) || 1));
+export const clampPlaybackRate = speed => {
+  const value = Number(speed ?? 1);
+  return Math.max(MIN_PLAYBACK_RATE, Math.min(2, Number.isFinite(value) ? value : 1));
+};
 const playbackRate = state => clampPlaybackRate(state.speed);
 
 export function japaneseVoices() {

@@ -137,7 +137,7 @@ function appFixture() {
   const plays = [];
   let timerId = 0;
   const element = () => ({
-    textContent: '', innerHTML: '', hidden: false, options: [],
+    textContent: '', innerHTML: '', hidden: false, options: [], style: {},
     insertAdjacentHTML(_, html) { this.innerHTML += html; },
     addEventListener() {}, setAttribute() {}, showModal() {}, close() {}
   });
@@ -290,37 +290,39 @@ test('Manual and automatic romaji do not assist JP-PT or Kana-Kanji; PT does ass
   assert.match(app.elements.get('prompt').innerHTML, /mizu/);
 });
 
-test('Slow audio uses 70% twice, minimum speed from the third click, and resets on every exercise', () => {
+test('Slow audio alternates 0.7x and minimum, starting at 0.7x on a new exercise', () => {
   const app = appFixture();
   app.startExercise('kana', { speed: 1.4 });
   app.context.play();
   assert.equal(app.plays.at(-1).restart, false);
-  assert.equal(vm.runInContext('normalAudioClicks', app.context), 0);
-  app.elements.get('audioButton').onclick();
-  assert.equal(app.plays.at(-1).restart, true);
   assert.equal(app.elements.get('slowAudioButton').hidden, true);
   app.elements.get('audioButton').onclick();
+  assert.equal(app.plays.at(-1).restart, true);
   assert.equal(app.elements.get('slowAudioButton').hidden, false);
   for (let i = 0; i < 4; i++) app.elements.get('slowAudioButton').onclick();
-  assert.ok(app.plays.slice(-4).every(play => play.restart));
-  assert.deepEqual(app.plays.slice(-4).map(play => Number(play.speed.toFixed(2))), [0.98, 0.98, 0.25, 0.25]);
+  assert.deepEqual(app.plays.slice(-4).map(play => Number(play.speed.toFixed(2))), [0.7, 0.25, 0.7, 0.25]);
   assert.equal(vm.runInContext('state.speed', app.context), 1.4);
   vm.runInContext("retries = [{id:'x',skill:'kana',due:0}];", app.context);
   app.context.nextCard(false);
-  assert.equal(vm.runInContext('current.isRetry', app.context), true);
-  assert.equal(vm.runInContext('normalAudioClicks + slowAudioClicks', app.context), 0);
+  assert.equal(vm.runInContext('slowAudioClicks', app.context), 0);
   assert.equal(app.elements.get('slowAudioButton').hidden, true);
+  vm.runInContext('state.speed = 0.25;', app.context);
   app.elements.get('audioButton').onclick();
-  app.elements.get('audioButton').onclick();
   app.elements.get('slowAudioButton').onclick();
-  assert.equal(Number(app.plays.at(-1).speed.toFixed(2)), 0.98);
-  vm.runInContext('state.speed = 0.5;', app.context);
-  app.elements.get('slowAudioButton').onclick();
-  assert.equal(app.plays.at(-1).speed, 0.35);
-  app.elements.get('slowAudioButton').onclick();
+  assert.equal(app.plays.at(-1).speed, 0.7);
   app.elements.get('slowAudioButton').onclick();
   assert.equal(app.plays.at(-1).speed, 0.25);
-  assert.equal(vm.runInContext('state.speed', app.context), 0.5);
+});
+
+test('An incorrect answer keeps the remaining counter stable, including assisted answers', () => {
+  for (const settings of [{}, { meaning: true }]) {
+    const app = appFixture();
+    app.startExercise('kana', settings);
+    vm.runInContext("deck = [{id:'y',skill:'kana',card:{...fixtureCard,id:'y'}}]; render();", app.context);
+    const before = app.elements.get('round').textContent;
+    app.context.answer(false);
+    assert.equal(app.elements.get('round').textContent, before);
+  }
 });
 
 test('A correct retry resumes the normal deck and keeps the independent streak', () => {

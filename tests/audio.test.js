@@ -8,6 +8,8 @@ test('Slow playback factors stay distinct below a configured 0.7x rate', () => {
   assert.equal(clampPlaybackRate(0.5 * 0.7), 0.35);
   assert.equal(clampPlaybackRate(0.5 * 0.5), 0.25);
   assert.equal(clampPlaybackRate(0.01), 0.25);
+  assert.equal(clampPlaybackRate(0), 0.25);
+  assert.equal(clampPlaybackRate(-1), 0.25);
   assert.equal(clampPlaybackRate(9), 2);
 });
 
