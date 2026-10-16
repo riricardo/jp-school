@@ -221,3 +221,13 @@ test('Hints penalize only the answer being tested',()=>{
  assert.equal(hintRevealsAnswer('reverse','meaning'),false);
  assert.equal(hintRevealsAnswer('reverse','romaji'),true);
 });
+
+test('Small per-card progress is visible with two decimal places across situations', () => {
+  const s = structuredClone(defaults);
+  const corpus = Array.from({ length: 1343 }, (_, i) => ({ ...card, id: `card-${i}` }));
+  record(s, 'card-0', 'kana', true);
+  assert.equal(summarize(corpus, s).find(item => item.skill === 'kana').percent, 0.01);
+  for (let i = 1; i <= 4; i++) record(s, `card-${i}`, 'kana', true);
+  assert.equal(score(s, 'card-0', 'kana'), 1);
+  assert.equal(pool(corpus, s).filter(item => item.skill === 'kana').length, corpus.length);
+});

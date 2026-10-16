@@ -4,7 +4,7 @@ import { cards } from '../src/data.js';
 import {
   japaneseMarkup,
   solutionJapaneseMarkup,
-  studyPromptMarkup, ttsText
+  studyPromptMarkup, ttsText, japaneseWords
 } from '../src/japanese.js';
 
 test('furigana is applied to kanji only, not repeated above kana', () => {
@@ -39,7 +39,7 @@ test('Furigana preserves katakana and rejects trailing unmatched readings', () =
 test('TTS retains lexical kanji context and supports explicit particle readings without altering display', () => {
   assert.equal(ttsText({japanese:'話しましょう',kana:'はなしましょう'}),'話しましょう');
   assert.equal(ttsText({japanese:'私は話します',kana:'わたしははなします'}),'私は話します');
-  assert.equal(ttsText({japanese:'花',kana:'はな'}),'花');
+  assert.equal(ttsText({japanese:'花',kana:'はな'}),'はな');
   const card={japanese:'発音は難しいです',kana:'はつおんはむずかしいです',ttsReading:'ハツオン ワ ムズカシイデス'};
   assert.equal(ttsText(card),'ハツオン ワ ムズカシイデス');
   assert.match(japaneseMarkup(card,true),/発音/);
@@ -143,4 +143,29 @@ test('Portuguese prompt keeps furigana when revealing Japanese', () => {
     solutionJapaneseMarkup(card, 'reverse'),
     '<div class="japanese"><ruby>助<rt>たす</rt></ruby>けてください</div>'
   );
+});
+
+test('Isolated words use the stored reading instead of an ambiguous kanji reading', () => {
+  for (const [japanese, kana] of [['水', 'みず'], ['上', 'うえ'], ['紙', 'かみ'], ['机', 'つくえ']]) {
+    const card = { kind: 'word', japanese, kana };
+    assert.equal(ttsText(card), kana);
+    assert.equal(japaneseWords(card).map(word => word.reading).join(''), kana);
+  }
+});
+
+test('Clickable words preserve sentence text, punctuation and contextual kanji readings', () => {
+  const card = { japanese: '水を飲みます。', kana: 'みずをのみます。' };
+  const words = japaneseWords(card);
+  assert.equal(words.map(word => word.text).join(''), card.japanese);
+  assert.equal(words.map(word => word.reading).join(''), card.kana);
+  assert.equal(words.find(word => word.text === '水').spoken, 'みず');
+  assert.equal(words.at(-1).isWord, false);
+});
+
+test('Word controls preserve the exact written text and reading throughout the corpus', () => {
+  for (const card of cards) {
+    const words = japaneseWords(card);
+    assert.equal(words.map(word => word.text).join(''), card.japanese, card.id);
+    assert.equal(words.map(word => word.reading).join(''), card.kana, card.id);
+  }
 });

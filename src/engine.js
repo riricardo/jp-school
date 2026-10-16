@@ -136,7 +136,7 @@ export function pool(cards,state){
     .flatMap(card=>availableSkills(card,skills).map(skill=>({id:card.id,skill,card})))
     .filter(item=>score(state,item.id,item.skill)<MAX);
 }
-export function summarize(cards,state){return SKILLS.map(skill=>{const applicable=filtered(cards,state).filter(c=>eligible(c,skill));const earned=applicable.reduce((t,c)=>t+score(state,c.id,skill),0);const total=applicable.length*MAX;return {skill,earned,total,percent:total?Math.round(earned/total*100):0};});}
+export function summarize(cards,state){return SKILLS.map(skill=>{const applicable=filtered(cards,state).filter(c=>eligible(c,skill));const earned=applicable.reduce((t,c)=>t+score(state,c.id,skill),0);const total=applicable.length*MAX;return {skill,earned,total,percent:total?Math.round(earned/total*10000)/100:0};});}
 export function choose(candidates,state,previous){
   let selected=null;
   let lowest=Infinity;
