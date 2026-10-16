@@ -1,6 +1,6 @@
 const CACHE_PREFIX = `manjapa-shell-${self.registration.scope}:`;
-const CACHE = CACHE_PREFIX + '4ebec8707e2c';
-const APP_SHELL = ["./","./assets/index-D133YeNL.css","./assets/index-Yo2nnPuY.js","./assets/audio-worker-Bbv11_YK.js","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png"];
+const CACHE = CACHE_PREFIX + '4c9929c771e9';
+const APP_SHELL = ["./","./assets/index-DIAgcN1p.css","./assets/index-CKzUchL4.js","./assets/audio-worker-Bbv11_YK.js","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png"];
 
 const shellUrls = APP_SHELL.map(path => new URL(path, self.registration.scope).href);
 
